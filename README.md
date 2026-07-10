@@ -10,11 +10,6 @@ Humans: each skill lives under `<category>/<skill>/` with a `SKILL.md` (the meth
 
 - **[total-tdd](engineering/total-tdd/)** — Systematic whole-app feature audit → test → fix loop, backed by tracker.py + render.py over one canonical CSV state machine. _(needs: a browser-automation tool, bundled python)_
 
-### knowledge
-
-- **[agentic-engineering](knowledge/agentic-engineering/)** — Read-only reference KB (not a procedure) on building agentic systems — loop engineering, harness design, agent reliability, context/token engineering, the agentic web (MCP/disco…. _(needs: nothing (pure method))_
-- **[gap-briefing](knowledge/gap-briefing/)** — Use when the user wants to catch up on what changed in the world since the model's knowledge cutoff and have it filtered through their own projects — "what did I miss", "anythin…. _(needs: web search/fetch)_
-
 ### meta
 
 - **[apply-paper](meta/apply-paper/)** — Turn a research paper's finding into a concrete change to our skills/agents — distill the claim, map it to where it applies, design the change, and prove it helps. _(needs: nothing (pure method))_
