@@ -1,73 +1,73 @@
 <!doctype html>
 <!--
- Reference output for the total-tdd loop. Render docs/feature-audit.html to match
- THIS shape, populated from docs/feature-audit.csv. One <tr> per feature row.
- Self-contained (inline CSS, no assets). The CSV stays canonical; this is its view.
- Filling every row with a real status + evidence is the forcing function that stops
- the agent skipping verification — an empty cell is a visible gap.
+  Reference output for the total-tdd loop. Render docs/feature-audit.html to match
+  THIS shape, populated from docs/feature-audit.csv. One <tr> per feature row.
+  Self-contained (inline CSS, no assets). The CSV stays canonical; this is its view.
+  Filling every row with a real status + evidence is the forcing function that stops
+  the agent skipping verification — an empty cell is a visible gap.
 -->
 <html lang="en">
 <head>
 <meta charset="utf-8" />
 <title>Feature Audit</title>
 <style>
- body { font: 14px/1.5 system-ui, sans-serif; margin: 2rem; color: #1a1a1a; }
- h1 { font-size: 20px; margin: 0 0 .25rem; }
- .tally { margin: 0 0 1rem; font-weight: 600; color: #444; }
- table { border-collapse: collapse; width: 100%; }
- th, td { border: 1px solid #e0e0e0; padding: 6px 9px; text-align: left; vertical-align: top; }
- th { background: #f6f7f9; }
- .spec { color: #8a6d00; }
- .pass { color: #137333; }
- .fail { color: #c5221f; font-weight: 600; }
- .fixed { color: #1a56c4; }
- .verified { color: #137333; font-weight: 600; }
- code { font: 12px ui-monospace, monospace; color: #555; }
+  body { font: 14px/1.5 system-ui, sans-serif; margin: 2rem; color: #1a1a1a; }
+  h1 { font-size: 20px; margin: 0 0 .25rem; }
+  .tally { margin: 0 0 1rem; font-weight: 600; color: #444; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { border: 1px solid #e0e0e0; padding: 6px 9px; text-align: left; vertical-align: top; }
+  th { background: #f6f7f9; }
+  .spec { color: #8a6d00; }
+  .pass { color: #137333; }
+  .fail { color: #c5221f; font-weight: 600; }
+  .fixed { color: #1a56c4; }
+  .verified { color: #137333; font-weight: 600; }
+  code { font: 12px ui-monospace, monospace; color: #555; }
 </style>
 </head>
 <body>
- <h1>Feature Audit — <span id="app">My App</span></h1>
- <p class="tally">12 total · 0 spec · 0 pass · 1 fail · 1 fixed · 10 verified</p>
- <table>
- <thead>
- <tr>
- <th>ID</th><th>Area</th><th>User story</th><th>Expected behavior</th>
- <th>Status</th><th>Issues</th><th>Fix</th><th>Evidence</th>
- </tr>
- </thead>
- <tbody>
- <!-- One row per CSV row. Status class = the status value. -->
- <tr>
- <td>F3</td>
- <td>Auth</td>
- <td>As a user, I want to log in, so that I reach my dashboard.</td>
- <td>POST /login sets the session cookie and redirects to /app <code>(auth.ts:42)</code></td>
- <td class="verified">verified</td>
- <td></td>
- <td></td>
- <td>Logged in as test user; dashboard rendered, no console errors</td>
- </tr>
- <tr>
- <td>F7</td>
- <td>Billing</td>
- <td>As an admin, I want to export invoices, so that I can reconcile.</td>
- <td>GET /invoices.csv streams the current org's rows <code>(billing.ts:118)</code></td>
- <td class="fail">fail</td>
- <td>Export returns 500 when org has 0 invoices (empty-set divide). Repro: new org → Export.</td>
- <td></td>
- <td>Network tab: 500 on /invoices.csv</td>
- </tr>
- <tr>
- <td>F9</td>
- <td>Settings</td>
- <td>As a user, I want to change my email, so that notifications reach me.</td>
- <td>PUT /settings/email validates + persists, sends confirm <code>(settings.ts:64)</code></td>
- <td class="fixed">fixed</td>
- <td>Saved without validating format.</td>
- <td>Added zod email check before persist <code>(settings.ts:64)</code></td>
- <td>(re-test pending)</td>
- </tr>
- </tbody>
- </table>
+  <h1>Feature Audit — <span id="app">My App</span></h1>
+  <p class="tally">12 total · 0 spec · 0 pass · 1 fail · 1 fixed · 10 verified</p>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th><th>Area</th><th>User story</th><th>Expected behavior</th>
+        <th>Status</th><th>Issues</th><th>Fix</th><th>Evidence</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- One row per CSV row. Status class = the status value. -->
+      <tr>
+        <td>F3</td>
+        <td>Auth</td>
+        <td>As a user, I want to log in, so that I reach my dashboard.</td>
+        <td>POST /login sets the session cookie and redirects to /app <code>(auth.ts:42)</code></td>
+        <td class="verified">verified</td>
+        <td></td>
+        <td></td>
+        <td>Logged in as test user; dashboard rendered, no console errors</td>
+      </tr>
+      <tr>
+        <td>F7</td>
+        <td>Billing</td>
+        <td>As an admin, I want to export invoices, so that I can reconcile.</td>
+        <td>GET /invoices.csv streams the current org's rows <code>(billing.ts:118)</code></td>
+        <td class="fail">fail</td>
+        <td>Export returns 500 when org has 0 invoices (empty-set divide). Repro: new org → Export.</td>
+        <td></td>
+        <td>Network tab: 500 on /invoices.csv</td>
+      </tr>
+      <tr>
+        <td>F9</td>
+        <td>Settings</td>
+        <td>As a user, I want to change my email, so that notifications reach me.</td>
+        <td>PUT /settings/email validates + persists, sends confirm <code>(settings.ts:64)</code></td>
+        <td class="fixed">fixed</td>
+        <td>Saved without validating format.</td>
+        <td>Added zod email check before persist <code>(settings.ts:64)</code></td>
+        <td>(re-test pending)</td>
+      </tr>
+    </tbody>
+  </table>
 </body>
 </html>
