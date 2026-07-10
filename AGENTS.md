@@ -4,14 +4,19 @@ If you are an AI coding agent, this file is for you. This repo is a set of **ski
 each is a folder with a `SKILL.md` describing one repeatable method. When a task matches a
 skill's stated purpose, open that `SKILL.md` and follow it.
 
-## Using a skill, per agent
+## Installing (per agent)
 
-- **Claude Code** — `./install.sh claude` symlinks skills into `~/.claude/skills`; they
-  load automatically and you invoke them by name.
-- **Codex / Cursor / Gemini CLI** — `./install.sh <agent>` prints a pointer block; paste it
-  into that agent's instructions file (`AGENTS.md` / `.cursor/rules` / `GEMINI.md`). Then,
-  when a task matches, read that skill's `SKILL.md` and follow it. These agents don't
-  auto-run skills — discovery plus a manual read is the model.
+Each agent reads its own skills directory. `./install.sh <agent>` symlinks every skill
+into it; the agent then discovers each `SKILL.md` natively.
+
+- **Claude Code** — `~/.claude/skills`
+- **Codex** — `~/.codex/skills`
+- **Cursor** — `~/.cursor/skills`
+- **Gemini CLI** — `~/.gemini/skills`
+
+`./install.sh all` does all four. Override any target with `CLAUDE_SKILLS_DIR`/`CODEX_SKILLS_DIR`/`CURSOR_SKILLS_DIR`/`GEMINI_SKILLS_DIR`. Safe and
+idempotent: it only creates, refreshes, or prunes symlinks that point back into this repo —
+a skill name you already own (a real dir, or a link elsewhere) is left untouched.
 
 ## Honest compatibility
 

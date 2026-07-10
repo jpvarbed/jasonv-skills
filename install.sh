@@ -1,33 +1,45 @@
 #!/usr/bin/env bash
 # Install jasonv-skills for one or more agents:  ./install.sh [claude|codex|cursor|gemini|all]
-#   claude  -> symlink each skill into ~/.claude/skills (auto-discovered by Claude Code).
-#   codex/cursor/gemini -> print a pointer block to paste into that agent's instructions file
-#     (AGENTS.md / .cursor/rules / GEMINI.md). We do NOT edit those files for you — they usually
-#     hold your own config. Most agents can't auto-run a skill; the pointer makes them discover it.
+# Each agent reads a native per-skill dir; we symlink each skill into it. Override any dir with
+# CLAUDE_SKILLS_DIR / CODEX_SKILLS_DIR / CURSOR_SKILLS_DIR / GEMINI_SKILLS_DIR.
+# Safe & idempotent: we only ever create, refresh, or prune symlinks that point back into THIS
+# repo. A name you already own (a real dir, or a link pointing elsewhere) is left untouched.
 set -euo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
-skills=(); for d in "$here"/*/*/; do [ -f "$d/SKILL.md" ] && skills+=("$d"); done
-agents=("$@"); [ ${#agents[@]} -eq 0 ] && agents=(all)
-[ "${agents[*]}" = "all" ] && agents=(claude codex cursor gemini)
+skills=(); for d in "$here"/*/*/; do [ -f "$d/SKILL.md" ] && skills+=("${d%/}"); done
+[ ${#skills[@]} -gt 0 ] || { echo "no skills found under $here" >&2; exit 1; }
 
-pointer() {
-  echo "<!-- jasonv-skills -->"
-  echo "## Skills (jasonv-skills)"
-  echo "Skills live under \`$here/<category>/<skill>/\`. When a task matches a skill's purpose,"
-  echo "READ that skill's SKILL.md and follow it. See $here/AGENTS.md for the full guide. Available:"
+# refuse to install if two skills share a folder name (they'd collide in a flat dest)
+dupes="$(for d in "${skills[@]}"; do basename "$d"; done | sort | uniq -d)"
+[ -z "$dupes" ] || { printf 'duplicate skill names, refusing to install:\n%s\n' "$dupes" >&2; exit 1; }
+names=" "; for d in "${skills[@]}"; do names+="$(basename "$d") "; done   # space-delimited for the prune membership test
+
+agents=("$@"); [ ${#agents[@]} -eq 0 ] && agents=(all)
+case " ${agents[*]} " in *" all "*) agents=(claude codex cursor gemini);; esac
+
+ours() { case "$(readlink "$1" 2>/dev/null)" in "$here"/*) return 0;; *) return 1;; esac; }
+
+link_into() { # dest label
+  local dest="$1" label="$2" n=0 skipped=0 pruned=0 name tgt
+  mkdir -p "$dest"
   for d in "${skills[@]}"; do
-    echo "- $(basename "$d") — ${d#$here/}SKILL.md"
+    name="$(basename "$d")"; tgt="$dest/$name"
+    if { [ -e "$tgt" ] || [ -L "$tgt" ]; } && ! { [ -L "$tgt" ] && ours "$tgt"; }; then
+      echo "  skip $name — you already have $tgt"; skipped=$((skipped + 1)); continue
+    fi
+    ln -sfn "$d" "$tgt"; n=$((n + 1))
   done
+  for l in "$dest"/*; do                      # prune OUR stale links (skill removed from repo)
+    [ -L "$l" ] && ours "$l" || continue
+    case "$names" in *" $(basename "$l") "*) ;; *) rm -f "$l"; pruned=$((pruned + 1));; esac
+  done
+  echo "$label: linked/updated $n · skipped $skipped · pruned $pruned → $dest"
 }
 
 for a in "${agents[@]}"; do case "$a" in
-  claude)
-    dest="${CLAUDE_SKILLS_DIR:-$HOME/.claude/skills}"; mkdir -p "$dest"
-    for d in "${skills[@]}"; do ln -sfn "$d" "$dest/$(basename "$d")"; done
-    echo "claude: linked ${#skills[@]} skills into $dest (auto-discovered)."
-    ;;
-  codex)  echo; echo "# codex — paste into ~/.codex/AGENTS.md (or your project AGENTS.md):"; echo; pointer;;
-  cursor) echo; echo "# cursor — paste into your project .cursor/rules (or Settings > Rules):"; echo; pointer;;
-  gemini) echo; echo "# gemini — paste into ~/.gemini/GEMINI.md:"; echo; pointer;;
-  *) echo "unknown agent: $a (use claude|codex|cursor|gemini|all)" >&2;;
+  claude) link_into "${CLAUDE_SKILLS_DIR:-$HOME/.claude/skills}" claude;;
+  codex)  link_into "${CODEX_SKILLS_DIR:-$HOME/.codex/skills}"  codex;;
+  cursor) link_into "${CURSOR_SKILLS_DIR:-$HOME/.cursor/skills}" cursor;;
+  gemini) link_into "${GEMINI_SKILLS_DIR:-$HOME/.gemini/skills}" gemini;;
+  *) echo "unknown agent: $a (use claude|codex|cursor|gemini|all)" >&2; exit 2;;
 esac; done
