@@ -1,0 +1,4 @@
+id,area,user_story,expected_behavior,source,status,issues,fix,verified
+F3,Auth,"As a user, I want to log in, so that I reach my dashboard.",POST /login sets the session cookie and redirects to /app,auth.ts:42,verified,,,"Logged in as test user; dashboard rendered, no console errors"
+F7,Billing,"As an admin, I want to export invoices, so that I can reconcile.",GET /invoices.csv streams the current org's rows,billing.ts:118,fail,"Export returns 500 when org has 0 invoices (empty-set divide). Repro: new org -> Export.",,Network tab: 500 on /invoices.csv
+F9,Settings,"As a user, I want to change my email, so that notifications reach me.","PUT /settings/email validates + persists, sends confirm",settings.ts:64,fixed,Saved without validating format.,Added zod email check before persist,(re-test pending)
