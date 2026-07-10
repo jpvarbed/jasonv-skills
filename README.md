@@ -1,37 +1,39 @@
 # jasonv-skills
 
-Curated, self-contained skills for AI coding agents (Claude Code, Cursor, and any agent that reads a `SKILL.md`). Install: `./install.sh` (symlinks each skill into `~/.claude/skills`).
+Skills for AI coding agents. **This repo is written for agents — start with [AGENTS.md](AGENTS.md).**
+
+Humans: each skill lives under `<category>/<skill>/` with a `SKILL.md` (the method) and, increasingly, a `SPEC.md` (what it must do + eval record). Install: `./install.sh`.
 
 ## Skills
 
 ### engineering
 
-- **[total-tdd](engineering/total-tdd/)** — Systematic whole-app feature audit → test → fix loop, backed by tracker.py + render.py over one canonical CSV state machine.
+- **[total-tdd](engineering/total-tdd/)** — Systematic whole-app feature audit → test → fix loop, backed by tracker.py + render.py over one canonical CSV state machine. _(needs: a browser-automation tool, bundled python)_
 
 ### knowledge
 
-- **[agentic-engineering](knowledge/agentic-engineering/)** — Read-only reference KB (not a procedure) on building agentic systems — loop engineering, harness design, agent reliability, context/token engineering, the agentic web (MCP/disco….
-- **[gap-briefing](knowledge/gap-briefing/)** — Use when the user wants to catch up on what changed in the world since the model's knowledge cutoff and have it filtered through their own projects — "what did I miss", "anythin….
+- **[agentic-engineering](knowledge/agentic-engineering/)** — Read-only reference KB (not a procedure) on building agentic systems — loop engineering, harness design, agent reliability, context/token engineering, the agentic web (MCP/disco…. _(needs: nothing (pure method))_
+- **[gap-briefing](knowledge/gap-briefing/)** — Use when the user wants to catch up on what changed in the world since the model's knowledge cutoff and have it filtered through their own projects — "what did I miss", "anythin…. _(needs: web search/fetch)_
 
 ### meta
 
-- **[apply-paper](meta/apply-paper/)** — Turn a research paper's finding into a concrete change to our skills/agents — distill the claim, map it to where it applies, design the change, and prove it helps.
-- **[determinize-refactor](meta/determinize-refactor/)** — Analyze a prompt-heavy skill/plugin and produce a prioritized migration plan that moves deterministic instructions out of prose into scripts or structured contracts — improving….
-- **[goal-spec](meta/goal-spec/)** — Turn a rough task into a launch-ready /goal brief — a verifiable spec with context-access, a verification plan, and a binary rubric — so a dispatched agent runs to completion un….
-- **[instruction-conflicts](meta/instruction-conflicts/)** — Audit the layered instruction stack (in-conversation user → soul.md/global → project guide → skill → tool/system) for conflicting or ambiguous directives, and surface which laye….
+- **[apply-paper](meta/apply-paper/)** — Turn a research paper's finding into a concrete change to our skills/agents — distill the claim, map it to where it applies, design the change, and prove it helps. _(needs: nothing (pure method))_
+- **[determinize-refactor](meta/determinize-refactor/)** — Analyze a prompt-heavy skill/plugin and produce a prioritized migration plan that moves deterministic instructions out of prose into scripts or structured contracts — improving…. _(needs: nothing (pure method))_
+- **[goal-spec](meta/goal-spec/)** — Turn a rough task into a launch-ready /goal brief — a verifiable spec with context-access, a verification plan, and a binary rubric — so a dispatched agent runs to completion un…. _(needs: nothing (pure method))_
+- **[instruction-conflicts](meta/instruction-conflicts/)** — Audit the layered instruction stack (in-conversation user → soul.md/global → project guide → skill → tool/system) for conflicting or ambiguous directives, and surface which laye…. _(needs: nothing (pure method))_
 
 ### productivity
 
-- **[caveman](productivity/caveman/)** — Ultra-compressed communication mode.
+- **[caveman](productivity/caveman/)** — Ultra-compressed communication mode. _(needs: nothing (pure method))_
 
 ### review
 
-- **[adversarial-review](review/adversarial-review/)** — Get a ruthless, INDEPENDENT second-model critique of a plan, spec, ADR, PRD, or diff via the Gemini CLI, then triage the findings (valid vs.
-- **[gtm-diligence](review/gtm-diligence/)** — Run a comprehensive pre-ship / go-to-market readiness audit of an application across security, reliability, concurrency/race conditions, accessibility (WCAG 2.2 AA), performance….
-- **[visual-critique](review/visual-critique/)** — Get a robust, noise-free 3-run majority-vote visual critique of 3D renders, joint positions, skeletal anatomy, or UI look-and-feel via the Gemini CLI, synthesizing a consensus r….
+- **[adversarial-review](review/adversarial-review/)** — Get a ruthless, INDEPENDENT second-model critique of a plan, spec, ADR, PRD, or diff via the Gemini CLI, then triage the findings (valid vs. _(needs: `gemini` CLI)_
+- **[gtm-diligence](review/gtm-diligence/)** — Run a comprehensive pre-ship / go-to-market readiness audit of an application across security, reliability, concurrency/race conditions, accessibility (WCAG 2.2 AA), performance…. _(needs: a browser-automation tool)_
+- **[visual-critique](review/visual-critique/)** — Get a robust, noise-free 3-run majority-vote visual critique of 3D renders, joint positions, skeletal anatomy, or UI look-and-feel via the Gemini CLI, synthesizing a consensus r…. _(needs: `gemini` CLI, a browser-automation tool)_
 
 ### writing
 
-- **[writing-hooks](writing/writing-hooks/)** — Personal compilation of hook and social-post writing gotchas (X/LinkedIn) in Jason''s voice.
+- **[writing-hooks](writing/writing-hooks/)** — Personal compilation of hook and social-post writing gotchas (X/LinkedIn) in Jason''s voice. _(needs: nothing (pure method))_
 
 MIT © 2026 Jason Varbedian
