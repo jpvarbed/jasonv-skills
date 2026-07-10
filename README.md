@@ -22,7 +22,7 @@ Curated, self-contained skills for AI coding agents (Claude Code, Cursor, and an
 
 ### productivity
 
-- **[caveman](productivity/caveman/)** — >.
+- **[caveman](productivity/caveman/)** — Ultra-compressed communication mode.
 
 ### review
 
