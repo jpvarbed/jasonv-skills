@@ -4,6 +4,22 @@ Skills for AI coding agents. **This repo is written for agents — start with [A
 
 Humans: each skill lives under `<category>/<skill>/` with a `SKILL.md` (the method) and, increasingly, a `SPEC.md` (what it must do + eval record). Install: `./install.sh`.
 
+<!-- arena-publish:begin -->
+| Skill | Category | Status | Headline | Evidence |
+|---|---|---|---|---|
+| total-tdd | engineering | no eval yet | Numbers appear here when this skill gets a benchmark. | [PERF.md](engineering/total-tdd/PERF.md) |
+| apply-paper | meta | no eval yet | Numbers appear here when this skill gets a benchmark. | [PERF.md](meta/apply-paper/PERF.md) |
+| determinize-refactor | meta | no eval yet | Numbers appear here when this skill gets a benchmark. | [PERF.md](meta/determinize-refactor/PERF.md) |
+| goal-spec | meta | no eval yet | Numbers appear here when this skill gets a benchmark. | [PERF.md](meta/goal-spec/PERF.md) |
+| instruction-conflicts | meta | no eval yet | Numbers appear here when this skill gets a benchmark. | [PERF.md](meta/instruction-conflicts/PERF.md) |
+| caveman | productivity | no eval yet | Numbers appear here when this skill gets a benchmark. | [PERF.md](productivity/caveman/PERF.md) |
+| adversarial-review | review | no eval yet | Numbers appear here when this skill gets a benchmark. | [PERF.md](review/adversarial-review/PERF.md) |
+| gtm-diligence | review | no eval yet | Numbers appear here when this skill gets a benchmark. | [PERF.md](review/gtm-diligence/PERF.md) |
+| visual-critique | review | no eval yet | Numbers appear here when this skill gets a benchmark. | [PERF.md](review/visual-critique/PERF.md) |
+| highsignal | writing | measured | detection `codex exec` (codex-cli 0.142.4, default model) 13/14; openai +10.5pp / haiku -10.5pp pre->post | [PERF.md](writing/highsignal/PERF.md) |
+| writing-hooks | writing | no eval yet | Numbers appear here when this skill gets a benchmark. | [PERF.md](writing/writing-hooks/PERF.md) |
+<!-- arena-publish:end -->
+
 ## Skills
 
 ### engineering
