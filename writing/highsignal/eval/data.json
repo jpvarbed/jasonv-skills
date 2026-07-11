@@ -1,0 +1,72 @@
+{
+  "canonical_repo": "https://github.com/jpvarbed/highsignal",
+  "category": "writing",
+  "detection": {
+    "benchmark": "highsignal detect eval",
+    "case_count": 19,
+    "scores": [
+      {
+        "false_positives": 0,
+        "model": "`codex exec` (codex-cli 0.142.4, default model)",
+        "passes": 13,
+        "rate": "93%",
+        "total": 14
+      },
+      {
+        "false_positives": 0,
+        "model": "Claude `sonnet-4-6` (Anthropic API)",
+        "passes": 12,
+        "rate": "86%",
+        "total": 14
+      }
+    ],
+    "trials": 1
+  },
+  "evidence": [
+    "eval/RESULTS.md",
+    "eval/data.json"
+  ],
+  "forge": {
+    "models": [
+      {
+        "backend": "google",
+        "best_variant": "v6",
+        "best_variant_passes": 13,
+        "best_variant_score": 0.6842105263157895,
+        "lift_pp": 0.0,
+        "model_id": "gemini-2.5-flash",
+        "n": 19,
+        "original_passes": 13,
+        "original_score": 0.6842105263157895
+      },
+      {
+        "backend": "haiku",
+        "best_variant": "v1",
+        "best_variant_passes": 9,
+        "best_variant_score": 0.47368421052631576,
+        "lift_pp": -10.5,
+        "model_id": "claude-haiku-4-5-20251001",
+        "n": 19,
+        "original_passes": 11,
+        "original_score": 0.5789473684210527
+      },
+      {
+        "backend": "openai",
+        "best_variant": "v2",
+        "best_variant_passes": 12,
+        "best_variant_score": 0.631578947368421,
+        "lift_pp": 10.5,
+        "model_id": "gpt-5.5",
+        "n": 19,
+        "original_passes": 10,
+        "original_score": 0.5263157894736842
+      }
+    ],
+    "source_schema_version": 1,
+    "target": "openai",
+    "trials": 1
+  },
+  "notes": [],
+  "schema_version": 1,
+  "skill": "highsignal"
+}
