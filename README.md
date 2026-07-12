@@ -7,7 +7,7 @@ Humans: each skill lives under `<category>/<skill>/` with a `SKILL.md` (the meth
 <!-- arena-publish:begin -->
 | Skill | Category | Status | Headline | Evidence |
 |---|---|---|---|---|
-| total-tdd | engineering | no eval yet | evidence unavailable; see PERF.md | [PERF.md](engineering/total-tdd/PERF.md) |
+| total-tdd | engineering | measured | detection codex / with-skill 8/8 | [PERF.md](engineering/total-tdd/PERF.md) |
 | apply-paper | meta | no eval yet | evidence unavailable; see PERF.md | [PERF.md](meta/apply-paper/PERF.md) |
 | determinize-refactor | meta | no eval yet | evidence unavailable; see PERF.md | [PERF.md](meta/determinize-refactor/PERF.md) |
 | goal-spec | meta | measured | detection codex / with-skill 7/8 | [PERF.md](meta/goal-spec/PERF.md) |
