@@ -1,0 +1,35 @@
+{
+  "canonical_repo": "https://github.com/jpvarbed/skill-arena",
+  "category": "productivity",
+  "detection": {
+    "benchmark": "caveman arena eval",
+    "case_count": 12,
+    "scores": [
+      {
+        "false_positives": 0,
+        "model": "codex / baseline",
+        "passes": 6,
+        "rate": "50%",
+        "total": 12
+      },
+      {
+        "false_positives": 0,
+        "model": "codex / with-skill",
+        "passes": 6,
+        "rate": "50%",
+        "total": 12
+      }
+    ],
+    "trials": 1
+  },
+  "evidence": [
+    "eval/RESULTS.md",
+    "eval/data.json"
+  ],
+  "forge": null,
+  "notes": [
+    "forge source missing; skipped."
+  ],
+  "schema_version": 1,
+  "skill": "caveman"
+}

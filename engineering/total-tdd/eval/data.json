@@ -1,0 +1,35 @@
+{
+  "canonical_repo": "https://github.com/jpvarbed/skill-arena",
+  "category": "engineering",
+  "detection": {
+    "benchmark": "total-tdd arena eval",
+    "case_count": 8,
+    "scores": [
+      {
+        "false_positives": 0,
+        "model": "codex / baseline",
+        "passes": 8,
+        "rate": "100%",
+        "total": 8
+      },
+      {
+        "false_positives": 0,
+        "model": "codex / with-skill",
+        "passes": 8,
+        "rate": "100%",
+        "total": 8
+      }
+    ],
+    "trials": 1
+  },
+  "evidence": [
+    "eval/RESULTS.md",
+    "eval/data.json"
+  ],
+  "forge": null,
+  "notes": [
+    "forge source missing; skipped."
+  ],
+  "schema_version": 1,
+  "skill": "total-tdd"
+}

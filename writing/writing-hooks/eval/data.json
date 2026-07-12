@@ -1,0 +1,28 @@
+{
+  "canonical_repo": "https://github.com/jpvarbed/skill-arena",
+  "category": "writing",
+  "detection": {
+    "benchmark": "writing-hooks arena eval",
+    "case_count": 18,
+    "scores": [
+      {
+        "false_positives": 1,
+        "model": "codex / with-skill",
+        "passes": 17,
+        "rate": "94%",
+        "total": 18
+      }
+    ],
+    "trials": 1
+  },
+  "evidence": [
+    "eval/RESULTS.md",
+    "eval/data.json"
+  ],
+  "forge": null,
+  "notes": [
+    "forge source missing; skipped."
+  ],
+  "schema_version": 1,
+  "skill": "writing-hooks"
+}
