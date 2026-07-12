@@ -1,0 +1,35 @@
+{
+  "canonical_repo": "https://github.com/jpvarbed/skill-arena",
+  "category": "meta",
+  "detection": {
+    "benchmark": "goal-spec arena eval",
+    "case_count": 8,
+    "scores": [
+      {
+        "false_positives": 0,
+        "model": "codex / baseline",
+        "passes": 6,
+        "rate": "75%",
+        "total": 8
+      },
+      {
+        "false_positives": 0,
+        "model": "codex / with-skill",
+        "passes": 7,
+        "rate": "88%",
+        "total": 8
+      }
+    ],
+    "trials": 1
+  },
+  "evidence": [
+    "eval/RESULTS.md",
+    "eval/data.json"
+  ],
+  "forge": null,
+  "notes": [
+    "forge source missing; skipped."
+  ],
+  "schema_version": 1,
+  "skill": "goal-spec"
+}
