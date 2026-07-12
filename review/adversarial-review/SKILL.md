@@ -30,10 +30,16 @@ feed it, so include the rationale, not just the conclusions.
 ### 2. Run the review
 
 ```bash
-skills/review/adversarial-review/gemini-review.sh \
+skills/review/adversarial-review/adversarial-review.sh \
   --focus "the specific bets you most want attacked" \
   path/to/ADR.md path/to/tasks.md
 ```
+
+`adversarial-review.sh` is the provider-neutral entrypoint: it prefers Gemini but
+falls back gemini → codex → cursor so the red-team step never hard-fails on one provider
+(Gemini's spend cap, 2026-07). It consults the harness's `capacity.json` when present
+(skips a capped seat without burning a timeout, reports runtime 429s back) and prints
+`ENGINE: <name>` as its first line. `gemini-review.sh` remains the Gemini-specific adapter:
 
 - `--focus` appends targeted attack instructions (the core bet, the riskiest
   slice, a specific invariant). Strongly recommended — a focused adversary is
