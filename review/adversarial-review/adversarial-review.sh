@@ -3,7 +3,7 @@
 # (--model/--focus/FILES) but with a fallback chain so the red-team step never
 # hard-fails on one provider: gemini → codex → cursor (all read-only).
 #
-# Capacity-aware when the harness repo is present (HARNESS_DIR, default ~/dev/harness):
+# Capacity-aware when HARNESS_DIR points at a checkout providing capacity.py:
 # a seat marked exhausted in capacity.json is skipped without burning a timeout, and a
 # runtime capacity error (429 / spend cap / no credits) is reported back so the state
 # self-updates. Without the harness, the chain still works — it just learns by failing.
@@ -14,7 +14,8 @@
 set -uo pipefail
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
-HARNESS_DIR="${HARNESS_DIR:-$HOME/dev/harness}"
+# opt-in: export HARNESS_DIR to enable capacity-aware seat ordering
+HARNESS_DIR="${HARNESS_DIR:-}"
 CAP_PY="$HARNESS_DIR/capacity.py"
 CAP_FILE="${CAPACITY_FILE:-$HARNESS_DIR/capacity.json}"
 

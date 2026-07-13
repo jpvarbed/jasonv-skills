@@ -11,7 +11,7 @@ Humans: each skill lives under `<category>/<skill>/` with a `SKILL.md` (the meth
 | apply-paper | meta | no eval yet | evidence unavailable; see PERF.md | [PERF.md](meta/apply-paper/PERF.md) |
 | determinize-refactor | meta | no eval yet | evidence unavailable; see PERF.md | [PERF.md](meta/determinize-refactor/PERF.md) |
 | goal-spec | meta | measured | detection codex / with-skill 7/8 | [PERF.md](meta/goal-spec/PERF.md) |
-| instruction-conflicts | meta | measured | detection codex / with-skill 15/18 | [PERF.md](meta/instruction-conflicts/PERF.md) |
+| instruction-conflicts | meta | measured | detection codex-56luna / with-skill 15/18; codex-56sol +27.8pp pre->post | [PERF.md](meta/instruction-conflicts/PERF.md) |
 | caveman | productivity | measured | detection codex / with-skill 6/12 | [PERF.md](productivity/caveman/PERF.md) |
 | adversarial-review | review | no eval yet | evidence unavailable; see PERF.md | [PERF.md](review/adversarial-review/PERF.md) |
 | gtm-diligence | review | no eval yet | evidence unavailable; see PERF.md | [PERF.md](review/gtm-diligence/PERF.md) |
