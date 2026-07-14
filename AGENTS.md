@@ -12,9 +12,8 @@ into it; the agent then discovers each `SKILL.md` natively.
 - **Claude Code** — `~/.claude/skills`
 - **Codex** — `~/.codex/skills`
 - **Cursor** — `~/.cursor/skills`
-- **Gemini CLI** — `~/.gemini/skills`
 
-`./install.sh all` does all four. Override any target with `CLAUDE_SKILLS_DIR`/`CODEX_SKILLS_DIR`/`CURSOR_SKILLS_DIR`/`GEMINI_SKILLS_DIR`. Safe and
+`./install.sh all` does all three. Override any target with `CLAUDE_SKILLS_DIR`/`CODEX_SKILLS_DIR`/`CURSOR_SKILLS_DIR`. Safe and
 idempotent: it only creates, refreshes, or prunes symlinks that point back into this repo —
 a skill name you already own (a real dir, or a link elsewhere) is left untouched.
 
@@ -34,9 +33,9 @@ tested on. Specs exist for 1/10 skills so far.
 | [goal-spec](meta/goal-spec/) | meta | nothing (pure method) | — |
 | [instruction-conflicts](meta/instruction-conflicts/) | meta | nothing (pure method) | — |
 | [caveman](productivity/caveman/) | productivity | nothing (pure method) | — |
-| [adversarial-review](review/adversarial-review/) | review | `gemini` CLI preferred; falls back to `codex` / `cursor-agent` | — |
+| [adversarial-review](review/adversarial-review/) | review | one of `codex`, `cline`, `claude`, or `cursor-agent` | — |
 | [gtm-diligence](review/gtm-diligence/) | review | a browser-automation tool | — |
-| [visual-critique](review/visual-critique/) | review | `gemini` CLI, a browser-automation tool | — |
+| [visual-critique](review/visual-critique/) | review | `codex` CLI, a browser-automation tool | — |
 | [writing-hooks](writing/writing-hooks/) | writing | nothing (pure method) | — |
 
 ## The SPEC.md convention
@@ -48,7 +47,7 @@ do and the record of which agents it has been evaluated on. Change the spec firs
 ## Install
 
 ```
-./install.sh [claude|codex|cursor|gemini|all]
+./install.sh [claude|codex|cursor|all]
 ```
 
 MIT © 2026 Jason Varbedian
