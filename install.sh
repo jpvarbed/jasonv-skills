@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Install jasonv-skills for one or more agents:  ./install.sh [claude|codex|cursor|gemini|all]
+# Install jasonv-skills for one or more agents:  ./install.sh [claude|codex|cursor|all]
 # Each agent reads a native per-skill dir; we symlink each skill into it. Override any dir with
-# CLAUDE_SKILLS_DIR / CODEX_SKILLS_DIR / CURSOR_SKILLS_DIR / GEMINI_SKILLS_DIR.
+# CLAUDE_SKILLS_DIR / CODEX_SKILLS_DIR / CURSOR_SKILLS_DIR.
 # Safe & idempotent: we only ever create, refresh, or prune symlinks that point back into THIS
 # repo. A name you already own (a real dir, or a link pointing elsewhere) is left untouched.
 set -euo pipefail
@@ -15,7 +15,7 @@ dupes="$(for d in "${skills[@]}"; do basename "$d"; done | sort | uniq -d)"
 names=" "; for d in "${skills[@]}"; do names+="$(basename "$d") "; done   # space-delimited for the prune membership test
 
 agents=("$@"); [ ${#agents[@]} -eq 0 ] && agents=(all)
-case " ${agents[*]} " in *" all "*) agents=(claude codex cursor gemini);; esac
+case " ${agents[*]} " in *" all "*) agents=(claude codex cursor);; esac
 
 ours() { case "$(readlink "$1" 2>/dev/null)" in "$here"/*) return 0;; *) return 1;; esac; }
 
@@ -40,6 +40,5 @@ for a in "${agents[@]}"; do case "$a" in
   claude) link_into "${CLAUDE_SKILLS_DIR:-$HOME/.claude/skills}" claude;;
   codex)  link_into "${CODEX_SKILLS_DIR:-$HOME/.codex/skills}"  codex;;
   cursor) link_into "${CURSOR_SKILLS_DIR:-$HOME/.cursor/skills}" cursor;;
-  gemini) link_into "${GEMINI_SKILLS_DIR:-$HOME/.gemini/skills}" gemini;;
-  *) echo "unknown agent: $a (use claude|codex|cursor|gemini|all)" >&2; exit 2;;
+  *) echo "unknown agent: $a (use claude|codex|cursor|all)" >&2; exit 2;;
 esac; done

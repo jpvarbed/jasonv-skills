@@ -38,7 +38,7 @@ canonical CSV state machine (`tracker.py`) rendered to HTML (`render.py`). Nothi
 ## Evaluated on
 
 Honest status: **authored and used in Claude Code; not yet formally evaluated on Codex, Cursor,
-or Gemini CLI.** The method is agent-agnostic (it only needs the deps above), but cross-agent
+or Cline.** The method is agent-agnostic (it only needs the deps above), but cross-agent
 eval via skill-arena is a TODO. Update this section with concrete results when run.
 
 | agent | evaluated | notes |
@@ -46,4 +46,3 @@ eval via skill-arena is a TODO. Update this section with concrete results when r
 | Claude Code | used in practice | primary authoring environment |
 | Codex | no | untested |
 | Cursor | no | untested |
-| Gemini CLI | no | untested |
