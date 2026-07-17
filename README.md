@@ -39,7 +39,7 @@ Humans: each skill lives under `<category>/<skill>/` with a `SKILL.md` (the meth
 
 ### review
 
-- **[adversarial-review](review/adversarial-review/)** — Get a ruthless independent critique of a plan, spec, ADR, PRD, or diff through a read-only provider fallback chain, then triage the findings. _(needs: one of `codex`, `cline`, `claude`, or `cursor-agent`)_
+- **[adversarial-review](review/adversarial-review/)** — Run a fast two-persona or deep four-persona council across live-verified device seats, with exact setup/auth/model receipts and no runtime fallback. _(needs: 1+ configured agent seat)_
 - **[gtm-diligence](review/gtm-diligence/)** — Run a comprehensive pre-ship / go-to-market readiness audit of an application across security, reliability, concurrency/race conditions, accessibility (WCAG 2.2 AA), performance…. _(needs: a browser-automation tool)_
 - **[visual-critique](review/visual-critique/)** — Run three independent Codex vision inspections of a render, pose, screenshot, or UI, then synthesize a consensus report. _(needs: `codex` CLI, a browser-automation tool)_
 

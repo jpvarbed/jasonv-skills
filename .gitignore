@@ -1,3 +1,6 @@
 __pycache__/
 *.pyc
 .DS_Store
+/review/adversarial-review/council-config.json
+/review/adversarial-review/.council-config.json.lock
+/review/adversarial-review/.council-runs/

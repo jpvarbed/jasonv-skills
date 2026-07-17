@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "profiles": {
+    "fast": [
+      {
+        "persona": "Architect",
+        "seat": "example-codex"
+      },
+      {
+        "persona": "Adversary",
+        "seat": "example-claude"
+      }
+    ],
+    "deep": [
+      {
+        "persona": "Architect",
+        "seat": "example-codex"
+      },
+      {
+        "persona": "Pragmatist",
+        "seat": "example-cursor"
+      },
+      {
+        "persona": "Verifier",
+        "seat": "example-claude"
+      },
+      {
+        "persona": "Adversary",
+        "seat": "example-cursor"
+      }
+    ]
+  },
+  "seats": [
+    {
+      "id": "example-codex",
+      "adapter": "codex",
+      "executable": "/absolute/path/to/codex",
+      "auth": {
+        "method": "oauth",
+        "label": "Codex first-party login",
+        "required_environment": [],
+        "unset_environment": [],
+        "setup_steps": [
+          "Install the Codex CLI.",
+          "Complete its first-party login.",
+          "Confirm the exact model available to that seat."
+        ]
+      },
+      "model": "gpt-replace-with-exact-model",
+      "observed": {
+        "smoke": {
+          "status": "setup_required",
+          "failure_class": "unconfigured",
+          "last_error": "Replace the example seat with device facts.",
+          "verified_at": "1970-01-01T00:00:00.000000Z"
+        },
+        "review": {
+          "status": "setup_required",
+          "failure_class": "not_run",
+          "last_error": "No bounded representative review has completed.",
+          "verified_at": "1970-01-01T00:00:00.000000Z"
+        }
+      }
+    },
+    {
+      "id": "example-cursor",
+      "adapter": "cursor",
+      "executable": "/absolute/path/to/agent",
+      "auth": {
+        "method": "secret_manager",
+        "label": "Cursor API key supplied to the parent environment and retained only for the Cursor child",
+        "required_environment": [
+          "CURSOR_API_KEY"
+        ],
+        "unset_environment": [],
+        "setup_steps": [
+          "Install the official Cursor Agent CLI.",
+          "Resolve CURSOR_API_KEY into the invoking environment without storing it in this file.",
+          "Confirm the exact Composer model available to that seat."
+        ]
+      },
+      "model": "composer-replace-with-exact-model",
+      "observed": {
+        "smoke": {
+          "status": "setup_required",
+          "failure_class": "unconfigured",
+          "last_error": "Replace the example seat with device facts.",
+          "verified_at": "1970-01-01T00:00:00.000000Z"
+        },
+        "review": {
+          "status": "setup_required",
+          "failure_class": "not_run",
+          "last_error": "No bounded representative review has completed.",
+          "verified_at": "1970-01-01T00:00:00.000000Z"
+        }
+      }
+    },
+    {
+      "id": "example-cline",
+      "adapter": "cline",
+      "executable": "/absolute/path/to/cline",
+      "auth": {
+        "method": "oauth",
+        "label": "ClinePass device OAuth",
+        "required_environment": [],
+        "unset_environment": [],
+        "setup_steps": [
+          "Install Cline CLI.",
+          "Authenticate the ClinePass provider.",
+          "Confirm an exact supported ClinePass model."
+        ]
+      },
+      "model": "cline-pass/glm-replace-with-exact-model",
+      "observed": {
+        "smoke": {
+          "status": "setup_required",
+          "failure_class": "unconfigured",
+          "last_error": "Replace the example seat with device facts.",
+          "verified_at": "1970-01-01T00:00:00.000000Z"
+        },
+        "review": {
+          "status": "setup_required",
+          "failure_class": "not_run",
+          "last_error": "No bounded representative review has completed.",
+          "verified_at": "1970-01-01T00:00:00.000000Z"
+        }
+      }
+    },
+    {
+      "id": "example-claude",
+      "adapter": "claude",
+      "executable": "/absolute/path/to/claude",
+      "auth": {
+        "method": "oauth",
+        "label": "Claude first-party subscription OAuth",
+        "required_environment": [],
+        "unset_environment": [],
+        "setup_steps": [
+          "Install the native Claude Code CLI.",
+          "Complete first-party browser login.",
+          "Confirm the exact Claude model available to that seat."
+        ]
+      },
+      "model": "claude-replace-with-exact-model",
+      "observed": {
+        "smoke": {
+          "status": "setup_required",
+          "failure_class": "unconfigured",
+          "last_error": "Replace the example seat with device facts.",
+          "verified_at": "1970-01-01T00:00:00.000000Z"
+        },
+        "review": {
+          "status": "setup_required",
+          "failure_class": "not_run",
+          "last_error": "No bounded representative review has completed.",
+          "verified_at": "1970-01-01T00:00:00.000000Z"
+        }
+      }
+    }
+  ]
+}
