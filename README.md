@@ -32,6 +32,7 @@ Humans: each skill lives under `<category>/<skill>/` with a `SKILL.md` (the meth
 - **[determinize-refactor](meta/determinize-refactor/)** — Analyze a prompt-heavy skill/plugin and produce a prioritized migration plan that moves deterministic instructions out of prose into scripts or structured contracts — improving…. _(needs: nothing (pure method))_
 - **[goal-spec](meta/goal-spec/)** — Turn a rough task into a launch-ready /goal brief — a verifiable spec with context-access, a verification plan, and a binary rubric — so a dispatched agent runs to completion un…. _(needs: nothing (pure method))_
 - **[instruction-conflicts](meta/instruction-conflicts/)** — Audit the layered instruction stack (in-conversation user → soul.md/global → project guide → skill → tool/system) for conflicting or ambiguous directives, and surface which laye…. _(needs: nothing (pure method))_
+- **[skill-workshop](meta/skill-workshop/)** — Build or materially redesign an agent skill from a rough idea or solved workflow, then prove it with tiered tests, evaluation, blind cross-family forward tests, and a typed completion receipt. _(needs: bundled python, skill-arena, configured review seats)_
 
 ### productivity
 
