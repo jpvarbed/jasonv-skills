@@ -33,7 +33,7 @@ tested on. Specs exist for 1/10 skills so far.
 | [goal-spec](meta/goal-spec/) | meta | nothing (pure method) | — |
 | [instruction-conflicts](meta/instruction-conflicts/) | meta | nothing (pure method) | — |
 | [caveman](productivity/caveman/) | productivity | nothing (pure method) | — |
-| [adversarial-review](review/adversarial-review/) | review | one of `codex`, `cline`, `claude`, or `cursor-agent` | — |
+| [adversarial-review](review/adversarial-review/) | review | configured `fast`/`deep` profiles using Codex, Cursor, Cline, and/or Claude | ✓ |
 | [gtm-diligence](review/gtm-diligence/) | review | a browser-automation tool | — |
 | [visual-critique](review/visual-critique/) | review | `codex` CLI, a browser-automation tool | — |
 | [writing-hooks](writing/writing-hooks/) | writing | nothing (pure method) | — |

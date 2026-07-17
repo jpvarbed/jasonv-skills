@@ -1,0 +1,1 @@
+{"type":"result","subtype":"success","is_error":false,"terminal_reason":"completed","permission_denials":[],"structured_output":{"output":"VERDICT: PASS"},"modelUsage":{"claude-opus-4-8":{"inputTokens":1,"outputTokens":1}}}
