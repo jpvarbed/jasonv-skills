@@ -1,0 +1,34 @@
+$ adversarial-review.sh --focus 'spec completeness, hidden gaps, gameable gates' SPEC.md
+# fast cross-family review of the SPEC; codex seat capacity-blocked
+ENGINE: claude
+This was a review-only task — there's nothing to build, so I'll just surface the deliverable. The full write-up is in the plan file. Here's the adversarial review.
+
+## Core defect (the throughline)
+
+The spec centers everything on `workshop.py check` returning `status: "complete"` and calls councils/tests/forward-tests "hard gates." But the checker **never reads a receipt's contents and never runs a command.** It checks JSON keys/types, that referenced files are regular/non-symlink/in-root, and that self-declared fields hold happy values. So every load-bearing anti-cheat invariant reduces to "author typed a coherent value and touched a file." The spec *admits* it isn't a forgery detector — then still markets exit 0 as "complete" and councils as "hard gates." Most findings are instances of this.
+
+## Critical
+
+- **C1 — "complete" is pointer-existence, not evidence.** `touch receipts/tests.txt` satisfies any command gate (`command` non-empty, `exit_code:0`, `dry_run:false`, file exists). Green with zero real runs. *Fix:* rename the terminal state and relocate the completion claim to review, **or** require receipts to embed a runner/CI token the checker parses. It does neither.
+- **C2 — `dry_run:false` is self-declared, receipt unparsed.** Point the "live" record at the dry-run's own log, type `false`. The arena lists "dry-run relabeling" as a *required* violation the checker structurally cannot catch.
+- **C3 — anti-substitution gate is string-equality between two author-typed fields.** Completion needs `substituted:false` + `observed_model==model` + `observed_provider==provider` — all hand-typed. The entire point of integration tier, defeated by typing the same string twice. *Fix:* extract `observed_*` from the representative receipt.
+- **C4 — councils are typed booleans.** "only pass completes"/"hard final gate" reduces to `status:"pass"` + a touched file, content unread, families typed.
+
+## High
+
+- **H1 — trust anchor asserted but not wired.** "CI/terminal/review establish authenticity," yet WORKSHOP.json has **no** provenance field (no CI ref, reviewer seat, signature) tying the receipt to that anchor.
+- **H2 — two-family blind forward-test contradicts its own Resolved decision.** The decision says blindness comes from receipts+review "not unverifiable self-attestation fields in the manifest" — but the gate *is* the manifest `family` field (typed, may equal `author_family`). Most load-bearing evidence, least verifiable.
+- **H3 — secret-leak protection is a one-line string match.** Checks the ignore file *contains* a normalized path, explicitly not that the file is ignored/absent. Gitignore precedence means the line doesn't prove ignoring; a committed secret device_config passes.
+- **H4 — config_example rule is too strict and leaky.** Rejects legitimate non-secret strings (URLs, enums, "false") → false `invalid`; constrains only string *leaf values*, so secrets in keys or encoded as numbers/bools pass.
+- **H5 — smoke-vs-representative is filename inequality.** `smoke.txt` vs `smoke2.txt` defeats it; run smoke twice, rename.
+- **H6 — install `targets` is a frozen 4-set in the completion contract.** Cline was added last commit — the list churns, and every new target forces a lockstep schema change.
+
+## Medium
+M1 catches the *incoherent* author, not the optimistic all-green one; M2 skill-workshop never states its own tier (it bundles code → ≥scripted); M3 tier "fixed before build" vs deps discovered mid-build; M4 "model/provider identity" makes method↔integration fuzzy; M5 Cursor is install-only/unverified; M6 unbacked `exit_code`; M7 vacuous council-families clause; M8 untyped `schema_version`/`work_unit`.
+
+**Hidden assumptions:** skill-arena, Thermos, Plannotator, council profiles all assumed to exist with no build step. **Missing work:** arena violation corpus (12+ cases) unsized; Plannotator unreceipted; `workshop.py` has no independent adjudicator. **Sequencing:** install must precede forward-tests (fresh agents need the skill loaded). **Load-bearing deferral:** anti-forgery deferred to "review/CI" while exit-0=complete ships now; Cline is "experimental" yet a mandatory install target.
+
+## Single biggest risk to escalate
+
+**The completion receipt is theater for the exact failures it enumerates.** `check` can emit `status:"complete"` with no live run, no real second-family review, a committed secret, and representative==smoke — as long as fields are coherent and files exist. Decide *before building*: (a) wire real runner/CI provenance the checker parses and verifies into every evidence record, or (b) rename the terminal state and move the completion claim explicitly to human review. The current framing gives authors a green button that certifies nothing.
+ADV_EXIT=0

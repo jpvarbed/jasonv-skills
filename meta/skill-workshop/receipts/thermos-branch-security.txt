@@ -1,0 +1,16 @@
+THERMOS — thermo-nuclear branch review (bugs, breaking, security, devex, flag-leaks)
+Scope: jasonv-skills + skill-arena diffs vs origin/main.
+
+security_verdict: PASS   quality_verdict: PASS   blocking_findings: none
+  - _safe_file robust: _relative rejects absolute/.. ; per-component symlink walk;
+    resolve(strict=True)+relative_to(root) catch escapes. Tests confirm.
+  - No hole lets a missing/contradictory receipt report complete within the tool's
+    stated trust model (forgery of file *contents* is explicitly out of scope, SPEC 102-104).
+  - _strings_are_placeholders fail-closed + recursive; only ''/${UPPER_SNAKE} pass.
+  - No credential persistence; .gitignore covers .workshop-device.json.
+Non-blocking (acted on / noted):
+  1. config.example.json/.gitignore/WORKSHOP.json/receipts were UNTRACKED → FIXED (git add).
+  2. arena config.json skill_path hardcodes sibling worktree name → won't resolve on a
+     normal clone/CI. KNOWN LIMITATION (cross-repo); flagged to author, not fixed here.
+  3. workshop.py:361 ignore read_text unguarded vs guarded :383 → FIXED (added OSError guard).
+  4. negation check only catches exact '!<path>'; broad un-ignore glob passes. SPEC = best-effort. Noted.

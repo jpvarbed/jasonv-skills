@@ -1,0 +1,125 @@
+{
+  "artifacts": {
+    "config_example": "config.example.json",
+    "deviations": "DEVIATIONS.md",
+    "ignore_file": ".gitignore",
+    "scripts": [
+      "scripts/workshop.py"
+    ],
+    "skill": "SKILL.md",
+    "spec": "SPEC.md",
+    "tests": [
+      "tests/test_workshop.py"
+    ]
+  },
+  "author_family": "openai",
+  "bundles_code": true,
+  "effort": "deep",
+  "evidence": {
+    "baseline": {
+      "command": "uv run arena run --skill skill-workshop --backends local  # in skill-arena repo",
+      "dry_run": false,
+      "exit_code": 0,
+      "receipt": "receipts/arena-local-clean.txt"
+    },
+    "behavioral": {
+      "command": "uv run arena run --skill skill-workshop --backends local  # in skill-arena repo",
+      "dry_run": false,
+      "exit_code": 0,
+      "receipt": "receipts/arena-results.json"
+    },
+    "councils": [
+      {
+        "families": [
+          "anthropic"
+        ],
+        "phase": "spec",
+        "profile": "fast",
+        "receipt": "receipts/council-spec-fast.txt",
+        "status": "blocked"
+      },
+      {
+        "families": [
+          "anthropic",
+          "cursor"
+        ],
+        "phase": "final",
+        "profile": "deep",
+        "receipt": "receipts/council-final-deep.txt",
+        "status": "fail"
+      }
+    ],
+    "forward_tests": [
+      {
+        "command": "Agent(claude): blind, SKILL.md + one raw task; verdict JSON",
+        "dry_run": false,
+        "exit_code": 0,
+        "family": "anthropic",
+        "receipt": "receipts/forward-test-anthropic.txt"
+      },
+      {
+        "command": "Agent(codex): blind, SKILL.md + one raw task; verdict JSON",
+        "dry_run": false,
+        "exit_code": 0,
+        "family": "openai",
+        "receipt": "receipts/forward-test-openai.txt"
+      }
+    ],
+    "install": {
+      "command": "CLAUDE/CODEX/CURSOR/CLINE_SKILLS_DIR=... ./install.sh all",
+      "dry_run": false,
+      "exit_code": 0,
+      "receipt": "receipts/install.txt",
+      "targets": [
+        "claude",
+        "codex",
+        "cursor",
+        "cline"
+      ]
+    },
+    "lint": {
+      "command": "linting-and-scoring rubric (40 checks) on meta/skill-workshop",
+      "dry_run": false,
+      "exit_code": 0,
+      "receipt": "receipts/lint.txt"
+    },
+    "live": {
+      "auth_kind": "none",
+      "device_config": ".workshop-device.json",
+      "failure_class": "none",
+      "model": "qwen-coder-32b-fc",
+      "provider": "local",
+      "recovery": null,
+      "status": "ready"
+    },
+    "repo_tests": {
+      "command": "uv run --with pytest pytest tests/ meta/skill-workshop/tests/ -q",
+      "dry_run": false,
+      "exit_code": 0,
+      "receipt": "receipts/repo-tests.txt"
+    },
+    "representative": {
+      "command": "uv run arena run --skill skill-workshop --backends local  # in skill-arena repo (bounded 18-case classification at the local seat)",
+      "dry_run": false,
+      "exit_code": 0,
+      "observed_model": "qwen-coder-32b-fc",
+      "observed_provider": "local",
+      "receipt": "receipts/arena-local-clean.txt",
+      "substituted": false
+    },
+    "smoke": {
+      "command": "curl -sf localhost:4000/v1/models",
+      "dry_run": false,
+      "exit_code": 0,
+      "receipt": "receipts/smoke-local-identity.txt"
+    },
+    "thermos": {
+      "quality": "pass",
+      "receipt": "receipts/thermos.txt",
+      "security": "pass"
+    }
+  },
+  "schema_version": 1,
+  "tier": "integration",
+  "work_unit": "f84bad5c-2488-41f4-ae0b-75003a5f0b5b"
+}

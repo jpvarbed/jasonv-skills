@@ -1,6 +1,6 @@
 ---
 name: skill-workshop
-description: Build or materially redesign an agent skill from a rough idea or a workflow that just succeeded, with a spec-first design, risk-based evidence, real baseline and with-skill evaluation, blind cross-family forward tests, and a typed completion receipt. Use for “create/add a skill,” “turn what we just did into a skill,” or a behavior/setup/script/eval redesign. NOT for prose-only edits (use writing-great-skills), static scoring (use linting-and-scoring), prompt-to-script audits (use determinize-refactor), or installing an existing skill (use skill-installer).
+description: Build or materially redesign an agent skill from a rough idea or a workflow that just succeeded, with a spec-first design, risk-based evidence, real baseline and with-skill evaluation, blind cross-family forward tests, and a typed completion receipt. Use for “create/add a skill,” “turn what we just did into a skill,” or “redesign a skill's behavior, setup, scripts, or eval.” NOT for prose-only edits (use writing-great-skills), static scoring (use linting-and-scoring), prompt-to-script audits (use determinize-refactor), or installing an existing skill (use skill-installer).
 ---
 
 # Skill Workshop
@@ -149,6 +149,11 @@ Exit 0 means the declared structural gates are complete. Exit 1 means valid but
 incomplete evidence. Exit 2 means the receipt violates the contract. Never edit
 an exit code, family, model identity, status, or `substituted` field to make the
 checker pass.
+
+A `complete` exit is necessary but not sufficient: the checker validates receipt
+structure, distinctness, and existence, not the truth of what a receipt records.
+Only semantic review of the receipt contents plus the independent council make
+the completion claim real. Never treat a green checker as a standalone ship signal.
 
 Ship only when the checker reports `complete`, semantic receipt review is
 clean, deviations are explicit, and the requested commit/PR authority exists.

@@ -1,0 +1,9 @@
+LINT — linting-and-scoring (40-check binary rubric, 11 categories)
+Target: meta/skill-workshop (SKILL.md, SPEC.md, references/, scripts/workshop.py, tests/)
+
+RESULT: 30/31 applicable = 97% — TIER: Ship Ready — SHIP: yes
+All 4 CRITICAL error-handling checks PASS.
+Only FAIL: description had 2 quoted trigger phrases; rubric wants >=3.
+  -> FIXED after lint: added a third quoted trigger ("redesign a skill's behavior...").
+Category tally: Description 4/5, Steps 5/5, Code 3/3, ErrorHandling 4/4 (critical),
+  EnvDetection 1/1, Tests 2/2, Verification 3/3, Docs 3/3, Scope 2/2, Interaction 3/3.

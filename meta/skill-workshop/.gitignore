@@ -1,0 +1,3 @@
+# Live per-device seat config: adapter names, paths, auth kinds, models — never credentials.
+# Absent from a clean checkout; refreshed by one-time device setup.
+.workshop-device.json

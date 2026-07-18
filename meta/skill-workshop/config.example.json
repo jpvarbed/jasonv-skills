@@ -1,0 +1,13 @@
+{
+  "seats": [
+    {
+      "adapter": "${ADAPTER}",
+      "executable": "${EXECUTABLE}",
+      "auth_kind": "${AUTH_KIND}",
+      "provider": "${PROVIDER}",
+      "model": "${MODEL}",
+      "effort": "${EFFORT}",
+      "last_observed_state": "${STATE}"
+    }
+  ]
+}

@@ -264,6 +264,9 @@ def _safe_file(root, relative, label, errors):
     if path.is_symlink() or not resolved.is_file():
         errors.append(f"incomplete: {label} must be a regular non-symlink file")
         return None
+    if resolved.stat().st_size == 0:
+        errors.append(f"incomplete: {label} must not be an empty file")
+        return None
     return resolved
 
 
@@ -305,6 +308,10 @@ def completeness_errors(value, receipt_path):
     evidence = value["evidence"]
     for key in ("baseline", "behavioral", "lint"):
         _check_command(root, evidence[key], f"evidence.{key}", errors)
+    base, behavioral = evidence["baseline"], evidence["behavioral"]
+    if isinstance(base, dict) and isinstance(behavioral, dict):
+        if base.get("receipt") == behavioral.get("receipt"):
+            errors.append("incomplete: baseline and behavioral receipts must differ")
     forwards = evidence["forward_tests"]
     if len(forwards) != 2:
         errors.append("incomplete: forward_tests must contain exactly two records")
@@ -313,6 +320,8 @@ def completeness_errors(value, receipt_path):
             _check_command(root, forward, f"evidence.forward_tests[{index}]", errors)
         if len({forward["family"] for forward in forwards}) != 2:
             errors.append("incomplete: forward_tests must use distinct families")
+        if len({forward["receipt"] for forward in forwards}) != 2:
+            errors.append("incomplete: forward_tests must use distinct receipts")
     _check_command(root, evidence["install"], "evidence.install", errors)
     if "repo_tests" in evidence:
         _check_command(root, evidence["repo_tests"], "evidence.repo_tests", errors)
@@ -358,7 +367,12 @@ def completeness_errors(value, receipt_path):
             ignore_path = _safe_file(root, artifacts["ignore_file"], "artifacts.ignore_file", errors)
             if ignore_path is not None:
                 device_config = Path(live["device_config"]).as_posix()
-                rules = [line.strip() for line in ignore_path.read_text().splitlines()]
+                try:
+                    ignore_text = ignore_path.read_text()
+                except OSError:
+                    errors.append("incomplete: ignore file could not be read")
+                    ignore_text = ""
+                rules = [line.strip() for line in ignore_text.splitlines()]
                 if device_config not in rules:
                     errors.append("incomplete: ignore file needs exact positive device-config rule")
                 if f"!{device_config}" in rules:

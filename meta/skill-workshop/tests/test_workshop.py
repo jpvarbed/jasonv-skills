@@ -163,6 +163,31 @@ class WorkshopCliTest(unittest.TestCase):
         self.assertEqual(result.returncode, 1)
         self.assertIn("distinct families", result.stdout)
 
+    def test_shared_baseline_behavioral_receipt_is_incomplete(self):
+        value = self.complete_method()
+        value["evidence"]["behavioral"]["receipt"] = value["evidence"]["baseline"]["receipt"]
+        self.write_json(value)
+        result = self.check()
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("baseline and behavioral receipts must differ", result.stdout)
+
+    def test_shared_forward_test_receipt_is_incomplete(self):
+        value = self.complete_method()
+        shared = value["evidence"]["forward_tests"][0]["receipt"]
+        value["evidence"]["forward_tests"][1]["receipt"] = shared
+        self.write_json(value)
+        result = self.check()
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("distinct receipts", result.stdout)
+
+    def test_empty_receipt_is_incomplete(self):
+        value = self.complete_method()
+        self.touch(value["evidence"]["baseline"]["receipt"], content="")
+        self.write_json(value)
+        result = self.check()
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("must not be an empty file", result.stdout)
+
     def test_null_forward_records_are_invalid_not_a_crash(self):
         value = self.init()
         value["evidence"]["forward_tests"] = [None, None]

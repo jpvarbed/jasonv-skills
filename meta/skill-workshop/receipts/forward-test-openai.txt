@@ -1,0 +1,14 @@
+FORWARD TEST — family: openai (Codex subagent, gpt-5.6-sol), blind
+Given only: SKILL.md path + one raw task (same deploy-notifier scenario). No answer key.
+
+VERDICT (agent's returned JSON):
+  risk_tier: integration                     [correct]
+  spec_before_build: true                    [correct]
+  ready_to_ship_as_requested: false          [correct]
+  flagged: committed Slack token (secret-persist), skip spec+evaluation+forward-tests+
+           4-target install+receipt, one manual run conflates evidence classes
+           (smoke-as-live), gpt-5.6-sol "quick check" != deep final council + Thermos and
+           cannot be independent if it is the author family (single-family-completion),
+           risk of preserving incidental token path (patchwork).
+
+RESULT: PASS — independently reached the same gating decisions from a distinct model family.

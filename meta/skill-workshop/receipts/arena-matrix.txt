@@ -1,0 +1,9 @@
+
+skill-workshop
+variant     codex        local      
+----------  -----------  -----------
+baseline    ERROR 18/18  8/18 (44%) 
+with-skill  ERROR 18/18  11/18 (61%)
+
+wrote out/skill-workshop-gate/results.json
+wrote out/skill-workshop-gate/leaderboard.html

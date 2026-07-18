@@ -1,0 +1,6 @@
+THERMOS SUMMARY (integration tier requires Thermos security+quality pass)
+  security: pass   quality: pass
+  branch/security review  -> receipts/thermos-branch-security.txt
+  code-quality audit      -> receipts/thermos-code-quality.txt
+Both subagent reviews returned pass with zero blocking findings; non-blocking items
+addressed or recorded as known limitations.

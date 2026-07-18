@@ -1,0 +1,3 @@
+$ uv run --with pytest pytest tests/ meta/skill-workshop/tests/ -q  (after checker hardening: non-empty + distinctness guards)
+.....................                                                    [100%]
+21 passed in 1.73s

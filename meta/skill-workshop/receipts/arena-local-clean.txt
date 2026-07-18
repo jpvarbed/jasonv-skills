@@ -1,0 +1,11 @@
+$ uv run arena run --skill skill-workshop --backends local --out-dir out/skill-workshop-gate-local
+
+skill-workshop
+variant     local      
+----------  -----------
+baseline    8/18 (44%) 
+with-skill  11/18 (61%)
+
+wrote out/skill-workshop-gate-local/results.json
+wrote out/skill-workshop-gate-local/leaderboard.html
+exit=0

@@ -1,0 +1,15 @@
+THERMOS — thermo-nuclear code-quality audit (fallback rubric; plugin skill not installed)
+Target: scripts/workshop.py (507 lines), tests/test_workshop.py, install.sh, tests/test_install.py
+
+quality_verdict: PASS — no blocking structural/maintainability defect.
+  - 507 lines, under the 1k rule; small single-purpose helpers; explicit key-set constants.
+  - Clean two-phase design: structural_errors (schema) then completeness_errors (files/semantics).
+  - Correct bool-vs-int guard on exit_code; careful symlink-escape handling in _safe_file.
+  - Tests exercise the real subprocess seam + security edge cases (path escape, symlinked dir,
+    negated ignore rule, substitution).
+Non-blocking notes (recorded, not fixed — would re-trigger review; surfaced to author):
+  1. Tier-shape predicate duplicated across _artifact_keys, _evidence_keys, make_manifest — can drift.
+  2. structural_errors ~120 lines; live/council blocks extractable into helpers.
+  3. Repeated `isinstance(x,dict) and set(x)==KEYS` re-guard; a _fully_valid helper would DRY it.
+  4. install.sh dense single-letter locals + space-delimited prune membership idiom (fragile).
+  5. test_install.py hardcodes sentinel skill 'apply-paper'; brittle if that skill is renamed.
