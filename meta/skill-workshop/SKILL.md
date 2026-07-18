@@ -139,11 +139,26 @@ python3 scripts/workshop.py init \
   --output WORKSHOP.json
 ```
 
-Fill it only from actual commands and retained receipts, then check it:
+Each step leaves a readable receipt, not an opaque blob: copy
+[`templates/receipt.md`](templates/receipt.md) — the real command, its verbatim
+output, and a one-line verdict. Fill `WORKSHOP.json` only from those retained
+receipts, then check it:
 
 ```bash
 python3 scripts/workshop.py check WORKSHOP.json
 ```
+
+Render the reviewer-facing report so semantic review is one read instead of
+fifteen file-opens:
+
+```bash
+python3 scripts/workshop.py report WORKSHOP.json --format md   -o REPORT.md
+python3 scripts/workshop.py report WORKSHOP.json --format html -o REPORT.html
+```
+
+`report` inlines every receipt's contents next to the checker verdict. The
+checker proves the receipts exist, are non-empty, and are distinct; reading the
+report is what confirms they are *true*. A green checker never ships alone.
 
 Exit 0 means the declared structural gates are complete. Exit 1 means valid but
 incomplete evidence. Exit 2 means the receipt violates the contract. Never edit

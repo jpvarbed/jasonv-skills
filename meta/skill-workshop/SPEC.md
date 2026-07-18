@@ -57,6 +57,12 @@ is explicit). Scripted adds tests and Thermos. Integration adds Thermos, config
 example, ignore rule, smoke, representative-operation evidence, and tests only
 when it bundles code.
 
+Each step's receipt is human-readable (`templates/receipt.md`: real command,
+verbatim output, one-line verdict). `workshop.py report` renders a single
+`REPORT.md`/`REPORT.html` that inlines every receipt beside the checker verdict,
+so semantic review — confirming the receipts are true, not merely present — is
+one read. The report is a generated view, not a gate artifact.
+
 ## Receipt tool
 
 The workshop bundles `scripts/workshop.py`. It generates and checks

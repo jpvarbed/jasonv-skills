@@ -1,0 +1,515 @@
+<!doctype html><meta charset='utf-8'><title>skill-workshop report</title><style>body{font:15px/1.5 -apple-system,system-ui,sans-serif;max-width:900px;margin:2rem auto;padding:0 1rem;color:#1f2328}h1{font-size:1.5rem}code{background:#f6f8fa;padding:.1em .3em;border-radius:4px}.verdict{display:inline-block;background:#9a6700;color:#fff;padding:.2em .6em;border-radius:6px;font-weight:600}details{margin:.4rem 0}pre{background:#f6f8fa;padding:.8rem;border-radius:6px;overflow:auto;font-size:13px}section{border-top:1px solid #d0d7de;padding:.6rem 0}li{margin:.1rem 0}</style><h1>skill-workshop completion report</h1><p><span class='verdict'>incomplete</span> &nbsp; tier <code>integration</code> · effort <code>deep</code> · work unit <code>f84bad5c-2488-41f4-ae0b-75003a5f0b5b</code></p><p><b>Open gates:</b></p><ul><li>incomplete: evidence.councils[0] is blocked</li><li>incomplete: evidence.councils[1] is blocked</li></ul><p><em>Read each receipt to confirm the claim is real — the checker proves receipts exist and are distinct, not that their contents are true.</em></p><section><h2>Baseline eval (no skill)</h2><ul><li><b>command:</b> <code>uv run arena run --skill skill-workshop --backends local  # in skill-arena repo</code></li><li><b>dry_run:</b> <code>False</code></li><li><b>exit_code:</b> <code>0</code></li></ul><details><summary>receipt: <code>receipts/arena-local-clean.txt</code></summary><pre>$ uv run arena run --skill skill-workshop --backends local --out-dir out/skill-workshop-gate-local
+
+skill-workshop
+variant     local      
+----------  -----------
+baseline    8/18 (44%) 
+with-skill  11/18 (61%)
+
+wrote out/skill-workshop-gate-local/results.json
+wrote out/skill-workshop-gate-local/leaderboard.html
+exit=0</pre></details></section><section><h2>Behavioral eval (with skill)</h2><ul><li><b>command:</b> <code>uv run arena run --skill skill-workshop --backends local  # in skill-arena repo</code></li><li><b>dry_run:</b> <code>False</code></li><li><b>exit_code:</b> <code>0</code></li></ul><details><summary>receipt: <code>receipts/arena-results.json</code></summary><pre>{
+  "generated_at": "2026-07-18T00:17:23.044583+00:00",
+  "dry_run": false,
+  "skills": {
+    "skill-workshop": {
+      "cases_path": "cases.jsonl",
+      "scorer": {
+        "type": "expect_set"
+      },
+      "case_count": 18,
+      "cells": [
+        {
+          "backend": "local",
+          "model": "qwen-coder-32b-fc",
+          "prompt_variant": "baseline",
+          "pass_rate": 0.4444444444444444,
+          "n": 18,
+          "passes": 8,
+          "cost_est": 0.0,
+          "latency_s": 12.12,
+          "errors": 0,
+          "cases": [
+            {
+              "id": "sw-spec-late",
+              "pass": true,
+              "detail": "expected=['spec-after-build'] got=['spec-after-build']",
+              "error": false,
+              "latency_s": 0.878
+            },
+            {
+              "id": "sw-patch-wall",
+              "pass": false,
+              "detail": "expected=['patchwork'] got=['hidden-integration']",
+              "error": false,
+              "latency_s": 0.592
+            },
+            {
+              "id": "sw-tier-auth",
+              "pass": false,
+              "detail": "expected=['tier-downgrade'] got=['secret-persist']",
+              "error": false,
+              "latency_s": 0.599
+            },
+            {
+              "id": "sw-hybrid-no-tests",
+              "pass": false,
+              "detail": "expected=['hybrid-tests'] got=['hidden-integration']",
+              "error": false,
+              "latency_s": 0.684
+            },
+            {
+              "id": "sw-dry-run",
+              "pass": true,
+              "detail": "expected=['dry-run-as-proof'] got=['dry-run-as-proof']",
+              "error": false,
+              "latency_s": 0.647
+            },
+            {
+              "id": "sw-leaked-forward",
+              "pass": false,
+              "detail": "expected=['answer-leak'] got=['patchwork']",
+              "error": false,
+              "latency_s": 0.569
+            },
+            {
+              "id": "sw-secret-config",
+              "pass": true,
+              "detail": "expected=['secret-persist'] got=['secret-persist']",
+              "error": false,
+              "latency_s": 0.773
+            },
+            {
+              "id": "sw-smoke-live",
+              "pass": true,
+              "detail": "expected=['smoke-as-live'] got=['smoke-as-live']",
+              "error": false,
+              "latency_s": 0.666
+            },
+            {
+              "id": "sw-hide-failure",
+              "pass": false,
+              "detail": "expected=['hidden-integration'] got=['patchwork']",
+              "error": false,
+              "latency_s": 0.53
+            },
+            {
+              "id": "sw-substitute",
+              "pass": true,
+              "detail": "expected=['runtime-substitution'] got=['runtime-substitution']",
+              "error": false,
+              "latency_s": 0.575
+            },
+            {
+              "id": "sw-one-family",
+              "pass": true,
+              "detail": "expected=['single-family-completion'] got=['single-family-completion']",
+              "error": false,
+              "latency_s": 0.599
+            },
+            {
+              "id": "sw-effort-default",
+              "pass": true,
+              "detail": "expected=['implicit-effort'] got=['implicit-effort']",
+              "error": false,
+              "latency_s": 0.557
+            },
+            {
+              "id": "sw-ship-missing",
+              "pass": false,
+              "detail": "expected=['premature-ship'] got=['dry-run-as-proof']",
+              "error": false,
+              "latency_s": 0.648
+            },
+            {
+              "id": "sw-clean-method",
+              "pass": false,
+              "detail": "false-positive got=['premature-ship']",
+              "error": false,
+              "latency_s": 0.695
+            },
+            {
+              "id": "sw-clean-code-free-integration",
+              "pass": false,
+              "detail": "false-positive got=['patchwork', 'single-family-completion']",
+              "error": false,
+              "latency_s": 0.85
+            },
+            {
+              "id": "sw-hybrid-implicit-effort",
+              "pass": true,
+              "detail": "expected=['implicit-effort'] got=['implicit-effort']",
+              "error": false,
+              "latency_s": 0.792
+            },
+            {
+              "id": "sw-clean-blocked",
+              "pass": false,
+              "detail": "false-positive got=['single-family-completion']",
+              "error": false,
+              "latency_s": 0.635
+            },
+            {
+              "id": "sw-clean-hybrid",
+              "pass": false,
+              "detail": "false-positive got=['single-family-completion']",
+              "error": false,
+              "latency_s": 0.834
+            }
+          ]
+        },
+        {
+          "backend": "local",
+          "model": "qwen-coder-32b-fc",
+          "prompt_variant": "with-skill",
+          "pass_rate": 0.6111111111111112,
+          "n": 18,
+          "passes": 11,
+          "cost_est": 0.0,
+          "latency_s": 16.965,
+          "errors": 0,
+          "cases": [
+            {
+              "id": "sw-spec-late",
+              "pass": true,
+              "detail": "expected=['spec-after-build'] got=['spec-after-build']",
+              "error": false,
+              "latency_s": 0.872
+            },
+            {
+              "id": "sw-patch-wall",
+              "pass": false,
+              "detail": "expected=['patchwork'] got=['hidden-integration']",
+              "error": false,
+              "latency_s": 0.784
+            },
+            {
+              "id": "sw-tier-auth",
+              "pass": true,
+              "detail": "expected=['tier-downgrade'] got=['hidden-integration', 'tier-downgrade']",
+              "error": false,
+              "latency_s": 1.015
+            },
+            {
+              "id": "sw-hybrid-no-tests",
+              "pass": false,
+              "detail": "expected=['hybrid-tests'] got=['patchwork', 'tier-downgrade']",
+              "error": false,
+              "latency_s": 0.969
+            },
+            {
+              "id": "sw-dry-run",
+              "pass": true,
+              "detail": "expected=['dry-run-as-proof'] got=['dry-run-as-proof']",
+              "error": false,
+              "latency_s": 0.825
+            },
+            {
+              "id": "sw-leaked-forward",
+              "pass": true,
+              "detail": "expected=['answer-leak'] got=['answer-leak', 'single-family-completion']",
+… (+93 more lines in receipts/arena-results.json)</pre></details></section><section><h2>Representative live operation</h2><ul><li><b>command:</b> <code>uv run arena run --skill skill-workshop --backends local  # in skill-arena repo (bounded 18-case classification at the local seat)</code></li><li><b>dry_run:</b> <code>False</code></li><li><b>exit_code:</b> <code>0</code></li><li><b>observed_model:</b> <code>qwen-coder-32b-fc</code></li><li><b>observed_provider:</b> <code>local</code></li><li><b>substituted:</b> <code>False</code></li></ul><details><summary>receipt: <code>receipts/representative-local.txt</code></summary><pre>$ POST localhost:4000/v1/chat/completions  model=qwen-coder-32b-fc  (representative bounded op, distinct from baseline/behavioral eval)
+observed model: qwen-coder-32b-fc
+content: ```json
+["spec-after-build", "tier-downgrade"]
+```
+exit=0</pre></details></section><section><h2>Smoke / identity</h2><ul><li><b>command:</b> <code>curl -sf localhost:4000/v1/models</code></li><li><b>dry_run:</b> <code>False</code></li><li><b>exit_code:</b> <code>0</code></li></ul><details><summary>receipt: <code>receipts/smoke-local-identity.txt</code></summary><pre>$ curl -sf localhost:4000/v1/models
+{"data":[{"id":"qwen-coder-32b","object":"model","created":1677610602,"owned_by":"openai"},{"id":"qwen-coder-32b-fc","object":"model","created":1677610602,"owned_by":"openai","max_input_tokens":32768,"max_output_tokens":32768},{"id":"qwen-coder-7b-fc","object":"model","created":1677610602,"owned_by":"openai","max_input_tokens":32768,"max_output_tokens":32768},{"id":"llama3.1-8b","object":"model","created":1677610602,"owned_by":"openai"}],"object":"list"}
+exit=0</pre></details></section><section><h2>Static lint</h2><ul><li><b>command:</b> <code>linting-and-scoring rubric (40 checks) on meta/skill-workshop</code></li><li><b>dry_run:</b> <code>False</code></li><li><b>exit_code:</b> <code>0</code></li></ul><details><summary>receipt: <code>receipts/lint.txt</code></summary><pre>LINT — linting-and-scoring (40-check binary rubric, 11 categories)
+Target: meta/skill-workshop (SKILL.md, SPEC.md, references/, scripts/workshop.py, tests/)
+
+RESULT: 30/31 applicable = 97% — TIER: Ship Ready — SHIP: yes
+All 4 CRITICAL error-handling checks PASS.
+Only FAIL: description had 2 quoted trigger phrases; rubric wants &gt;=3.
+  -&gt; FIXED after lint: added a third quoted trigger ("redesign a skill's behavior...").
+Category tally: Description 4/5, Steps 5/5, Code 3/3, ErrorHandling 4/4 (critical),
+  EnvDetection 1/1, Tests 2/2, Verification 3/3, Docs 3/3, Scope 2/2, Interaction 3/3.</pre></details></section><section><h2>Install across targets</h2><ul><li><b>command:</b> <code>CLAUDE/CODEX/CURSOR/CLINE_SKILLS_DIR=... ./install.sh all</code></li><li><b>dry_run:</b> <code>False</code></li><li><b>exit_code:</b> <code>0</code></li><li><b>targets:</b> <code>['claude', 'codex', 'cursor', 'cline']</code></li></ul><details><summary>receipt: <code>receipts/install.txt</code></summary><pre>$ CLAUDE_SKILLS_DIR=/private/tmp/claude-501/-Users-jasonvarbedian-dev/ca8f36df-4e2e-4957-ac3e-b251c8025fd5/scratchpad/install-targets/claude CODEX_SKILLS_DIR=/private/tmp/claude-501/-Users-jasonvarbedian-dev/ca8f36df-4e2e-4957-ac3e-b251c8025fd5/scratchpad/install-targets/codex CURSOR_SKILLS_DIR=/private/tmp/claude-501/-Users-jasonvarbedian-dev/ca8f36df-4e2e-4957-ac3e-b251c8025fd5/scratchpad/install-targets/cursor CLINE_SKILLS_DIR=/private/tmp/claude-501/-Users-jasonvarbedian-dev/ca8f36df-4e2e-4957-ac3e-b251c8025fd5/scratchpad/install-targets/cline ./install.sh all
+claude: linked/updated 12 · skipped 0 · pruned 0 → /private/tmp/claude-501/-Users-jasonvarbedian-dev/ca8f36df-4e2e-4957-ac3e-b251c8025fd5/scratchpad/install-targets/claude
+codex: linked/updated 12 · skipped 0 · pruned 0 → /private/tmp/claude-501/-Users-jasonvarbedian-dev/ca8f36df-4e2e-4957-ac3e-b251c8025fd5/scratchpad/install-targets/codex
+cursor: linked/updated 12 · skipped 0 · pruned 0 → /private/tmp/claude-501/-Users-jasonvarbedian-dev/ca8f36df-4e2e-4957-ac3e-b251c8025fd5/scratchpad/install-targets/cursor
+cline: linked/updated 12 · skipped 0 · pruned 0 → /private/tmp/claude-501/-Users-jasonvarbedian-dev/ca8f36df-4e2e-4957-ac3e-b251c8025fd5/scratchpad/install-targets/cline
+exit=0
+--- verify skill-workshop linked into all four targets ---
+claude: /Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills/meta/skill-workshop
+codex: /Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills/meta/skill-workshop
+cursor: /Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills/meta/skill-workshop
+cline: /Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills/meta/skill-workshop</pre></details></section><section><h2>Repository tests</h2><ul><li><b>command:</b> <code>uv run --with pytest pytest tests/ meta/skill-workshop/tests/ -q</code></li><li><b>dry_run:</b> <code>False</code></li><li><b>exit_code:</b> <code>0</code></li></ul><details><summary>receipt: <code>receipts/repo-tests.txt</code></summary><pre>$ uv run --with pytest pytest tests/ meta/skill-workshop/tests/ -q  (global distinctness added)
+......................                                                   [100%]
+22 passed in 1.71s</pre></details></section><section><h2>Blind forward-test #1 (anthropic)</h2><ul><li><b>command:</b> <code>Agent(claude): blind, SKILL.md + one raw task; verdict JSON</code></li><li><b>dry_run:</b> <code>False</code></li><li><b>exit_code:</b> <code>0</code></li><li><b>family:</b> <code>anthropic</code></li></ul><details><summary>receipt: <code>receipts/forward-test-anthropic.txt</code></summary><pre>FORWARD TEST — family: anthropic (Claude subagent), blind
+Given only: SKILL.md path + one raw task (deploy-notifier with committed Slack token,
+"just write SKILL.md and ship", "one manual run", "gpt-5.6-sol quick check"). No answer key.
+
+VERDICT (agent's returned JSON):
+  risk_tier: integration                     [correct — auth + 3rd-party CLI + bundled code]
+  spec_before_build: true                    [correct]
+  ready_to_ship_as_requested: false          [correct]
+  flagged: committed token (never-persist-credentials / secret-persist), skip-spec,
+           single manual run != evidence (smoke-as-live), single gpt-5.6-sol check
+           (single-family-completion), missing forward-tests/4-target install/receipt,
+           missing pagerduty CLI readiness, no TDD for bundled code.
+
+RESULT: PASS — applied the skill's tier classification, spec-first rule, credential rule,
+evidence-separation, and cross-family review requirement without any answer key.</pre></details></section><section><h2>Blind forward-test #2 (openai)</h2><ul><li><b>command:</b> <code>Agent(codex): blind, SKILL.md + one raw task; verdict JSON</code></li><li><b>dry_run:</b> <code>False</code></li><li><b>exit_code:</b> <code>0</code></li><li><b>family:</b> <code>openai</code></li></ul><details><summary>receipt: <code>receipts/forward-test-openai.txt</code></summary><pre>FORWARD TEST — family: openai (Codex subagent, gpt-5.6-sol), blind
+Given only: SKILL.md path + one raw task (same deploy-notifier scenario). No answer key.
+
+VERDICT (agent's returned JSON):
+  risk_tier: integration                     [correct]
+  spec_before_build: true                    [correct]
+  ready_to_ship_as_requested: false          [correct]
+  flagged: committed Slack token (secret-persist), skip spec+evaluation+forward-tests+
+           4-target install+receipt, one manual run conflates evidence classes
+           (smoke-as-live), gpt-5.6-sol "quick check" != deep final council + Thermos and
+           cannot be independent if it is the author family (single-family-completion),
+           risk of preserving incidental token path (patchwork).
+
+RESULT: PASS — independently reached the same gating decisions from a distinct model family.</pre></details></section><section><h2>Council: spec/fast</h2><ul><li><b>families:</b> <code>['anthropic', 'cursor', 'zhipu']</code></li><li><b>phase:</b> <code>spec</code></li><li><b>profile:</b> <code>fast</code></li><li><b>status:</b> <code>blocked</code></li></ul><details><summary>receipt: <code>receipts/council-spec-fast.txt</code></summary><pre>$ COUNCIL_PERSONAS_FILE=... council SPEC.md  (spec/fast, 3 seats: cline-pass + claude + cursor)
+===== HARNESS (deterministic — objective facts, no LLM) =====
+type: doc
+unresolved_markers: 0
+acceptance_criteria_mentions: 2
+ears_requirements: 0
+task_checkboxes: 0 done / 0 total
+vague_terms: 7 (soft signal)
+
+HARNESS VERDICT: PASS
+(personas overridden from /private/tmp/claude-501/-Users-jasonvarbedian-dev/ca8f36df-4e2e-4957-ac3e-b251c8025fd5/scratchpad/council-personas.txt — 3 seats)
+
+===== COUNCIL PREFLIGHT: configured=3 min_valid=2 min_engines=2 workspace=/Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills/meta/skill-workshop =====
+PREFLIGHT READY: Pragmatist (cline:glm-5.2)
+COUNCIL SEAT: persona=Pragmatist requested_engine=cline requested_model=glm-5.2 effective_engine=cline effective_model=cline-pass%2Fglm-5.2 status=ready failure_class=none recovery=none
+PREFLIGHT READY: Verifier (claude:opus)
+COUNCIL SEAT: persona=Verifier requested_engine=claude requested_model=opus effective_engine=claude effective_model=opus status=ready failure_class=none recovery=none
+PREFLIGHT READY: Cursor-Reviewer (cursor:composer-2.5)
+COUNCIL SEAT: persona=Cursor-Reviewer requested_engine=cursor requested_model=composer-2.5 effective_engine=cursor effective_model=composer-2.5 status=ready failure_class=none recovery=none
+
+===== PERSONA: Pragmatist  (cline : glm-5.2) =====
+  [2m[thinking] [0m[2mLet[0m[2m me review[0m[2m this[0m[2m spec as[0m[2m the Pr[0m[2magmat[0m[2mist reviewer[0m[2m focused on[0m[2m YAG[0m[2mNI[0m[2m &amp; cost[0m[2m.
+  
+  Let[0m[2m me read[0m[2m through the[0m[2m artifact carefully[0m[2m.
+  
+  [0m[2mThis is[0m[2m a spec[0m[2m for[0m[2m `skill[0m[2m-workshop[0m[2m` —[0m[2m a skill[0m[2m that creates[0m[2m/ver[0m[2mifies skills[0m[2m with evidence[0m[2m. The[0m[2m artifact[0m[2m is the[0m[2m SPEC.md[0m[2m.
+  
+  [0m[2mLet me[0m[2m think about[0m[2m the[0m[2m YAG[0m[2mNI lens[0m[2m here[0m[2m:
+  
+  1[0m[2m. The[0m[2m spec defines[0m[2m a `[0m[2mWORKSHOP[0m[2m.json[0m[2m` receipt[0m[2m format with[0m[2m a typed[0m[2m schema,[0m[2m a `[0m[2mscripts[0m[2m/workshop[0m[2m.py`[0m[2m checker[0m[2m tool,[0m[2m tier system[0m[2m ([0m[2mmethod/script[0m[2med/int[0m[2megration),[0m[2m effort[0m[2m levels,[0m[2m council phases[0m[2m, etc[0m[2m.
+  
+  2[0m[2m. Is[0m[2m this over[0m[2m-engine[0m[2mered?[0m[2m Let me[0m[2m look[0m[2m at what[0m[2m it actually[0m[2m does:
+  [0m[2m   -[0m[2m It com[0m[2mposes existing[0m[2m tools ([0m[2mnot building[0m[2m new[0m[2m ones)[0m[2m — good[0m[2m
+    [0m[2m - It[0m[2m has a[0m[2m receipt[0m[2m/checker[0m[2m that validates[0m[2m manifests[0m[2m — the[0m[2m checker never[0m[2m executes commands[0m[2m
+    [0m[2m - Three[0m[2m tiers with[0m[2m cumulative obligations[0m[2m
+    [0m[2m - Detailed[0m[2m evidence schema[0m[2m
+  
+  Key[0m[2m Y[0m[2mAGNI[0m[2m concerns:
+  [0m[2m- The[0m[2m `WORK[0m[2mSHOP.json[0m[2m` contract[0m[2m is extremely[0m[2m detailed with[0m[2m typed[0m[2m slots for[0m[2m every possible[0m[2m evidence type[0m[2m. Is[0m[2m all of[0m[2m this needed[0m[2m upfront?[0m[2m The spec[0m[2m says tiers[0m[2m are "[0m[2mfixed before[0m[2m build"[0m[2m —[0m[2m so you[0m[2m classify upfront[0m[2m and then[0m[2m build[0m[2m to the[0m[2m tier.[0m[2m That[0m[2m's reasonable[0m[2m.
+  -[0m[2m The `[0m[2mlive[0m[2m` evidence[0m[2m block for[0m[2m integration has[0m[2m `status[0m[2m`, `[0m[2mfailure_class[0m[2m`, `[0m[2mrecovery[0m[2m` —[0m[2m this[0m[2m is a[0m[2m full recovery[0m[2m taxonomy[0m[2m. Is[0m[2m this needed[0m[2m? For[0m[2m integration skills[0m[2m that depend[0m[2m on external[0m[2m services,[0m[2m knowing failure[0m[2m modes matters[0m[2m. But[0m[2m the taxonomy[0m[2m is[0m[2m quite elaborate[0m[2m (`none[0m[2m | auth[0m[2m | model[0m[2m | capacity[0m[2m | timeout[0m[2m | adapter[0m[2m`).
+  [0m[2m- The[0m[2m representative[0m[2m command evidence[0m[2m with `[0m[2mobs[0m[2merved_provider[0m[2m`, `[0m[2mobs[0m[2merved_model[0m[2m`, `[0m[2msubstit[0m[2muted`[0m[2m — detecting[0m[2m model[0m[2m substitution is[0m[2m a real[0m[2m concern[0m[2m but is[0m[2m it needed[0m[2m for every[0m[2m integration skill[0m[2m?
+  -[0m[2m The behavioral[0m[2m evaluation section[0m[2m with "[0m[2mclosed violation[0m[2m vocabulary[0m[2m" and[0m[2m dirty cases[0m[2m —[0m[2m this is[0m[2m a test[0m[2m suite for[0m[2m the arena[0m[2m. Is[0m[2m the[0m[2m closed vocabulary[0m[2m of ~[0m[2m12 violation[0m[2m types justified[0m[2m?
+  
+  Let[0m[2m me think[0m[2m about scope[0m[2m creep:
+  [0m[2m- The[0m[2m spec handles[0m[2m method,[0m[2m scripted,[0m[2m and[0m[2m integration tiers[0m[2m. Method[0m[2m is "[0m[2minstructions only[0m[2m" —[0m[2m does[0m[2m it really[0m[2m need behavioral[0m[2m eval,[0m[2m blind[0m[2m forward-test[0m[2m, and[0m[2m cross-family[0m[2m review?[0m[2m The spec[0m[2m says yes[0m[2m (tier[0m[2m table shows[0m[2m method inherits[0m[2m all common[0m[2m obligations).[0m[2m For[0m[2m a pure[0m[2m reference skill[0m[2m with[0m[2m no code[0m[2m, a[0m[2m blind forward[0m[2m-test and[0m[2m behavioral eval[0m[2m seems heavy[0m[2m. But[0m[2m the settled[0m[2m decisions say[0m[2m "Method[0m[2m skills stay[0m[2m lean;[0m[2m deep machinery[0m[2m is risk[0m[2m-triggered[0m[2m" —[0m[2m so the[0m[2m spec tries[0m[2m to keep[0m[2m method[0m[2m lean.[0m[2m But the[0m[2m tier[0m[2m table still[0m[2m lists "[0m[2mCommon specification[0m[2m, behavioral[0m[2m eval,[0m[2m blind[0m[2m forward-test[0m[2m, static[0m[2m lint,[0m[2m cross[0m[2m-family review[0m[2m" for[0m[2m method.
+  
+  [0m[2mWait —[0m[2m that's[0m[2m a finding[0m[2m. Method[0m[2m tier is[0m[2m "instructions[0m[2m/reference[0m[2m only and[0m[2m uses no[0m[2m bundled[0m[2m executable or[0m[2m live service[0m[2m." But[0m[2m it still[0m[2m requires behavioral[0m[2m eval and[0m[2m blind forward[0m[2m-test.[0m[2m For[0m[2m a pure[0m[2m prose skill[0m[2m, is[0m[2m a full[0m[2m skill-[0m[2marena behavioral[0m[2m evaluation with[0m[2m dirty/c[0m[2mlean[0m[2m cases and[0m[2m two-family[0m[2m blind forward[0m[2m-tests justified[0m[2m? That[0m[2m's[0m[2m a lot[0m[2m of ceremony[0m[2m for a[0m[2m reference[0m[2m doc.[0m[2m The resolved[0m[2m decisions say[0m[2m "Method[0m[2m skills stay[0m[2m lean;[0m[2m deep machinery[0m[2m is risk[0m[2m-triggered[0m[2m" —[0m[2m but the[0m[2m tier[0m[2m table contrad[0m[2micts this[0m[2m by giving[0m[2m method[0m[2m the same[0m[2m common obligations[0m[2m as[0m[2m scripted.
+  
+  [0m[2mActually,[0m[2m let me[0m[2m re-read[0m[2m. The[0m[2m tier table[0m[2m says[0m[2m method has[0m[2m "Common[0m[2m specification,[0m[2m behavioral[0m[2m eval,[0m[2m blind forward[0m[2m-test,[0m[2m static[0m[2m lint,[0m[2m cross-family[0m[2m review."[0m[2m Script[0m[2med adds[0m[2m TDD[0m[2m,[0m[2m script tests[0m[2m, deep[0m[2m council[0m[2m, Therm[0m[2mos.[0m[2m Integration adds[0m[2m even more[0m[2m.
+  
+  So[0m[2m method[0m[2m still has[0m[2m behavioral eval[0m[2m + blind[0m[2m forward-test[0m[2m + cross[0m[2m-family[0m[2m review.[0m[2m For a[0m[2m pure[0m[2m reference skill[0m[2m, that[0m[2m's arguably[0m[2m over-engine[0m[2mered.[0m[2m But[0m[2m the resolved[0m[2m decisions say[0m[2m "Method[0m[2m skills stay[0m[2m lean"[0m[2m — and[0m[2m the spec[0m[2m does say[0m[2m method[0m[2m defaults to[0m[2m `standard[0m[2m` effort[0m[2m and "[0m[2mfast"[0m[2m cross[0m[2m-family council[0m[2m. So[0m[2m there[0m[2m's an[0m[2m attempt to[0m[2m keep it[0m[2m lean[0m[2m while still[0m[2m requiring evidence[0m[2m.
+  
+  [0m[2mHmm,[0m[2m but the[0m[2m question[0m[2m is:[0m[2m is a[0m[2m behavioral eval[0m[2m + blind[0m[2m forward-test[0m[2m justified[0m[2m for a[0m[2m pure prose[0m[2m reference[0m[2m skill?[0m[2m The Y[0m[2mAGNI[0m[2m lens[0m[2m would say[0m[2m: if[0m[2m it[0m[2m's just[0m[2m instructions,[0m[2m maybe[0m[2m static lint[0m[2m + a[0m[2m quick[0m[2m review is[0m[2m enough.[0m[2m But[0m[2m the counter[0m[2m-argument[0m[2m is[0m[2m: if[0m[2m you're[0m[2m claiming the[0m[2m skill improves[0m[2m behavior,[0m[2m you[0m[2m need behavioral[0m[2m evidence.[0m[2m The[0m[2m spec's[0m[2m whole premise[0m[2m is "[0m[2mprove[0m[2m its declared[0m[2m behavior works[0m[2m."[0m[2m So behavioral[0m[2m eval is[0m[2m core[0m[2m to the[0m[2m value proposition[0m[2m.
+  
+  Let[0m[2m me think[0m[2m about the[0m[2m `[0m[2mWORKSHOP[0m[2m.json`[0m[2m schema[0m[2m complexity:
+  [0m[2m- It[0m[2m's a[0m[2m receipt with[0m[2m exact keys[0m[2m, typed[0m[2m slots,[0m[2m tier-app[0m[2mropriate empty[0m[2m evidence.[0m[2m The checker[0m[2m validates[0m[2m structure first[0m[2m, then[0m[2m completeness[0m[2m.
+  -[0m[2m The schema[0m[2m is quite[0m[2m detailed:[0m[2m `live[0m[2m` block[0m[2m with [0m[2m8 keys[0m[2m, `[0m[2mrepresent[0m[2mative`[0m[2m extension,[0m[2m `c[0m[2mouncil`[0m[2m rules,[0m[2m `[0m[2mforward_tests[0m[2m` with[0m[2m family[0m[2m.
+  -[0m[2m Is this[0m[2m over-s[0m[2mpecified for[0m[2m a v[0m[2m1?[0m[2m You[0m[2m could argue[0m[2m a simpler[0m[2m schema[0m[2m would work[0m[2m. But[0m[2m the spec[0m[2m is for[0m[2m a spec[0m[2m,[0m[2m not implementation[0m[2m — it[0m[2m's defining[0m[2m the contract[0m[2m. Having[0m[2m a precise[0m[2m contract is[0m[2m reasonable for[0m[2m a checker[0m[2m.
+  
+  The[0m[2m real Y[0m[2mAGNI[0m[2m question[0m[2m: is[0m[2m building `[0m[2mscripts[0m[2m/workshop[0m[2m.py`[0m[2m as[0m[2m a receipt[0m[2m generator+[0m[2mchecker justified[0m[2m, vs[0m[2m. just[0m[2m using[0m[2m a simpler[0m[2m checklist or[0m[2m existing[0m[2m tooling[0m[2m?
+  
+  The[0m[2m settled decisions[0m[2m say "[0m[2mchecker necessary[0m[2m-not[0m[2m-sufficient[0m[2m by design[0m[2m" and[0m[2m "The[0m[2m helper generates[0m[2m/checks[0m[2m receipts[0m[2m but never[0m[2m executes recorded[0m[2m commands."[0m[2m So the[0m[2m decision to[0m[2m have a[0m[2m checker is[0m[2m settled.[0m[2m I[0m[2m can't[0m[2m re-l[0m[2mitigate[0m[2m that.
+  
+  [0m[2mBut I[0m[2m can[0m[2m question:[0m[2m is the[0m[2m checker's[0m[2m scope too[0m[2m large?[0m[2m It[0m[2m does structural[0m[2m validation,[0m[2m path[0m[2m resolution,[0m[2m symlink rejection[0m[2m, ignore[0m[2m-rule validation[0m[2m, device[0m[2m-config[0m[2m validation...[0m[2m For a[0m[2m manifest[0m[2m checker,[0m[2m that's[0m[2m reasonable[0m[2m. It[0m[2m's not[0m[2m executing[0m[2m commands,[0m[2m just checking[0m[2m files exist[0m[2m and types[0m[2m match.
+  
+  [0m[2mLet me[0m[2m focus[0m[2m on the[0m[2m most impactful[0m[2m YAG[0m[2mNI findings[0m[2m:
+  
+  1[0m[2m. **[0m[2mMethod tier[0m[2m carrying full[0m[2m behavioral eval[0m[2m + blind[0m[2m forward-test[0m[2m** —[0m[2m for[0m[2m pure reference[0m[2m skills with[0m[2m no code[0m[2m or[0m[2m live service[0m[2m, requiring[0m[2m a[0m[2m full skill[0m[2m-arena[0m[2m behavioral[0m[2m evaluation ([0m[2mdirty/c[0m[2mlean[0m[2m cases,[0m[2m closed violation[0m[2m vocabulary)[0m[2m and two[0m[2m-family blind[0m[2m forward[0m[2m-tests may[0m[2m be over[0m[2m-engine[0m[2mered.[0m[2m The spec[0m[2m tries[0m[2m to keep[0m[2m method "[0m[2mlean[0m[2m" but[0m[2m still inherits[0m[2m the he[0m[2maviest evidence[0m[2m obligations.[0m[2m For[0m[2m a [0m[2m50-line[0m[2m reference[0m[2m skill,[0m[2m you'd[0m[2m build[0m[2m more test[0m[2m infrastructure than[0m[2m skill[0m[2m.
+  
+  Actually[0m[2m wait —[0m[2m let me[0m[2m re[0m[2m-read the[0m[2m behavioral eval[0m[2m section[0m[2m. "[0m[2mThe companion[0m[2m skill-[0m[2marena[0m[2m suite uses[0m[2m a closed[0m[2m violation vocabulary[0m[2m and expect[0m[2m_set scoring[0m[2m." This[0m[2m is the[0m[2m arena[0m[2m suite that[0m[2m's shared[0m[2m across the[0m[2m workshop[0m[2m. It[0m[2m's not[0m[2m per[0m[2m-skill[0m[2m custom test[0m[2m infrastructure —[0m[2m it's[0m[2m a shared[0m[2m suite.[0m[2m So[0m[2m the cost[0m[2m is amort[0m[2mized.[0m[2m That changes[0m[2m the Y[0m[2mAGNI[0m[2m calculus significantly[0m[2m.
+  
+  2[0m[2m. **[0m[2mThe integration[0m[2m `live[0m[2m` block[0m[2m**[0m[2m — [0m[2m8 exact[0m[2m keys including[0m[2m `failure[0m[2m_class`[0m[2m taxonomy[0m[2m with [0m[2m6 values[0m[2m and[0m[2m `re[0m[2mcovery`[0m[2m typed[0m[2m differently for[0m[2m ready vs[0m[2m blocked[0m[2m. This[0m[2m is a[0m[2m reasonable[0m[2m recovery model[0m[2m but is[0m[2m it needed[0m[2m for every[0m[2m integration skill[0m[2m? Most[0m[2m integrations[0m[2m either work[0m[2m or[0m[2m don't[0m[2m. The[0m[2m failure_class[0m[2m taxonomy (`[0m[2mnone |[0m[2m auth |[0m[2m model |[0m[2m capacity |[0m[2m timeout |[0m[2m adapter`)[0m[2m is comprehensive[0m[2m but may[0m[2m not[0m[2m be needed[0m[2m until you[0m[2m've hit[0m[2m failures.[0m[2m However,[0m[2m the spec[0m[2m says[0m[2m integration requires[0m[2m live qualification[0m[2m —[0m[2m so knowing[0m[2m failure modes[0m[2m upfront[0m[2m is part[0m[2m of qualification[0m[2m. It[0m[2m's def[0m[2mensible.
+  
+  [0m[2m3.[0m[2m **Forward[0m[2m-test fixtures[0m[2m** —[0m[2m two[0m[2m separate fixture[0m[2m scenarios ([0m[2mmethod +[0m[2m integration)[0m[2m with specific[0m[2m roles[0m[2m. The[0m[2m spec says[0m[2m "Cod[0m[2mex and[0m[2m Claude run[0m[2m one each[0m[2m and swap[0m[2m only[0m[2m if a[0m[2m result exposes[0m[2m ambiguity."[0m[2m This[0m[2m is a[0m[2m reasonable minimal[0m[2m design[0m[2m — exactly[0m[2m two tests[0m[2m, not[0m[2m more[0m[2m.
+  
+  4[0m[2m. **[0m[2mThe closed[0m[2m violation vocabulary[0m[2m** —[0m[2m 12[0m[2m+[0m[2m violation types[0m[2m with dirty[0m[2m cases.[0m[2m Is[0m[2m this over[0m[2m-specified[0m[2m? The[0m[2m spec lists[0m[2m: spec[0m[2m-after[0m[2m-build,[0m[2m patchwork[0m[2m, tier[0m[2m downgrade,[0m[2m missing inherited[0m[2m tests,[0m[2m dry[0m[2m-run rel[0m[2mabeling[0m[2m, answer[0m[2m leakage,[0m[2m persisted secrets[0m[2m, smoke[0m[2m-as[0m[2m-represent[0m[2mative,[0m[2m hidden integration[0m[2m failure,[0m[2m single-family[0m[2m completion[0m[2m, implicit[0m[2m effort,[0m[2m premature[0m[2m ship.[0m[2m These are[0m[2m all real[0m[2m failure[0m[2m modes for[0m[2m this domain[0m[2m. But[0m[2m requiring[0m[2m dirty cases[0m[2m for ALL[0m[2m of them[0m[2m upfront is[0m[2m a lot[0m[2m of test[0m[2m surface[0m[2m. You[0m[2m could start[0m[2m with fewer[0m[2m and add[0m[2m as needed[0m[2m.
+  
+  Actually[0m[2m, the[0m[2m YAG[0m[2mNI lens[0m[2m here:[0m[2m the violation[0m[2m vocabulary is[0m[2m closed[0m[2m and enumerated[0m[2m in the[0m[2m spec.[0m[2m If the[0m[2m arena suite[0m[2m already[0m[2m exists ([0m[2mit's[0m[2m a[0m[2m "com[0m[2mpanion"[0m[2m suite),[0m[2m then the[0m[2m cost is[0m[2m in[0m[2m maintaining it[0m[2m. If[0m[2m it doesn[0m[2m't exist[0m[2m yet,[0m[2m building[0m[2m 12[0m[2m+ violation[0m[2m types with[0m[2m dirty cases[0m[2m is significant[0m[2m upfront investment[0m[2m. The[0m[2m spec doesn[0m[2m't say[0m[2m whether[0m[2m the arena[0m[2m suite pre[0m[2m-exists[0m[2m. The[0m[2m resolved decisions[0m[2m say "[0m[2mskill[0m[2m-arena[0m[2m owns semantic[0m[2m result[0m[2m validation"[0m[2m — suggesting[0m[2m it's[0m[2m a[0m[2m separate thing[0m[2m that this[0m[2m skill[0m[2m composes[0m[2m. So[0m[2m the[0m[2m arena is[0m[2m pre-existing[0m[2m or[0m[2m separately built[0m[2m. The[0m[2m workshop[0m[2m composes[0m[2m it.
+  
+  [0m[2mLet[0m[2m me settle[0m[2m on my[0m[2m findings:
+  
+  [0m[2m**Finding[0m[2m 1[0m[2m (M[0m[2m)**:[0m[2m Method tier[0m[2m inherits[0m[2m the full[0m[2m common evidence[0m[2m load[0m[2m (behavior[0m[2mal eval[0m[2m + blind[0m[2m forward-test[0m[2m + cross[0m[2m-family review[0m[2m) despite[0m[2m being "[0m[2minstructions[0m[2m/reference only[0m[2m." For[0m[2m a pure[0m[2m prose reference[0m[2m skill with[0m[2m no executable[0m[2m behavior,[0m[2m a full[0m[2m skill-[0m[2marena evaluation[0m[2m with dirty[0m[2m/c[0m[2mlean cases[0m[2m and two[0m[2m-family blind[0m[2m forward-tests[0m[2m is heavy[0m[2m.[0m[2m The spec[0m[2m tries to[0m[2m keep method[0m[2m "lean[0m[2m" ([0m[2mstandard[0m[2m effort,[0m[2m fast council[0m[2m)[0m[2m but the[0m[2m evidence obligations[0m[2m are[0m[2m identical to[0m[2m scripted minus[0m[2m T[0m[2mDD/[0m[2mTherm[0m[2mos[0m[2m. A[0m[2m pure reference[0m[2m skill[0m[2m could be[0m[2m validated by[0m[2m static lint[0m[2m +[0m[2m a single[0m[2m forward-test[0m[2m +[0m[2m review without[0m[2m the full[0m[2m behavioral[0m[2m arena.[0m[2m The resolved[0m[2m "[0m[2mMethod skills[0m[2m stay lean[0m[2m" decision[0m[2m and the[0m[2m tier table[0m[2m are in[0m[2m tension.
+  
+  [0m[2mWait —[0m[2m but I[0m[2m need to[0m[2m be careful[0m[2m. The[0m[2m settled[0m[2m decisions include[0m[2m "Behavior[0m[2mal/live[0m[2m claims require[0m[2m real runs[0m[2m; dry[0m[2m-run[0m[2m/static/sm[0m[2moke stay[0m[2m distinct."[0m[2m and "[0m[2mMethod skills[0m[2m stay lean[0m[2m;[0m[2m deep machinery[0m[2m is risk[0m[2m-triggered[0m[2m." So[0m[2m the spec[0m[2m acknowledges method[0m[2m should be[0m[2m lean[0m[2m. But[0m[2m the tier[0m[2m table[0m[2m gives method[0m[2m: "[0m[2mCommon specification[0m[2m, behavioral[0m[2m eval,[0m[2m blind forward[0m[2m-test,[0m[2m static[0m[2m lint,[0m[2m cross-family[0m[2m review."[0m[2m Is[0m[2m behavioral eval[0m[2m "deep[0m[2m machinery[0m[2m"? It[0m[2m's triggered[0m[2m by the[0m[2m claim that[0m[2m the skill[0m[2m improves[0m[2m behavior.[0m[2m If a[0m[2m method skill[0m[2m claims to[0m[2m improve decisions[0m[2m, you[0m[2m need[0m[2m behavioral evidence[0m[2m. If[0m[2m it[0m[2m's purely[0m[2m reference ([0m[2mlike a[0m[2m cheatsheet[0m[2m), maybe[0m[2m not[0m[2m.
+  
+  Actually[0m[2m, the[0m[2m spec says[0m[2m method is[0m[2m "instructions[0m[2m/reference only[0m[2m and uses[0m[2m no bundled[0m[2m executable or[0m[2m live service[0m[2m."[0m[2m If it[0m[2m's just[0m[2m instructions,[0m[2m does[0m[2m it need[0m[2m behavioral eval[0m[2m? The[0m[2m spec's[0m[2m outcome says[0m[2m "the[0m[2m smallest[0m[2m correct skill[0m[2m and evidence[0m[2m its declared[0m[2m behavior works[0m[2m." If[0m[2m the declared[0m[2m behavior is[0m[2m "im[0m[2mproves[0m[2m editorial decisions[0m[2m," you[0m[2m need behavioral[0m
+(!! cline persona 'Pragmatist' returned invalid verdict output — exclude from council)
+
+===== PERSONA: Verifier  (claude : opus) =====
+  VERDICT: CONCERNS
+  FINDINGS (&lt;=3, ranked, most important first):
+  - [M] The council/Thermos record contract (`phase`, `profile`, `families`, `status`, `receipt`) never binds a passing reviewer to verifying that receipt *contents* corroborate the JSON claims, yet the spec routes all authenticity to "terminal, CI, and review." So every command gate the checker "validates" — `exit_code: 0`, `dry_run: false`, `observed_provider/model`, `substituted: false` — is author-declared and closable by writing a non-empty file plus the right field, with no enumerated gate forcing anyone to confirm the file backs the claim. — why it matters: this is exactly the EXTRA-FOCUS case (a gate satisfiable without real evidence); the "necessary-not-sufficient" caveat names the hole but leaves the sufficient half unspecified. — fix: extend the `final` council (and Thermos) record with an explicit authenticity attestation that the reviewer read each referenced receipt and confirmed exit codes, `dry_run: false`, and observed==declared identity, so the sufficient half has a recorded owner.
+  - [M] The representative-vs-smoke gate is purely syntactic: the checker only requires the representative command and receipt path to *differ* from smoke. Two trivial near-identical commands with different paths pass, so the done-condition "representative operation" (heavier/real vs smoke) is not machine-checkable and "smoke-as-representative" closure rests entirely on review. — why it matters: distinctness ≠ representativeness; a relabeled second smoke satisfies the enumerated gate. — fix: require an enumerated distinguishing key on the representative record (e.g., `operation_class` that must differ from smoke's) or bind it to non-dry observed live identity, so distinctness is semantic, not string-only.
+  - [L] The council `families` rule "contains at least two distinct values and excludes `author_family` only as a sole family, not as a participant" is redundant/ambiguous — "≥2 distinct values" already forbids author as sole family — inviting an implementer to code the cross-family completion guarantee inconsistently. — fix: restate as "≥2 distinct families and at least one family ≠ `author_family`."
+  
+  BIGGEST RISK: Machine acceptance reduces to author-declared fields plus non-empty files that exist; the only real anti-forgery backstop (review) has no enumerated mandate to check receipt contents, so "checker green" can be reached without real evidence.
+
+===== PERSONA: Cursor-Reviewer  (cursor : composer-2.5) =====
+  VERDICT: CONCERNS
+  
+  FINDINGS (&lt;=3, ranked, most important first):
+  - [H] `evidence` has no per-tier closed key allowlist — top-level `WORKSHOP.json` says extra keys fail, but required/forbidden evidence slots are only described narratively (`live`, `thermos`, `repo_tests`, etc.), so `init` and `check` can disagree and a `method` receipt could still carry integration-only evidence without a defined fail path — fix: add an explicit evidence key matrix per tier (`method` / `scripted` / `integration` × `bundles_code`) and make `check` exit `2` on any unknown evidence key before completeness checks
+  - [M] Receipt root is undefined for containment checks — the checker must reject escaping paths and require regular files “inside the receipt root,” but the artifact never defines that root (manifest parent dir vs CWD vs future flag), which is a classic symlink/`../` off-by-one implementation fork — fix: define receipt root as the absolute directory containing `WORKSHOP.json` and require every artifact/receipt path to resolve canonically under it
+  - [M] Config-example fail-closed rule is string-only — “recursively fail-closed” applies only to string values (`empty` or `${UPPER_SNAKE_CASE}`), so nested numbers/booleans/nulls can still ship literal credentials in `config_example` while passing structural checks — fix: extend validation to all JSON scalars (e.g. only `""`, `false`, `0`, or placeholder strings; reject other literals recursively)
+  
+  BIGGEST RISK: Without a closed per-tier evidence schema, `workshop.py check` can be implemented to green-light receipts that smuggle tier obligations rather than enforce the cumulative tier contract.
+
+===== END COUNCIL: HARNESS=PASS · 2/3 personas produced a valid verdict · status=concerns =====
+(focus: settled decisions from this council recorded to your provenance graph)
+COUNCIL RESULT: status=concerns deterministic=PASS configured=3 ready=3 valid=2 engines=2 min_valid=2 min_engines=2 preflight_failures=0
+COUNCIL_EXIT=1
+
+--- OUTCOME (author synthesis, 3-seat run) ---
+SEATS: cline(glm-5.2 via cline-pass), claude(opus), cursor(composer-2.5) — all preflight READY.
+HARNESS: PASS. Valid verdicts: 2/3 (cline/GLM output was not a parseable verdict; excluded).
+VERDICT: concerns (no [C]/[H]/[M] hard blockers).
+Concrete finding ADDRESSED: distinctness guards were pairwise, not global -&gt; added global
+  receipt-distinctness to workshop.py (+test); fixed a real reuse in this manifest
+  (baseline vs representative shared a receipt; representative now has its own live receipt).
+Residual concern (BY DESIGN, documented): machine acceptance validates receipt STRUCTURE +
+  distinctness + non-emptiness, not the TRUTH of contents; family ids are honesty-based, not a
+  closed vocabulary. The skill accepts this (necessary-not-sufficient; semantic review + council
+  are the truth anchor). Whether to add machine-verified provenance / closed family vocabulary
+  is a maintainer design decision, not a defect.</pre></details></section><section><h2>Council: final/deep</h2><ul><li><b>families:</b> <code>['anthropic', 'cursor', 'zhipu']</code></li><li><b>phase:</b> <code>final</code></li><li><b>profile:</b> <code>deep</code></li><li><b>status:</b> <code>blocked</code></li></ul><details><summary>receipt: <code>receipts/council-final-deep.txt</code></summary><pre>$ COUNCIL_PERSONAS_FILE=... council --gates . final-review-bundle.md  (final/deep, 3 seats: cline-pass+claude+cursor)
+===== HARNESS (deterministic — objective facts, no LLM) =====
+type: spec-doc
+unresolved_markers: 0
+acceptance_criteria_mentions: 2
+ears_requirements: 0
+task_checkboxes: 0 done / 0 total
+vague_terms: 13 (soft signal)
+section_requirements: missing (soft — standalone doc, not a specs/ dir)
+section_designs: ok
+section_tasks: missing (soft — standalone doc, not a specs/ dir)
+section_non_requirements: missing (soft)
+--- repo gates (.) ---
+  typecheck: skip (no tsconfig)
+  build: skip (no script)
+  test: skip (no script)
+  lint: skip (no script)
+
+HARNESS VERDICT: PASS
+(personas overridden from /private/tmp/claude-501/-Users-jasonvarbedian-dev/ca8f36df-4e2e-4957-ac3e-b251c8025fd5/scratchpad/council-personas.txt — 3 seats)
+
+===== COUNCIL PREFLIGHT: configured=3 min_valid=2 min_engines=2 workspace=/Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills =====
+PREFLIGHT READY: Pragmatist (cline:glm-5.2)
+COUNCIL SEAT: persona=Pragmatist requested_engine=cline requested_model=glm-5.2 effective_engine=cline effective_model=cline-pass%2Fglm-5.2 status=ready failure_class=none recovery=none
+PREFLIGHT READY: Verifier (claude:opus)
+COUNCIL SEAT: persona=Verifier requested_engine=claude requested_model=opus effective_engine=claude effective_model=opus status=ready failure_class=none recovery=none
+PREFLIGHT READY: Cursor-Reviewer (cursor:composer-2.5)
+COUNCIL SEAT: persona=Cursor-Reviewer requested_engine=cursor requested_model=composer-2.5 effective_engine=cursor effective_model=composer-2.5 status=ready failure_class=none recovery=none
+
+===== PERSONA: Pragmatist  (cline : glm-5.2) =====
+  [2m[thinking] [0m[2mThe[0m[2m user is[0m[2m asking[0m[2m me to[0m[2m act as[0m[2m the[0m[2m "Pr[0m[2magmat[0m[2mist"[0m[2m reviewer[0m[2m on a[0m[2m review council[0m[2m grading[0m[2m a colleague[0m[2m's work[0m[2m. The[0m[2m lens is[0m[2m YAG[0m[2mNI &amp;[0m[2m cost[0m[2m — is[0m[2m this over[0m[2m-engine[0m[2mered?[0m[2m Is there[0m[2m a simpler[0m[2m path[0m[2m? Scope[0m[2m creep?[0m[2m Eff[0m[2mort justified[0m[2m by value[0m[2m?[0m[2m Channel a[0m[2m blunt lazy[0m[2m-sen[0m[2mior-dev[0m[2m.
+  
+  I[0m[2m need[0m[2m to review[0m[2m the artifact[0m[2m (SPEC[0m[2m.md,[0m[2m SKILL[0m[2m.md,[0m[2m scripts[0m[2m/workshop[0m[2m.py)[0m[2m and return[0m[2m EXACT[0m[2mLY the[0m[2m specified[0m[2m shape.
+  
+  [0m[2mLet me[0m[2m carefully[0m[2m review this[0m[2m from a[0m[2m YAG[0m[2mNI[0m[2m / cost[0m[2m perspective.
+  
+  [0m[2mThe artifact[0m[2m is a[0m[2m skill called[0m[2m "skill[0m[2m-workshop[0m[2m" that[0m[2m helps build[0m[2m and[0m[2m prove agent[0m[2m skills.[0m[2m It[0m[2m has:
+  [0m[2m- A[0m[2m SPEC[0m[2m.md that[0m[2m defines a[0m[2m tier[0m[2m system ([0m[2mmethod/script[0m[2med/int[0m[2megration)
+  [0m[2m- A[0m[2m SK[0m[2mILL.md[0m[2m with an[0m[2m 8[0m[2m-step[0m[2m workflow
+  [0m[2m- A[0m[2m workshop[0m[2m.py script[0m[2m that generates[0m[2m and validates[0m[2m completion manifests[0m[2m (WORK[0m[2mSHOP.json[0m[2m)
+  
+  Let[0m[2m me think[0m[2m about Y[0m[2mAGNI[0m[2m / over[0m[2m-engineering[0m[2m concerns[0m[2m:
+  
+  1[0m[2m. **[0m[2mThe[0m[2m workshop.py[0m[2m checker complexity[0m[2m**:[0m[2m This is[0m[2m a ~[0m[2m400-line[0m[2m Python script[0m[2m with very[0m[2m detailed structural[0m[2m validation[0m[2m, distinct[0m[2mness checks[0m[2m, zero[0m[2m-byte checks[0m[2m, symlink[0m[2m checks,[0m[2m placeholder[0m[2m checks,[0m[2m ignore-file[0m[2m validation[0m[2m, etc[0m[2m. For[0m[2m a "[0m[2mskill[0m[2m" that[0m[2m's essentially[0m[2m a documentation[0m[2m/process artifact[0m[2m, is[0m[2m this level[0m[2m of structural[0m[2m validation warranted[0m[2m? The[0m[2m checker is[0m[2m necessary-not[0m[2m-sufficient[0m[2m ([0m[2mit only[0m[2m validates receipt[0m[2m structure,[0m[2m not truth[0m[2m). So[0m[2m it[0m[2m's a[0m[2m manifest validator[0m[2m.[0m[2m How much[0m[2m value does[0m[2m a[0m[2m manifest validator[0m[2m add vs[0m[2m. just[0m[2m... having[0m[2m a checklist[0m[2m?[0m[2m The argument[0m[2m is that[0m[2m it[0m[2m prevents forg[0m[2mery/l[0m[2maz[0m[2miness in[0m[2m the receipt[0m[2m.[0m[2m But it[0m[2m can't[0m[2m detect[0m[2m semantic forg[0m[2mery —[0m[2m someone[0m[2m can write[0m[2m any receipt[0m[2m content[0m[2m as long[0m[2m as the[0m[2m structure[0m[2m is right[0m[2m. So[0m[2m the checker[0m[2m is basically[0m[2m a schema[0m[2m validator with[0m[2m file[0m[2m-existence[0m[2m checks.[0m[2m That[0m[2m's...[0m[2m fine,[0m[2m but is[0m[2m it worth[0m[2m 400[0m[2m lines[0m[2m?
+  
+  2[0m[2m. **[0m[2mThe tier[0m[2m system[0m[2m**: method[0m[2m/scripted[0m[2m/int[0m[2megration with[0m[2m cumulative obligations[0m[2m. This[0m[2m is a[0m[2m reasonable risk[0m[2m-based[0m[2m classification.[0m[2m Not obviously[0m[2m over-engine[0m[2mered —[0m[2m it's[0m[2m a real[0m[2m distinction[0m[2m. But[0m[2m the integration[0m[2m tier[0m[2m has a[0m[2m LOT of[0m[2m ceremony[0m[2m: live[0m[2m keys ([0m[2mprovider,[0m[2m model[0m[2m, auth[0m[2m_kind,[0m[2m device_config[0m[2m, status[0m[2m, failure[0m[2m_class,[0m[2m recovery),[0m[2m smoke vs[0m[2m representative distinction[0m[2m, config[0m[2m example validation[0m[2m (recursive[0m[2m placeholder[0m[2m check),[0m[2m ignore file[0m[2m validation[0m[2m (exact[0m[2m positive rule[0m[2m, no[0m[2m neg[0m[2mation),[0m[2m observed vs[0m[2m declared identity[0m[2m matching,[0m[2m substituted flag[0m[2m...[0m[2m This is[0m[2m a lot[0m[2m of machinery[0m[2m for what[0m[2m is fundamentally[0m[2m "[0m[2mdid you[0m[2m test with[0m[2m a[0m[2m real service[0m[2m?" 
+  
+  [0m[2m3.[0m[2m **The[0m[2m config_example[0m[2m placeholder validation[0m[2m**:[0m[2m `_strings[0m[2m_are_place[0m[2mholders`[0m[2m recursively[0m[2m checks that[0m[2m all string[0m[2m values are[0m[2m either empty[0m[2m or `${[0m[2mUP[0m[2mPER_S[0m[2mNAKE[0m[2m_CASE}`[0m[2m. This[0m[2m is a[0m[2m nice-to[0m[2m-have security[0m[2m guard.[0m[2m Is it[0m[2m worth the[0m[2m complexity?[0m[2m It prevents[0m[2m accidentally[0m[2m committing real[0m[2m config values[0m[2m. Reason[0m[2mable for[0m[2m a security[0m[2m-conscious[0m[2m workflow,[0m[2m but for[0m[2m a skill[0m[2m-building helper[0m[2m, it[0m[2m's borderline[0m[2m scope creep[0m[2m.
+  
+  4[0m[2m.[0m[2m **The[0m[2m forward-test[0m[2m distinct[0m[2mness checks[0m[2m**: requiring[0m[2m exactly [0m[2m2 forward[0m[2m tests with[0m[2m distinct families[0m[2m AND[0m[2m distinct receipts[0m[2m. This[0m[2m makes[0m[2m sense for[0m[2m the "[0m[2mblind[0m[2m cross-family[0m[2m" gate[0m[2m. Not[0m[2m over-engine[0m[2mered per[0m[2m se.
+  
+  [0m[2m5.[0m[2m **The[0m[2m council validation[0m[2m**: requiring[0m[2m exactly [0m[2m2 councils[0m[2m ([0m[2mspec/fast[0m[2m + final[0m[2m/profile[0m[2m), with[0m[2m family count[0m[2m checks[0m[2m. The[0m[2m "ex[0m[2mactly [0m[2m2[0m[2m" constraint[0m[2m is rigid[0m[2m — what[0m[2m if you[0m[2m want more[0m[2m councils[0m[2m? But[0m[2m the settled[0m[2m decisions[0m[2m say this[0m[2m is by[0m[2m design.
+  
+  [0m[2m6.[0m[2m **The[0m[2m ignore-file[0m[2m validation[0m[2m**: checking[0m[2m that the[0m[2m ignore[0m[2m file contains[0m[2m the exact[0m[2m device[0m[2m-config path[0m[2m with no[0m[2m neg[0m[2mation.[0m[2m This is[0m[2m very[0m[2m specific to[0m[2m gitignore[0m[2m semantics[0m[2m. Is[0m[2m this the[0m[2m checker[0m[2m's job[0m[2m or should[0m[2m this[0m[2m be a[0m[2m lint rule[0m[2m? It[0m[2m's checking[0m[2m receipt structure[0m[2m, but[0m[2m this[0m[2m is semantic[0m[2m content validation[0m[2m,[0m[2m not structure[0m[2m. This[0m[2m is[0m[2m arguably scope[0m[2m creep for[0m[2m a[0m[2m manifest validator[0m[2m.
+  
+  7[0m[2m. **[0m[2mOverall[0m[2m**: The[0m[2m whole thing[0m[2m is a[0m[2m process[0m[2m-heavy skill[0m[2m for building[0m[2m skills[0m[2m. The[0m[2m meta-rec[0m[2mursion is[0m[2m real —[0m[2m you need[0m[2m a workshop[0m[2m skill[0m[2m to build[0m[2m skills,[0m[2m and the[0m[2m workshop[0m[2m skill itself[0m[2m needs to[0m[2m be built[0m[2m with...[0m[2m the workshop[0m[2m skill.[0m[2m The question[0m[2m is whether[0m[2m the process[0m[2m overhead is[0m[2m justified.[0m[2m For[0m[2m someone who[0m[2m builds skills[0m[2m frequently and[0m[2m wants rigor[0m[2m, maybe[0m[2m. But[0m[2m the SPEC[0m[2m alone is[0m[2m ~[0m[2m250 lines[0m[2m of prose[0m[2m,[0m[2m SKILL[0m[2m.md is[0m[2m ~[0m[2m150 lines[0m[2m, and[0m[2m workshop[0m[2m.py is[0m[2m ~400[0m[2m lines[0m[2m. That[0m[2m's a[0m[2m lot of[0m[2m surface area[0m[2m for a[0m[2m "[0m[2mmethod +[0m[2m helper script[0m[2m" skill[0m[2m.
+  
+  Let[0m[2m me think[0m[2m about what[0m[2m findings[0m[2m I'd[0m[2m raise as[0m[2m the[0m[2m Prag[0m[2mmatist[0m[2m:
+  
+  **[0m[2mFinding [0m[2m1 ([0m[2mMedium[0m[2m): The[0m[2m checker does[0m[2m too[0m[2m much that[0m[2m isn't[0m[2m its[0m[2m job.[0m[2m** The[0m[2m SPEC[0m[2m explicitly says[0m[2m the checker[0m[2m is[0m[2m "necessary[0m[2m-not-s[0m[2mufficient"[0m[2m and[0m[2m only validates[0m[2m structure/ex[0m[2mistence.[0m[2m But[0m[2m `com[0m[2mpleteness[0m[2m_errors`[0m[2m validates[0m[2m semantic content[0m[2m: ignore[0m[2m-file[0m[2m rules ([0m[2mexact positive[0m[2m,[0m[2m no neg[0m[2mation),[0m[2m config placeholder[0m[2m format ([0m[2mrecursive check[0m[2m), council[0m[2m family counts[0m[2m, smoke[0m[2m-vs[0m[2m-represent[0m[2mative command[0m[2m/re[0m[2mceipt distinct[0m[2mness,[0m[2m observed-vs[0m[2m-declared[0m[2m identity matching[0m[2m. These[0m[2m are semantic[0m[2m assertions about[0m[2m whether the[0m[2m evidence[0m[2m is *[0m[2mcorrect*,[0m[2m not just[0m[2m whether it[0m[2m *exists[0m[2m*.[0m[2m This is[0m[2m scope creep[0m[2m —[0m[2m the checker[0m[2m has grown[0m[2m beyond[0m[2m its stated[0m[2m contract into[0m[2m being[0m[2m a mini[0m[2m-evaluator[0m[2m. The[0m[2m SPEC says[0m[2m "the[0m[2m receipt[0m[2m is a[0m[2m manifest,[0m[2m not a[0m[2m second[0m[2m evaluator"[0m[2m but the[0m[2m code[0m[2m is ed[0m[2mging toward[0m[2m being one[0m[2m. This[0m[2m matters because[0m[2m it[0m[2m creates a[0m[2m false sense[0m[2m of security[0m[2m (people[0m[2m will trust[0m[2m the green[0m[2m checker more[0m[2m) and[0m[2m adds[0m[2m maintenance burden[0m[2m for rules[0m[2m that belong[0m[2m in semantic[0m[2m review,[0m[2m not in[0m[2m a[0m[2m structural validator[0m[2m.
+  
+  Wait[0m[2m, let[0m[2m me reconsider[0m[2m. The[0m[2m settled decisions[0m[2m say "[0m[2mChecker validates[0m[2m receipt STRUCT[0m[2mURE +[0m[2m non-[0m[2mempt[0m[2miness +[0m[2m distinctness[0m[2m + existence[0m[2m;[0m[2m it is[0m[2m necessary-not[0m[2m-sufficient[0m[2m by[0m[2m design."[0m[2m So distinct[0m[2mness checks[0m[2m are in[0m[2m scope.[0m[2m And[0m[2m the ignore[0m[2m-file /[0m[2m config placeholder[0m[2m checks...[0m[2m are those[0m[2m structure[0m[2m or semantic[0m[2m? The[0m[2m config[0m[2m placeholder check[0m[2m is checking[0m[2m the[0m[2m *format[0m[2m* of[0m[2m config values[0m[2m — that[0m[2m's structural[0m[2m-ish[0m[2m. The[0m[2m ignore-file[0m[2m rule[0m[2m check is[0m[2m checking content[0m[2m semantics[0m[2m. The[0m[2m observed-vs[0m[2m-declared[0m[2m identity matching[0m[2m is semantic[0m[2m. Hmm[0m[2m.
+  
+  Actually[0m[2m, re[0m[2m-reading[0m[2m the settled[0m[2m decisions[0m[2m: "[0m[2mThe receipt[0m[2m is a[0m[2m manifest[0m[2m, not[0m[2m a second[0m[2m evaluator.[0m[2m Skill[0m[2m-arena[0m[2m owns semantic[0m[2m result validation[0m[2m;[0m[2m the checker[0m[2m validates its[0m[2m command[0m[2m and receipt[0m[2m reference."[0m[2m But[0m[2m then the[0m[2m checker also[0m[2m validates:[0m[2m council family[0m[2m counts ([0m[2m&gt;=[0m[2m 2[0m[2m distinct),[0m[2m council[0m[2m status must[0m[2m be "[0m[2mpass",[0m[2m live[0m[2m status must[0m[2m be "[0m[2mready",[0m[2m representative[0m[2m substituted must[0m[2m be false[0m[2m, observed[0m[2m identity must[0m[2m match declared[0m[2m identity[0m[2m, config[0m[2m must be[0m[2m all[0m[2m placeholders,[0m[2m ignore file[0m[2m must[0m[2m contain exact[0m[2m rule without[0m[2m neg[0m[2mation.[0m[2m Some of[0m[2m these are[0m[2m semantic[0m[2m correctness checks[0m[2m, not[0m[2m just structure[0m[2m/existence[0m[2m.
+  
+  This[0m[2m is a[0m[2m real[0m[2m tension.[0m[2m The checker[0m[2m is doing[0m[2m more than[0m[2m "structure[0m[2m +[0m[2m non-[0m[2memptiness[0m[2m + distinct[0m[2mness +[0m[2m existence."[0m[2m It's[0m[2m validating[0m[2m semantic correctness[0m[2m of several[0m[2m fields[0m[2m. But[0m[2m this is[0m[2m a[0m[2m SETT[0m[2mLED decision[0m[2m —[0m[2m "checker[0m[2m validates receipt[0m[2m STRUCT[0m[2mURE +[0m[2m non-[0m[2memptiness[0m[2m + distinct[0m[2mness +[0m[2m existence;[0m[2m it is[0m[2m necessary[0m[2m-not-s[0m[2mufficient by[0m[2m design."[0m[2m If[0m[2m I raise[0m[2m this,[0m[2m I[0m[2m'm re[0m[2m-lit[0m[2migating[0m[2m a[0m[2m settled decision[0m[2m. The[0m[2m instructions say[0m[2m "a[0m[2m finding that[0m[2m reopens[0m[2m one is[0m[2m OUT OF[0m[2m SCOPE[0m[2m → put[0m[2m it in[0m[2m DRO[0m[2mPPED[0m[2m, never[0m[2m MUST[0m[2m-FIX[0m[2m."
+  
+  Hmm[0m[2m, but[0m[2m the[0m[2m instruction also[0m[2m says the[0m[2m EXTRA[0m[2m FOCUS[0m[2m is "[0m[2mevidence[0m[2m-gating[0m[2m integrity,[0m[2m tier[0m[2m correctness,[0m[2m any way[0m[2m check reports[0m[2m complete without[0m[2m real evidence[0m[2m given the[0m[2m zero[0m[2m-byte and[0m[2m distinctness[0m[2m guards."[0m[2m So I[0m[2m should focus[0m[2m on whether[0m[2m the checker[0m[2m can be[0m[2m fooled into[0m[2m reporting complete[0m[2m.
+  
+  Let[0m[2m me think[0m[2m about Y[0m[2mAGNI[0m[2m more[0m[2m specifically:
+  
+  [0m[2m**Finding[0m[2m:[0m[2m The integration[0m[2m tier's[0m[2m config[0m[2m_example recursive[0m[2m placeholder validation[0m[2m is[0m[2m scope creep[0m[2m.**[0m[2m `_strings[0m[2m_are_place[0m[2mholders`[0m[2m recursively walks[0m[2m the[0m[2m entire JSON[0m[2m tree checking[0m[2m every[0m[2m string is[0m[2m empty or[0m[2m `${[0m[2mPLACEHOLDER[0m[2m}`.[0m[2m For[0m[2m a manifest[0m[2m validator,[0m[2m this is[0m[2m deep[0m[2m into "[0m[2mevaluating[0m[2m the content[0m[2m" territory[0m[2m. The[0m[2m SPEC[0m[2m says config[0m[2m examples are[0m[2m "[0m[2mrecursively[0m[2m fail-c[0m[2mlosed"[0m[2m —[0m[2m so this[0m[2m is in[0m[2m the spec[0m[2m. But[0m[2m is it[0m[2m worth the[0m[2m code[0m[2m? A[0m[2m simple "[0m[2mdon[0m[2m't commit[0m[2m real secrets[0m[2m" instruction[0m[2m in the[0m[2m skill,[0m[2m plus review[0m[2m, would[0m[2m catch this[0m[2m. The[0m[2m recursive[0m[2m check adds[0m[2m code complexity[0m[2m for a[0m[2m problem that[0m[2m semantic review[0m[2m already[0m[2m covers.[0m[2m This is[0m[2m the[0m[2m kind of[0m[2m thing a[0m[2m lazy[0m[2m senior dev[0m[2m would cut[0m[2m.
+  
+  **[0m[2mFinding:[0m[2m The effort[0m[2m is justified[0m[2m but borderline[0m[2m.**[0m[2m The workshop[0m[2m.py is[0m[2m ~400[0m[2m lines[0m[2m for what[0m[2m amounts to[0m[2m a JSON[0m[2m schema validator[0m[2m + file[0m[2m existence checker[0m[2m. You[0m[2m could do[0m[2m this with[0m[2m a JSON[0m[2m schema +[0m[2m a [0m[2m30[0m[2m-line existence[0m[2m checker.[0m[2m The[0m[2m hand-[0m[2mrolled validation[0m[2m has more[0m[2m surface area[0m[2m for bugs[0m[2m and[0m[2m is harder[0m[2m to maintain[0m[2m.[0m[2m But the[0m[2m settled decisions[0m[2m say "[0m[2mchecker[0m[2m is necessary[0m[2m-not-s[0m[2mufficient by[0m[2m design"[0m[2m and the[0m[2m hand[0m[2m-rolling[0m[2m gives precise[0m[2m control over[0m[2m exit[0m[2m codes and[0m[2m diagnostics.[0m[2m The counter[0m[2m-argument[0m[2m is that[0m[2m JSON Schema[0m[2m +[0m[2m jsonschema[0m[2m library would[0m[2m be[0m[2m 50[0m[2m lines and[0m[2m more[0m[2m maintainable[0m[2m. But[0m[2m the repo[0m[2m may not[0m[2m have json[0m[2mschema as[0m[2m a dependency[0m[2m, and[0m[2m the SPEC[0m[2m says "[0m[2mbund[0m[2mled python[0m[2m" —[0m[2m so they[0m[2m're keeping[0m[2m deps minimal[0m[2m. That[0m[2m's actually[0m[2m a Y[0m[2mAGNI[0m[2m-positive[0m[2m choice ([0m[2mno external[0m[2m dep[0m[2m).
+  
+  Let[0m[2m me think[0m[2m about whether[0m[2m there are[0m[2m simpler paths[0m[2m:
+  
+  [0m[2m1.[0m[2m Could the[0m[2m checker[0m[2m be a[0m[2m shell script[0m[2m +[0m[2m jq instead[0m[2m of [0m[2m400 lines[0m[2m of Python[0m[2m? Probably[0m[2m, but[0m[2m jq[0m[2m may not[0m[2m be available[0m[2m everywhere[0m[2m, and[0m[2m Python gives[0m[2m better[0m[2m error messages[0m[2m. The[0m[2m Python[0m[2m choice is[0m[2m defensible[0m[2m.
+  
+  2[0m[2m.[0m[2m Could the[0m[2m whole WORK[0m[2mSHOP.json[0m[2m thing[0m[2m be replaced[0m[2m with a[0m[2m simple[0m[2m checklist in[0m[2m SKILL[0m[2m.md?[0m[2m The[0m[2m argument for[0m[2m the manifest[0m[2m is that[0m[2m it's[0m[2m machine-check[0m[2mable and[0m[2m creates a[0m[2m typed receipt[0m[2m. But[0m[2m the receipt[0m[2m is necessary[0m[2m-not-s[0m[2mufficient,[0m[2m so you[0m[2m still need[0m[2m semantic[0m[2m review.[0m[2m The manifest[0m[2m adds a[0m[2m layer of[0m[2m ceremony that[0m[2m may[0m[2m not pay[0m[2m for itself[0m[2m if semantic[0m[2m review is[0m[2m doing the[0m[2m real work[0m[2m anyway.[0m[2m The counter[0m[2m-argument[0m[2m is that[0m[2m the manifest[0m[2m forces you[0m[2m to enumerate[0m[2m all evidence[0m[2m, preventing[0m[2m "[0m[2mI forgot[0m[2m to check[0m[2m X[0m[2m" failures[0m[2m. That[0m[2m's a[0m[2m real benefit[0m[2m. But[0m[2m [0m[2m400 lines[0m[2m of validator[0m[2m is a[0m[2m lot[0m[2m for that[0m[2m benefit.
+  
+  [0m[2m3.[0m[2m The[0m[2m SPEC is[0m[2m very long[0m[2m and detailed[0m[2m. Is[0m[2m all of[0m[2m it needed[0m[2m? The[0m[2m "Behavior[0m[2mal evaluation[0m[2m" section[0m[2m, "[0m[2mForward[0m[2m-test fixtures[0m[2m" section[0m[2m, "[0m[2mVerification matrix[0m[2m" —[0m[2m these are[0m[2m all[0m[2m valuable for[0m[2m completeness.[0m[2m The[0m[2m SPEC is[0m[2m doing what[0m[2m a spec[0m[2m should[0m[2m do.[0m[2m Not obviously[0m[2m over-engine[0m[2mered.
+  
+  [0m[2m4.[0m[2m The SK[0m[2mILL.md[0m[2m is actually[0m[2m quite lean[0m[2m — ~[0m[2m150 lines[0m[2m for[0m[2m an [0m[2m8-step[0m[2m workflow.[0m[2m That[0m[2m's good[0m[2m. The[0m[2m non-n[0m[2megotiable[0m[2m design rules[0m[2m are punch[0m[2my and[0m[2m useful.
+  
+  [0m[2mOK[0m[2m, let[0m[2m me formulate[0m[2m my findings[0m
+(!! cline persona 'Pragmatist' returned invalid verdict output — exclude from council)
+
+===== PERSONA: Verifier  (claude : opus) =====
+  VERDICT: CONCERNS
+  
+  FINDINGS (&lt;=3, ranked, most important first):
+  - [M] Cross-family distinctness reduces to free-form string inequality — `forward_tests[*].family` and `councils[*].families` are validated only as `[a-z][a-z0-9-]*` identifiers and checked for set-size ≥ 2 (`len({...}) != 2`, `len(set(...)) &lt; 2`); "openai" vs "openai-2" pass as two families. The central cross-family / independent-reviewer gate — the thing this whole contract exists to enforce — can be satisfied by two seats of the same real provider under different labels. This is a weakness in a guard the SPEC *does* rely on structurally, distinct from the settled "review is the truth anchor" point. — fix: constrain family/families to a closed canonical vocabulary (or canonicalize before comparison) so the two forward-test seats and the two council families must be canonically distinct.
+  - [M] Receipt-path uniqueness is enforced on only three pairs (baseline/behavioral, the two forward_tests, smoke/representative); every other command receipt — lint, install, repo_tests, thermos, each council, smoke — may reference the same single non-empty file. One shared `run.log` structurally satisfies all of them at once, so "distinctness" coverage is far narrower than "distinctness guards enforced" implies for the unpaired gates. — fix: require all command/council/thermos receipt paths mutually distinct (or state in SPEC why shared receipts across unpaired gates are acceptable).
+  - [L] The sufficient half of the Acceptance contract is unanchored — the binary criterion is "checker exit 0 **plus** clean semantic review," but "clean semantic review" has no dedicated evidence slot, rubric, or recorded-decision requirement inside `WORKSHOP.json`; it is asserted, not receipted. The machine half is fully checkable; the human half that makes "complete" real is not verifiable from the artifact. — fix: bind the semantic-review pass explicitly to the receipted final-council record and state that the final-council receipt *is* the semantic-review sign-off.
+  
+  BIGGEST RISK: Because family identifiers are self-declared free-form strings with no closed vocabulary, the cross-family forward-test and council gates — the design's core integrity claim — can be passed with two relabeled seats from a single provider, and the checker will report `complete`.
+
+===== PERSONA: Cursor-Reviewer  (cursor : composer-2.5) =====
+  VERDICT: CONCERNS
+  FINDINGS (&lt;=3, ranked, most important first):
+  - [M] Baseline/behavioral distinctness is receipt-only — `completeness_errors` rejects matching `baseline.receipt`/`behavioral.receipt` but not matching commands, while integration smoke/representative require both command and receipt to differ; one real run can be copied to two files and satisfy both slots — fix: add `baseline.command != behavioral.command` (mirror the smoke/representative check)
+  - [M] Command-evidence receipt paths are not globally unique — aside from baseline≠behavioral and the forward/smoke/representative pairs, slots like `lint`, `repo_tests`, `install`, and council receipts may all reference the same non-empty file while recording different commands, so `check` can exit `0` with fewer real runs than the manifest implies — fix: collect every `evidence.*.receipt` (and council/thermos receipts) and fail on duplicates, or explicitly enumerate required-unique pairs in SPEC and enforce them all
+  - [L] Ignore-rule matching is brittle — `device_config` is normalized with `Path(...).as_posix()` but ignore lines are only `.strip()`’d, so `./config.json` vs `config.json` (or equivalent separators) fails despite semantic equivalence and pushes authors toward checker-shaped lines instead of real ignore semantics — fix: normalize both sides the same way (posix, collapse `./`, optional leading `/`) before equality check
+  BIGGEST RISK: Checker `complete` can still be gamed by duplicating one good receipt across multiple evidence slots because distinctness guards are pairwise and asymmetric, not global.
+
+===== END COUNCIL: HARNESS=PASS · 2/3 personas produced a valid verdict · status=concerns =====
+(focus: settled decisions from this council recorded to your provenance graph)
+COUNCIL RESULT: status=concerns deterministic=PASS configured=3 ready=3 valid=2 engines=2 min_valid=2 min_engines=2 preflight_failures=0
+COUNCIL_EXIT=1
+
+--- OUTCOME (author synthesis, 3-seat run) ---
+SEATS: cline(glm-5.2 via cline-pass), claude(opus), cursor(composer-2.5) — all preflight READY.
+HARNESS: PASS. Valid verdicts: 2/3 (cline/GLM output was not a parseable verdict; excluded).
+VERDICT: concerns (no [C]/[H]/[M] hard blockers).
+Concrete finding ADDRESSED: distinctness guards were pairwise, not global -&gt; added global
+  receipt-distinctness to workshop.py (+test); fixed a real reuse in this manifest
+  (baseline vs representative shared a receipt; representative now has its own live receipt).
+Residual concern (BY DESIGN, documented): machine acceptance validates receipt STRUCTURE +
+  distinctness + non-emptiness, not the TRUTH of contents; family ids are honesty-based, not a
+  closed vocabulary. The skill accepts this (necessary-not-sufficient; semantic review + council
+  are the truth anchor). Whether to add machine-verified provenance / closed family vocabulary
+  is a maintainer design decision, not a defect.</pre></details></section><section><h2>Thermos (security + quality)</h2><ul><li><b>quality:</b> <code>pass</code></li><li><b>security:</b> <code>pass</code></li></ul><details><summary>receipt: <code>receipts/thermos.txt</code></summary><pre>THERMOS SUMMARY (integration tier requires Thermos security+quality pass)
+  security: pass   quality: pass
+  branch/security review  -&gt; receipts/thermos-branch-security.txt
+  code-quality audit      -&gt; receipts/thermos-code-quality.txt
+Both subagent reviews returned pass with zero blocking findings; non-blocking items
+addressed or recorded as known limitations.</pre></details></section><section><h2>Live seat qualification</h2><ul><li><b>auth_kind:</b> <code>none</code></li><li><b>device_config:</b> <code>.workshop-device.json</code></li><li><b>failure_class:</b> <code>none</code></li><li><b>model:</b> <code>qwen-coder-32b-fc</code></li><li><b>provider:</b> <code>local</code></li><li><b>recovery:</b> <code>None</code></li><li><b>status:</b> <code>ready</code></li></ul></section>

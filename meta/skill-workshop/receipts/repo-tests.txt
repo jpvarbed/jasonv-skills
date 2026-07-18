@@ -1,3 +1,3 @@
-$ uv run --with pytest pytest tests/ meta/skill-workshop/tests/ -q  (global distinctness added)
-......................                                                   [100%]
-22 passed in 1.71s
+$ uv run --with pytest pytest tests/ meta/skill-workshop/tests/ -q  (+report generator, templates)
+........................                                                 [100%]
+24 passed in 1.91s

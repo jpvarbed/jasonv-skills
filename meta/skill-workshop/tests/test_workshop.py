@@ -196,6 +196,27 @@ class WorkshopCliTest(unittest.TestCase):
         self.assertEqual(result.returncode, 1)
         self.assertIn("must not be an empty file", result.stdout)
 
+    def test_report_renders_readable_artifact(self):
+        self.complete_method()
+        out = self.root / "REPORT.md"
+        result = self.run_cli("report", self.receipt, "--output", str(out))
+        self.assertEqual(result.returncode, 0, result.stderr)
+        text = out.read_text()
+        self.assertIn("completion report", text)
+        self.assertIn("Baseline eval", text)
+        self.assertIn("Council: spec/fast", text)
+        # receipt contents are inlined for semantic review, not just referenced
+        self.assertIn("run-baseline", text)
+
+    def test_report_html_is_self_contained(self):
+        self.complete_method()
+        out = self.root / "REPORT.html"
+        result = self.run_cli("report", self.receipt, "--format", "html", "--output", str(out))
+        self.assertEqual(result.returncode, 0, result.stderr)
+        text = out.read_text()
+        self.assertIn("<!doctype html>", text)
+        self.assertNotIn("http://", text.split("<title>")[0])  # no external asset before title
+
     def test_null_forward_records_are_invalid_not_a_crash(self):
         value = self.init()
         value["evidence"]["forward_tests"] = [None, None]

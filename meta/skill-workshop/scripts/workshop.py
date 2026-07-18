@@ -518,6 +518,158 @@ def check_command(arguments):
     return 0
 
 
+def _excerpt(root, receipt, max_lines=40):
+    if not isinstance(receipt, str):
+        return None, "no receipt path recorded"
+    path = root / receipt
+    try:
+        text = path.read_text()
+    except OSError:
+        return None, f"receipt not readable: {receipt}"
+    lines = text.splitlines()
+    body = "\n".join(lines[:max_lines])
+    if len(lines) > max_lines:
+        body += f"\n… (+{len(lines) - max_lines} more lines in {receipt})"
+    return body, None
+
+
+def report_sections(value):
+    """Yield (title, facts, receipt) for every gate, in reading order."""
+    ev = value["evidence"]
+    labels = {
+        "baseline": "Baseline eval (no skill)",
+        "behavioral": "Behavioral eval (with skill)",
+        "representative": "Representative live operation",
+        "smoke": "Smoke / identity",
+        "lint": "Static lint",
+        "install": "Install across targets",
+        "repo_tests": "Repository tests",
+    }
+    for key, title in labels.items():
+        record = ev.get(key)
+        if record is None:
+            continue
+        facts = {k: v for k, v in record.items() if k != "receipt"}
+        yield title, facts, record.get("receipt")
+    for index, forward in enumerate(ev.get("forward_tests") or []):
+        if not isinstance(forward, dict):
+            continue
+        facts = {k: v for k, v in forward.items() if k != "receipt"}
+        yield f"Blind forward-test #{index + 1} ({forward.get('family', '?')})", facts, forward.get("receipt")
+    for council in ev.get("councils") or []:
+        if not isinstance(council, dict):
+            continue
+        facts = {k: v for k, v in council.items() if k != "receipt"}
+        yield f"Council: {council.get('phase', '?')}/{council.get('profile', '?')}", facts, council.get("receipt")
+    if ev.get("thermos") is not None:
+        facts = {k: v for k, v in ev["thermos"].items() if k != "receipt"}
+        yield "Thermos (security + quality)", facts, ev["thermos"].get("receipt")
+    if value["tier"] == "integration" and ev.get("live") is not None:
+        yield "Live seat qualification", dict(ev["live"]), None
+
+
+def render_report_markdown(value, root, verdict):
+    out = [
+        f"# skill-workshop completion report — `{value['work_unit']}`",
+        "",
+        f"**Checker verdict:** `{verdict['status']}`  ·  "
+        f"tier `{value['tier']}`  ·  effort `{value['effort']}`  ·  "
+        f"author family `{value['author_family']}`",
+        "",
+    ]
+    if verdict.get("errors"):
+        out += ["**Open gates:**", ""] + [f"- {e}" for e in verdict["errors"]] + [""]
+    out += ["> Read each receipt excerpt below to confirm the claim is real. The checker proves",
+            "> the receipts exist, are non-empty, and are distinct; only this read confirms truth.",
+            "", "---", ""]
+    for title, facts, receipt in report_sections(value):
+        out.append(f"## {title}")
+        out.append("")
+        for fk, fv in facts.items():
+            out.append(f"- **{fk}:** `{fv}`")
+        if receipt is not None:
+            body, err = _excerpt(root, receipt)
+            out.append("")
+            if err:
+                out.append(f"> ⚠️ {err}")
+            else:
+                out.append(f"<details><summary>receipt: <code>{receipt}</code></summary>")
+                out.append("")
+                out.append("```")
+                out.append(body)
+                out.append("```")
+                out.append("</details>")
+        out.append("")
+    return "\n".join(out) + "\n"
+
+
+def _html_escape(text):
+    return (str(text).replace("&", "&amp;").replace("<", "&lt;")
+            .replace(">", "&gt;"))
+
+
+def render_report_html(value, root, verdict):
+    status = verdict["status"]
+    colour = {"complete": "#1a7f37", "incomplete": "#9a6700", "invalid": "#cf222e"}.get(status, "#57606a")
+    parts = [
+        "<!doctype html><meta charset='utf-8'>",
+        "<title>skill-workshop report</title>",
+        "<style>body{font:15px/1.5 -apple-system,system-ui,sans-serif;max-width:900px;"
+        "margin:2rem auto;padding:0 1rem;color:#1f2328}h1{font-size:1.5rem}"
+        "code{background:#f6f8fa;padding:.1em .3em;border-radius:4px}"
+        f".verdict{{display:inline-block;background:{colour};color:#fff;padding:.2em .6em;"
+        "border-radius:6px;font-weight:600}details{margin:.4rem 0}"
+        "pre{background:#f6f8fa;padding:.8rem;border-radius:6px;overflow:auto;font-size:13px}"
+        "section{border-top:1px solid #d0d7de;padding:.6rem 0}li{margin:.1rem 0}</style>",
+        f"<h1>skill-workshop completion report</h1>",
+        f"<p><span class='verdict'>{_html_escape(status)}</span> &nbsp; tier "
+        f"<code>{_html_escape(value['tier'])}</code> · effort <code>{_html_escape(value['effort'])}</code> "
+        f"· work unit <code>{_html_escape(value['work_unit'])}</code></p>",
+    ]
+    if verdict.get("errors"):
+        parts.append("<p><b>Open gates:</b></p><ul>"
+                     + "".join(f"<li>{_html_escape(e)}</li>" for e in verdict["errors"]) + "</ul>")
+    parts.append("<p><em>Read each receipt to confirm the claim is real — the checker proves "
+                 "receipts exist and are distinct, not that their contents are true.</em></p>")
+    for title, facts, receipt in report_sections(value):
+        parts.append(f"<section><h2>{_html_escape(title)}</h2><ul>")
+        for fk, fv in facts.items():
+            parts.append(f"<li><b>{_html_escape(fk)}:</b> <code>{_html_escape(fv)}</code></li>")
+        parts.append("</ul>")
+        if receipt is not None:
+            body, err = _excerpt(root, receipt, max_lines=200)
+            if err:
+                parts.append(f"<p>⚠️ {_html_escape(err)}</p>")
+            else:
+                parts.append(f"<details><summary>receipt: <code>{_html_escape(receipt)}</code></summary>"
+                             f"<pre>{_html_escape(body)}</pre></details>")
+        parts.append("</section>")
+    return "".join(parts) + "\n"
+
+
+def report_command(arguments):
+    receipt = Path(arguments.receipt)
+    try:
+        value = json.loads(receipt.read_text())
+    except (OSError, json.JSONDecodeError) as error:
+        print(f"invalid: {error}", file=sys.stderr)
+        return 2
+    errors = structural_errors(value)
+    if errors:
+        print("invalid receipt; run check first", file=sys.stderr)
+        return 2
+    completeness = completeness_errors(value, receipt)
+    verdict = {"status": "complete" if not completeness else "incomplete", "errors": completeness}
+    root = receipt.parent.resolve()
+    if arguments.format == "html":
+        text = render_report_html(value, root, verdict)
+    else:
+        text = render_report_markdown(value, root, verdict)
+    Path(arguments.output).write_text(text)
+    print(f"wrote {arguments.output} ({verdict['status']})")
+    return 0
+
+
 def parser():
     root = argparse.ArgumentParser(description=__doc__)
     commands = root.add_subparsers(dest="command", required=True)
@@ -532,6 +684,11 @@ def parser():
     check = commands.add_parser("check")
     check.add_argument("receipt")
     check.set_defaults(handler=check_command)
+    report = commands.add_parser("report")
+    report.add_argument("receipt")
+    report.add_argument("--format", choices=("md", "html"), default="md")
+    report.add_argument("--output", "-o", required=True)
+    report.set_defaults(handler=report_command)
     return root
 
 
