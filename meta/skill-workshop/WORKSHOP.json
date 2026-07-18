@@ -31,7 +31,8 @@
     "councils": [
       {
         "families": [
-          "anthropic"
+          "anthropic",
+          "cursor"
         ],
         "phase": "spec",
         "profile": "fast",
@@ -46,7 +47,7 @@
         "phase": "final",
         "profile": "deep",
         "receipt": "receipts/council-final-deep.txt",
-        "status": "fail"
+        "status": "blocked"
       }
     ],
     "forward_tests": [

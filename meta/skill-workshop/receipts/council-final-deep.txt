@@ -1,9 +1,9 @@
-$ council --gates . --focus 'evidence-gating integrity; can check report complete without real evidence?' final-review-bundle.md
-# NOTE seat availability: codex=capacity-blocked, cline=adapter-error, cursor=unauthenticated, claude=OK
+$ council --gates . --focus 'evidence-gating integrity; can check report complete without real evidence' final-review-bundle.md  (final/deep re-review, hardened)
+# seats: codex=capacity, cline=out-of-credits; claude+cursor active = 2 families
 ===== HARNESS (deterministic — objective facts, no LLM) =====
 type: spec-doc
 unresolved_markers: 0
-acceptance_criteria_mentions: 0
+acceptance_criteria_mentions: 2
 ears_requirements: 0
 task_checkboxes: 0 done / 0 total
 vague_terms: 13 (soft signal)
@@ -17,58 +17,30 @@ section_non_requirements: missing (soft)
   test: skip (no script)
   lint: skip (no script)
 
-HARNESS VERDICT: FAIL
-HARNESS BLOCKERS:
-  - 0 acceptance/verification criteria — tasks aren't verifiable
+HARNESS VERDICT: PASS
+
+===== COUNCIL PREFLIGHT: configured=4 min_valid=3 min_engines=2 workspace=/Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills =====
 (capacity: codex exhausted (subscription-window) — substituting cline:kimi-k2-thinking for persona 'Architect')
+PREFLIGHT FAILED: Architect (cline:kimi-k2-thinking) rc=1 verdict=INVALID
+  [31merror:[0m hook dispatch failed: session.hook requires a valid hook event payload
+  [31merror:[0m Insufficient balance. Your Cline Credits balance is $-0.00
+COUNCIL SEAT: persona=Architect requested_engine=codex requested_model=gpt-5.6-sol effective_engine=cline effective_model=moonshotai%2Fkimi-k2-thinking status=unavailable failure_class=capacity recovery=restore%20provider%20capacity%20or%20billing
+PREFLIGHT FAILED: Pragmatist (cline:kimi-k2-thinking) rc=1 verdict=INVALID
+  [31merror:[0m hook dispatch failed: session.hook requires a valid hook event payload
+  [31merror:[0m Insufficient balance. Your Cline Credits balance is $-0.00
+COUNCIL SEAT: persona=Pragmatist requested_engine=cline requested_model=kimi-k2-thinking effective_engine=cline effective_model=moonshotai%2Fkimi-k2-thinking status=unavailable failure_class=capacity recovery=restore%20provider%20capacity%20or%20billing
+PREFLIGHT READY: Verifier (claude:opus)
+COUNCIL SEAT: persona=Verifier requested_engine=claude requested_model=opus effective_engine=claude effective_model=opus status=ready failure_class=none recovery=none
+PREFLIGHT READY: Cursor-Reviewer (cursor:composer-2.5)
+COUNCIL SEAT: persona=Cursor-Reviewer requested_engine=cursor requested_model=composer-2.5 effective_engine=cursor effective_model=composer-2.5 status=ready failure_class=none recovery=none
+error: ready panel does not meet policy (ready=2/4 engines=2 min_valid=3 min_engines=2)
+COUNCIL RESULT: status=preflight_failed deterministic=PASS configured=4 ready=2 valid=0 engines=0 min_valid=3 min_engines=2 preflight_failures=2
+COUNCIL_EXIT=1
 
-===== PERSONA: Architect  (cline : kimi-k2-thinking) =====
-[31merror:[0m hook dispatch failed: session.hook requires a valid hook event payload
-[31merror:[0m invalid model format. Expected format: modelType/model
-(!! cline persona 'Architect' exited rc=1 — NO verdict, exclude from council)
-
-===== PERSONA: Pragmatist  (cline : kimi-k2-thinking) =====
-[31merror:[0m hook dispatch failed: session.hook requires a valid hook event payload
-[31merror:[0m invalid model format. Expected format: modelType/model
-(!! cline persona 'Pragmatist' exited rc=1 — NO verdict, exclude from council)
-
-===== PERSONA: Verifier  (claude : opus) =====
-VERDICT: FAIL
-
-FINDINGS (ranked):
-
-- [H] The checker enforces receipt/command *distinctness* only for the smoke-vs-representative pair, but omits the same guard for the two gates that carry the core verifiability claims: `baseline` vs `behavioral`, and the two `forward_tests`. In `completeness_errors`, baseline and behavioral are each validated independently (`_check_command`) with no check that their `command` or `receipt` differ — so a single no-skill run pointed at both slots satisfies "real baseline AND with-skill" and the checker reports `complete` with zero measured lift and no way to detect the collapse. Likewise the two forward_tests only require distinct `family` values, not distinct `receipt` paths, so one file can back both "isolated" runs. — Why it matters: this is the reward-hack surface the design already recognized (it guards smoke/representative) but left open on the highest-value evidence; "success" here is fakeable without touching any exit code. — fix: require `baseline.command`/`baseline.receipt` to differ from `behavioral`, and require the two `forward_tests` receipts to be distinct, mirroring the smoke/representative guard.
-
-- [H] HARNESS FAIL (hard blocker): 0 machine-checkable acceptance/verification criteria. The spec's "Skill workflow" completion column and "Verification matrix" are prose done-conditions ("stays lean," "errors and missing cells stay explicit," "integrations qualify adapters visibly") — none binary. The one automated gate (`workshop.py check`) verifies a *narrower, different* contract (key shape, exit_code==0, dry_run==false, file existence) than those stated completion criteria, so the artifact's own done-conditions are not verifiable by anything. — Why it matters: a step whose "done" is a subjective adjective can be declared complete without evidence; the checker's green does not attest to the workflow's criteria. — fix: attach a binary, checkable acceptance criterion to each workflow row (which receipt key / exit condition proves it), or explicitly demote the prose rows to guidance and state that only the checker's enumerated gates are the acceptance contract.
-
-- [M] Empty-content bypass on every gate: `_safe_file` accepts any zero-byte regular file, and no gate requires receipt non-emptiness or binds receipt content to the recorded command. Combined with self-declared `observed_provider`/`observed_model` compared only against self-declared `live.provider`/`live.model`, "complete" is reachable with empty placeholder files and honest-only identity fields. — Why it matters: this is the acknowledged structural-vs-forgery boundary, but the artifact should make the boundary load-bearing, not implicit. — fix: reject zero-byte receipts, and have SKILL.md's ship rule state in one line that a `complete` checker exit is necessary-not-sufficient and never a standalone ship signal.
-
-BIGGEST RISK: `workshop.py check` can report `complete` while baseline/with-skill (and the two blind forward-tests) share a single receipt, silently voiding the lift and cross-family-isolation claims the receipt exists to prove.
-
-DROPPED (out of scope — settled): checker is structural, not a forgery detector; observed-identity/`substituted` and exit-code trust rely on semantic receipt review + independent council as the truth anchor; tier fixed integration+bundles_code; codex capacity-blocked not substituted; saturated baseline by design.
-
-===== PERSONA: Cursor-Reviewer  (cursor : composer-2.5) =====
-VERDICT: FAIL
-FINDINGS (<=3, ranked, most important first):
-- [H] `exit_code: 0` is structurally rejected — `_valid_command` uses `isinstance(exit_code, bool)`, and in Python `isinstance(0, bool)` is true, so every successful command record fails structural validation (exit 2) and `check` can never return `complete` — fix: require `type(value["exit_code"]) is int` (or `isinstance(v, int) and not isinstance(v, bool)`)
-- [M] Config fail-closed rule is weaker than SPEC — `_strings_are_placeholders` treats JSON numbers/booleans as automatically valid, so a config example can embed literal non-placeholder values without failing the checker — fix: recurse dicts/lists and only exempt non-string scalars when SPEC explicitly allows them; otherwise fail on any non-placeholder leaf
-- [M] `device_config` vs ignore-file matching is not normalized — completeness compares `Path(device_config).as_posix()` to stripped ignore lines with no `normpath`/collapse of `.` or `..`, so a valid ignored path can spuriously fail — fix: normalize both sides with the same `Path(...).as_posix()` (or `resolve` relative to receipt root) before exact comparison
-BIGGEST RISK: The `exit_code` bool-subclass bug makes a passing workshop receipt structurally impossible, so the completion gate cannot work as specified.
-
-===== END COUNCIL: HARNESS=FAIL · 2/4 personas produced a verdict — Claude synthesizes per SKILL.md =====
-(focus: settled decisions from this council recorded to your provenance graph)
-COUNCIL_EXIT=0
-
---- SYNTHESIS (recorded by author, per SKILL.md) ---
-Families that produced a verdict: claude(anthropic), cursor(composer-2.5) = 2 distinct.
-cline personas errored (adapter); codex capacity-blocked. Verdict: FAIL.
-Actionable findings ADDRESSED in this revision:
-  - baseline/behavioral receipt distinctness guard        -> added to workshop.py + test
-  - forward_tests distinct-receipt guard                  -> added to workshop.py + test
-  - zero-byte receipt rejection                           -> added to workshop.py + test
-  - SKILL.md: 'complete is necessary-not-sufficient'      -> added
-Finding REJECTED (factually wrong): cursor '[H] isinstance(0,bool) rejects exit_code:0' —
-  in Python isinstance(0,bool) is False; the code already excludes bools and passing
-  complete-receipt tests prove exit_code:0 is accepted.
-Deferred to user (design decision): harness 'prose acceptance criteria' — whether to make
-  each workflow row a binary acceptance criterion or demote prose rows to guidance.
+--- OUTCOME (author synthesis) ---
+HARNESS (deterministic): PASS — acceptance-criteria + no unresolved markers (the prior
+  'prose criteria' FAIL is resolved by the SPEC Acceptance contract).
+COUNCIL PANEL: preflight_failed — policy requires min_valid=3 seats; only 2 ready
+  (claude:opus, cursor:composer-2.5). codex=capacity (resets 2026-07-23),
+  cline=capacity/billing ($-0.00 credits; model-format fixed to z-ai/glm-5.2 but balance empty).
+STATUS: blocked (cannot assemble a policy-valid panel). No substitution performed.

@@ -1,34 +1,61 @@
-$ adversarial-review.sh --focus 'spec completeness, hidden gaps, gameable gates' SPEC.md
-# fast cross-family review of the SPEC; codex seat capacity-blocked
-ENGINE: claude
-This was a review-only task — there's nothing to build, so I'll just surface the deliverable. The full write-up is in the plan file. Here's the adversarial review.
+$ council --focus 'spec completeness; any gate satisfiable without real evidence' SPEC.md  (spec/fast re-review, hardened)
+# seats: codex=capacity, cline=out-of-credits; claude+cursor active = 2 families
+===== HARNESS (deterministic — objective facts, no LLM) =====
+type: spec-doc
+unresolved_markers: 0
+acceptance_criteria_mentions: 2
+ears_requirements: 0
+task_checkboxes: 0 done / 0 total
+vague_terms: 13 (soft signal)
+section_requirements: missing (soft — standalone doc, not a specs/ dir)
+section_designs: ok
+section_tasks: missing (soft — standalone doc, not a specs/ dir)
+section_non_requirements: missing (soft)
 
-## Core defect (the throughline)
+HARNESS VERDICT: PASS
 
-The spec centers everything on `workshop.py check` returning `status: "complete"` and calls councils/tests/forward-tests "hard gates." But the checker **never reads a receipt's contents and never runs a command.** It checks JSON keys/types, that referenced files are regular/non-symlink/in-root, and that self-declared fields hold happy values. So every load-bearing anti-cheat invariant reduces to "author typed a coherent value and touched a file." The spec *admits* it isn't a forgery detector — then still markets exit 0 as "complete" and councils as "hard gates." Most findings are instances of this.
+===== COUNCIL PREFLIGHT: configured=4 min_valid=3 min_engines=2 workspace=/private/tmp/claude-501/-Users-jasonvarbedian-dev/ca8f36df-4e2e-4957-ac3e-b251c8025fd5/scratchpad =====
+PREFLIGHT FAILED: Architect (codex:gpt-5.6-sol) rc=1 verdict=PASS
+  Reading additional input from stdin...
+  OpenAI Codex v0.144.5
+  --------
+  workdir: /Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills
+  model: gpt-5.6-sol
+  provider: openai
+  approval: never
+  sandbox: read-only
+  reasoning effort: high
+  reasoning summaries: none
+  session id: 019f72f3-0f0b-7a13-8117-d45ed0099329
+  --------
+  user
+  COUNCIL PREFLIGHT
+  This is a noninteractive adapter readiness check. Do not inspect or modify files.
+  Return exactly one anchored verdict line and no other verdict lines:
+  VERDICT: PASS
+  warning: Skill descriptions were shortened to fit the 2% skills context budget. Codex can still see every skill, but some descriptions are shorter. Disable unused skills or plugins to leave more room for the rest.
+  hook: SessionStart
+  hook: SessionStart Completed
+  ERROR: You've hit your usage limit. Visit https://chatgpt.com/codex/settings/usage to purchase more credits or try again at Jul 23rd, 2026 12:15 AM.
+  ERROR: You've hit your usage limit. Visit https://chatgpt.com/codex/settings/usage to purchase more credits or try again at Jul 23rd, 2026 12:15 AM.
+(capacity: reported codex -> subscription-window; later seats route around it)
+COUNCIL SEAT: persona=Architect requested_engine=codex requested_model=gpt-5.6-sol effective_engine=codex effective_model=gpt-5.6-sol status=unavailable failure_class=adapter_error recovery=inspect%20adapter%20output%20and%20retry%20preflight
+PREFLIGHT FAILED: Pragmatist (cline:kimi-k2-thinking) rc=1 verdict=INVALID
+  [31merror:[0m hook dispatch failed: session.hook requires a valid hook event payload
+  [31merror:[0m Insufficient balance. Your Cline Credits balance is $-0.00
+COUNCIL SEAT: persona=Pragmatist requested_engine=cline requested_model=kimi-k2-thinking effective_engine=cline effective_model=moonshotai%2Fkimi-k2-thinking status=unavailable failure_class=capacity recovery=restore%20provider%20capacity%20or%20billing
+PREFLIGHT READY: Verifier (claude:opus)
+COUNCIL SEAT: persona=Verifier requested_engine=claude requested_model=opus effective_engine=claude effective_model=opus status=ready failure_class=none recovery=none
+PREFLIGHT READY: Cursor-Reviewer (cursor:composer-2.5)
+COUNCIL SEAT: persona=Cursor-Reviewer requested_engine=cursor requested_model=composer-2.5 effective_engine=cursor effective_model=composer-2.5 status=ready failure_class=none recovery=none
+error: ready panel does not meet policy (ready=2/4 engines=2 min_valid=3 min_engines=2)
+COUNCIL RESULT: status=preflight_failed deterministic=PASS configured=4 ready=2 valid=0 engines=0 min_valid=3 min_engines=2 preflight_failures=2
+COUNCIL_EXIT=1
 
-## Critical
-
-- **C1 — "complete" is pointer-existence, not evidence.** `touch receipts/tests.txt` satisfies any command gate (`command` non-empty, `exit_code:0`, `dry_run:false`, file exists). Green with zero real runs. *Fix:* rename the terminal state and relocate the completion claim to review, **or** require receipts to embed a runner/CI token the checker parses. It does neither.
-- **C2 — `dry_run:false` is self-declared, receipt unparsed.** Point the "live" record at the dry-run's own log, type `false`. The arena lists "dry-run relabeling" as a *required* violation the checker structurally cannot catch.
-- **C3 — anti-substitution gate is string-equality between two author-typed fields.** Completion needs `substituted:false` + `observed_model==model` + `observed_provider==provider` — all hand-typed. The entire point of integration tier, defeated by typing the same string twice. *Fix:* extract `observed_*` from the representative receipt.
-- **C4 — councils are typed booleans.** "only pass completes"/"hard final gate" reduces to `status:"pass"` + a touched file, content unread, families typed.
-
-## High
-
-- **H1 — trust anchor asserted but not wired.** "CI/terminal/review establish authenticity," yet WORKSHOP.json has **no** provenance field (no CI ref, reviewer seat, signature) tying the receipt to that anchor.
-- **H2 — two-family blind forward-test contradicts its own Resolved decision.** The decision says blindness comes from receipts+review "not unverifiable self-attestation fields in the manifest" — but the gate *is* the manifest `family` field (typed, may equal `author_family`). Most load-bearing evidence, least verifiable.
-- **H3 — secret-leak protection is a one-line string match.** Checks the ignore file *contains* a normalized path, explicitly not that the file is ignored/absent. Gitignore precedence means the line doesn't prove ignoring; a committed secret device_config passes.
-- **H4 — config_example rule is too strict and leaky.** Rejects legitimate non-secret strings (URLs, enums, "false") → false `invalid`; constrains only string *leaf values*, so secrets in keys or encoded as numbers/bools pass.
-- **H5 — smoke-vs-representative is filename inequality.** `smoke.txt` vs `smoke2.txt` defeats it; run smoke twice, rename.
-- **H6 — install `targets` is a frozen 4-set in the completion contract.** Cline was added last commit — the list churns, and every new target forces a lockstep schema change.
-
-## Medium
-M1 catches the *incoherent* author, not the optimistic all-green one; M2 skill-workshop never states its own tier (it bundles code → ≥scripted); M3 tier "fixed before build" vs deps discovered mid-build; M4 "model/provider identity" makes method↔integration fuzzy; M5 Cursor is install-only/unverified; M6 unbacked `exit_code`; M7 vacuous council-families clause; M8 untyped `schema_version`/`work_unit`.
-
-**Hidden assumptions:** skill-arena, Thermos, Plannotator, council profiles all assumed to exist with no build step. **Missing work:** arena violation corpus (12+ cases) unsized; Plannotator unreceipted; `workshop.py` has no independent adjudicator. **Sequencing:** install must precede forward-tests (fresh agents need the skill loaded). **Load-bearing deferral:** anti-forgery deferred to "review/CI" while exit-0=complete ships now; Cline is "experimental" yet a mandatory install target.
-
-## Single biggest risk to escalate
-
-**The completion receipt is theater for the exact failures it enumerates.** `check` can emit `status:"complete"` with no live run, no real second-family review, a committed secret, and representative==smoke — as long as fields are coherent and files exist. Decide *before building*: (a) wire real runner/CI provenance the checker parses and verifies into every evidence record, or (b) rename the terminal state and move the completion claim explicitly to human review. The current framing gives authors a green button that certifies nothing.
-ADV_EXIT=0
+--- OUTCOME (author synthesis) ---
+HARNESS (deterministic): PASS — acceptance-criteria + no unresolved markers (the prior
+  'prose criteria' FAIL is resolved by the SPEC Acceptance contract).
+COUNCIL PANEL: preflight_failed — policy requires min_valid=3 seats; only 2 ready
+  (claude:opus, cursor:composer-2.5). codex=capacity (resets 2026-07-23),
+  cline=capacity/billing ($-0.00 credits; model-format fixed to z-ai/glm-5.2 but balance empty).
+STATUS: blocked (cannot assemble a policy-valid panel). No substitution performed.

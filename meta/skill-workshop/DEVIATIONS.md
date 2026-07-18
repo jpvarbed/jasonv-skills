@@ -55,3 +55,18 @@
   was FAIL on the pre-fix checker. A clean re-review of the hardened revision is the remaining
   step; it needs a second live review family (claude + cursor are currently reachable; codex
   resets 2026-07-23).
+
+## Council re-review on hardened revision (2026-07-17, second pass)
+
+- All actionable findings from the first pass are addressed: zero-byte receipts rejected,
+  baseline!=behavioral and distinct forward-test receipts required, guarded ignore read,
+  SKILL.md necessary-not-sufficient, and a binary Acceptance contract added to SPEC.md.
+- Result: the council HARNESS (deterministic) gate now PASSES (previously FAIL on prose
+  acceptance criteria).
+- The council PANEL still cannot run: its preflight policy requires 3 valid seats; only
+  claude:opus and cursor:composer-2.5 are ready. codex is capacity-blocked (resets
+  2026-07-23) and cline is at $-0.00 credits (the invalid-model-format error was a stale
+  `kimi-k2-thinking`; the working format is `z-ai/glm-5.2`, but the account balance is empty).
+- No seat was substituted. Completion stays blocked on seat availability, now confirmed by
+  the council tool's own min-3-seat preflight, not author judgment. Recovery: restore codex
+  quota (Jul 23) or top up Cline credits, then re-run both councils.

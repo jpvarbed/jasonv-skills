@@ -183,9 +183,21 @@ Council rules:
 - `standard` requires passing `spec/fast` and `final/fast` records;
 - `deep` requires passing `spec/fast` and `final/deep` records.
 
-## Skill workflow
+## Acceptance contract
 
-| Step | Completion criterion |
+The binary, machine-checkable acceptance criterion is exactly one thing:
+`python3 scripts/workshop.py check WORKSHOP.json` exits `0` (`status: complete`)
+over the tier's enumerated gates — artifacts present and non-empty, every
+required command receipt real (non-empty, exit `0`, `dry_run: false`), receipts
+distinct where the contract requires it, and councils/Thermos at the required
+status and family count. That checker result plus clean semantic review of the
+receipt contents is the acceptance contract; it is necessary but not sufficient
+on its own (see `SKILL.md`). The workflow rows below are guidance toward that
+contract, not additional independent pass/fail gates.
+
+## Skill workflow (guidance)
+
+| Step | Guidance |
 |---|---|
 | Discover | Triggers, failures, users, repo, and authority define behavior. |
 | Specify | `SPEC.md` fixes tier, effort, seams, claims, rubric, and decisions. |
