@@ -568,6 +568,27 @@ def report_sections(value):
         yield "Live seat qualification", dict(ev["live"]), None
 
 
+def _grade_line(facts):
+    """Derive the pass GRADE from a record's own fields."""
+    if "status" in facts:  # councils, live
+        return facts["status"].upper()
+    if "security" in facts and "quality" in facts:  # thermos
+        return f"security={facts['security']} quality={facts['quality']}"
+    if "exit_code" in facts:  # command records
+        return "PASS (exit 0)" if facts["exit_code"] == 0 else f"FAIL (exit {facts['exit_code']})"
+    return "—"
+
+
+def _input_line(title, facts):
+    if "command" in facts:
+        return facts["command"]
+    if "families" in facts:
+        return f"cross-family review, seats: {', '.join(facts['families'])}"
+    if "provider" in facts:
+        return f"seat {facts.get('provider')}/{facts.get('model')}"
+    return title
+
+
 def render_report_markdown(value, root, verdict):
     out = [
         f"# skill-workshop completion report — `{value['work_unit']}`",
@@ -585,20 +606,21 @@ def render_report_markdown(value, root, verdict):
     for title, facts, receipt in report_sections(value):
         out.append(f"## {title}")
         out.append("")
-        for fk, fv in facts.items():
-            out.append(f"- **{fk}:** `{fv}`")
+        out.append(f"- **INPUT:** `{_input_line(title, facts)}`")
         if receipt is not None:
             body, err = _excerpt(root, receipt)
-            out.append("")
             if err:
-                out.append(f"> ⚠️ {err}")
+                out.append(f"- **OUTPUT:** ⚠️ {err}")
             else:
-                out.append(f"<details><summary>receipt: <code>{receipt}</code></summary>")
+                out.append(f"- **OUTPUT:** <details><summary>receipt: <code>{receipt}</code></summary>")
                 out.append("")
                 out.append("```")
                 out.append(body)
                 out.append("```")
                 out.append("</details>")
+        else:
+            out.append("- **OUTPUT:** _(declared fields only — no receipt file)_")
+        out.append(f"- **GRADE:** {_grade_line(facts)}")
         out.append("")
     return "\n".join(out) + "\n"
 
@@ -632,17 +654,19 @@ def render_report_html(value, root, verdict):
     parts.append("<p><em>Read each receipt to confirm the claim is real — the checker proves "
                  "receipts exist and are distinct, not that their contents are true.</em></p>")
     for title, facts, receipt in report_sections(value):
-        parts.append(f"<section><h2>{_html_escape(title)}</h2><ul>")
-        for fk, fv in facts.items():
-            parts.append(f"<li><b>{_html_escape(fk)}:</b> <code>{_html_escape(fv)}</code></li>")
-        parts.append("</ul>")
+        parts.append(f"<section><h2>{_html_escape(title)}</h2>")
+        parts.append(f"<p><b>INPUT:</b> <code>{_html_escape(_input_line(title, facts))}</code></p>")
         if receipt is not None:
             body, err = _excerpt(root, receipt, max_lines=200)
             if err:
-                parts.append(f"<p>⚠️ {_html_escape(err)}</p>")
+                parts.append(f"<p><b>OUTPUT:</b> ⚠️ {_html_escape(err)}</p>")
             else:
-                parts.append(f"<details><summary>receipt: <code>{_html_escape(receipt)}</code></summary>"
+                parts.append(f"<p><b>OUTPUT:</b></p><details><summary>receipt: "
+                             f"<code>{_html_escape(receipt)}</code></summary>"
                              f"<pre>{_html_escape(body)}</pre></details>")
+        else:
+            parts.append("<p><b>OUTPUT:</b> <em>declared fields only — no receipt file</em></p>")
+        parts.append(f"<p><b>GRADE:</b> <code>{_html_escape(_grade_line(facts))}</code></p>")
         parts.append("</section>")
     return "".join(parts) + "\n"
 

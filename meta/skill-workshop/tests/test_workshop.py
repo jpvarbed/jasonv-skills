@@ -205,6 +205,10 @@ class WorkshopCliTest(unittest.TestCase):
         self.assertIn("completion report", text)
         self.assertIn("Baseline eval", text)
         self.assertIn("Council: spec/fast", text)
+        # every gate renders the rubric: INPUT -> OUTPUT -> GRADE
+        self.assertIn("**INPUT:**", text)
+        self.assertIn("**OUTPUT:**", text)
+        self.assertIn("**GRADE:**", text)
         # receipt contents are inlined for semantic review, not just referenced
         self.assertIn("run-baseline", text)
 

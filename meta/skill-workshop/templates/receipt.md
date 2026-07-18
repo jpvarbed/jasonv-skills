@@ -1,16 +1,15 @@
-# Receipt template — one per step, kept human-readable
+# Receipt rubric — one per gate
 
-Copy this per gate so every step leaves an artifact a reviewer can actually read.
-The command block must be the real command; paste the real output verbatim below it.
-End with a one-line verdict. `workshop.py report` inlines these into REPORT.md/REPORT.html.
+Every receipt is the same three parts. Never put a summary where OUTPUT goes —
+OUTPUT is the raw, unedited result. Author notes (if any) go under NOTES only.
 
----
+    INPUT:  <exactly what was run / fed in: the command, the task, the diff, the cases>
+    OUTPUT: <the raw, verbatim result — tool stdout, the agent's own returned text/JSON,
+             the results file. NOT a paraphrase.>
+    GRADE:  <PASS | FAIL | CONCERNS | BLOCKED> by rule: <the stated pass rule and the
+             number that decides it, e.g. "with-skill > baseline", "verdict == PASS",
+             ">= 2 model families", "all tests green">
+    NOTES:  <optional: deviations, excluded seats, known limits. Never replaces OUTPUT.>
 
-STEP: <gate name, e.g. Behavioral eval / Council final/deep / Thermos>
-FAMILY / SEAT: <model family or reviewer seat, if applicable>
-
-$ <exact command that produced this evidence>
-<paste the real, verbatim output — not a summary>
-
-VERDICT: <PASS | FAIL | CONCERNS | BLOCKED> — <one sentence, with the number that proves it>
-NOTES: <deviations, excluded seats, known limitations — keep failures visible>
+`workshop.py report` renders INPUT -> OUTPUT -> GRADE for every gate on one page, so
+reading a receipt is one question: did the OUTPUT actually earn the GRADE?

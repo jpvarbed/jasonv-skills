@@ -1,6 +1,15 @@
-THERMOS SUMMARY (integration tier requires Thermos security+quality pass)
-  security: pass   quality: pass
-  branch/security review  -> receipts/thermos-branch-security.txt
-  code-quality audit      -> receipts/thermos-code-quality.txt
-Both subagent reviews returned pass with zero blocking findings; non-blocking items
-addressed or recorded as known limitations.
+INPUT: Two thermo-nuclear reviews of the skill-workshop diff — a branch review
+(security/bugs/breaking/devex) and a code-quality audit — each run as an isolated subagent
+that returned a JSON verdict. This file is the aggregate; the raw reviewer outputs are the
+two primary receipts named under OUTPUT.
+
+OUTPUT (the two reviewers' verdicts, verbatim; full findings in the linked primary receipts):
+- branch/security review  -> receipts/thermos-branch-security.txt
+    {"security_verdict": "pass", "quality_verdict": "pass", "blocking_findings": []}
+- code-quality audit      -> receipts/thermos-code-quality.txt
+    {"quality_verdict": "pass", "blocking_findings": []}
+
+GRADE: PASS by rule: security == pass AND quality == pass across both reviews, zero
+blocking findings. Holds.
+NOTES: non-blocking findings from both reviews were either applied (untracked artifacts,
+workshop.py:361 guard) or recorded as known limitations / surfaced to the author.

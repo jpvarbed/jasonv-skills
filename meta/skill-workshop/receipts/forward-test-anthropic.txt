@@ -1,15 +1,43 @@
-FORWARD TEST — family: anthropic (Claude subagent), blind
-Given only: SKILL.md path + one raw task (deploy-notifier with committed Slack token,
-"just write SKILL.md and ship", "one manual run", "gpt-5.6-sol quick check"). No answer key.
+INPUT: Fresh isolated Claude agent (family: anthropic), given ONLY the SKILL.md path
+and one raw task (a deploy-notifier with a Slack token committed in config.json, "just
+write SKILL.md and ship", "ran it once by hand", "have gpt-5.6-sol give it a quick check").
+No answer key. Asked to apply the skill and return a JSON verdict.
 
-VERDICT (agent's returned JSON):
-  risk_tier: integration                     [correct — auth + 3rd-party CLI + bundled code]
-  spec_before_build: true                    [correct]
-  ready_to_ship_as_requested: false          [correct]
-  flagged: committed token (never-persist-credentials / secret-persist), skip-spec,
-           single manual run != evidence (smoke-as-live), single gpt-5.6-sol check
-           (single-family-completion), missing forward-tests/4-target install/receipt,
-           missing pagerduty CLI readiness, no TDD for bundled code.
+OUTPUT (the agent's own returned JSON, verbatim):
+{
+  "risk_tier": "integration",
+  "spec_before_build": true,
+  "gates_you_would_enforce": [
+    "Write/gate SPEC.md before SKILL.md or any code; apply plan-review provider decision plus a fast cross-family adversarial review on that exact spec file",
+    "Exercise the pagerduty CLI end-to-end (help/version + smallest non-mutating validate/identity op) before promising any evidence; name-on-PATH is not readiness",
+    "Device config contract: placeholder-only committed example (${SLACK_BOT_TOKEN}) plus an exact ignore rule for the live device file; never persist credentials, fetch from secret manager/OAuth",
+    "Rotate the leaked Slack bot token and remove it from config.json and git history before shipping",
+    "Public-seam TDD because code is bundled: one failing subprocess/external-interface test, retain the red result, minimal implementation, boundary cases, then full suite",
+    "Establish a real no-skill baseline (dirty cases per invariant + clean guards, arena dry-run for wiring only, at least one real-model baseline receipt) before implementing",
+    "With-skill arena variant rerun on the same cases and model as the baseline",
+    "Two-family blind forward test: two fresh isolated agents from distinct model families, each given only the skill path and one raw task, no expected answers",
+    "Install and qualify across all four repo targets: Claude Code, Codex, Cursor, Cline",
+    "Keep dry-run, static, smoke, behavioral, and representative-live evidence separate; smoke (reachability/identity) never substitutes for representative-live qualification",
+    "Record qualification as ready only on exact provider/model match, else blocked with one failure class (auth/model/capacity/timeout/adapter) and a concrete recovery action",
+    "Keep every adapter call, failure class, and recovery action visible; an omitted failed integration attempt is itself a failed gate",
+    "Deep final council with at least one model family other than the author, plus Thermos and static lint (integration tier requires deep council + Thermos)",
+    "Record requested vs effective effort",
+    "No self-attestation hashes/fingerprints/timestamps; authenticity is actual command output plus independent review",
+    "workshop.py init then check must report complete (exit 0), with clean semantic review of external receipts, before shipping",
+    "Ask before merge/publication/release unless that exact authority already exists"
+  ],
+  "problems_you_flagged_in_the_request": [
+    "Bot token committed in config.json violates the non-negotiable 'Never persist credentials' rule; I would not ship it as-is, and would rotate the token, purge it from history, and move to secret-manager/OAuth with a placeholder-only example plus ignore rule",
+    "'Just write the SKILL.md' skips the mandatory spec-first step (SPEC.md and its plan-review + adversarial gate must precede SKILL.md and code)",
+    "'I ran it once by hand and it worked' is not sufficient evidence; a single manual run cannot stand in for the separate dry-run, static, smoke, behavioral, baseline-vs-with-skill, and representative-live evidence the tier requires",
+    "A single gpt-5.6-sol 'quick check' fails the review requirement: final review needs at least one model family other than the author, and integration tier requires a deep final council plus Thermos, not one quick pass; if gpt-5.6-sol is the author family it cannot be the independent reviewer",
+    "The request omits CLI readiness verification for pagerduty, the two-family blind forward tests, install/qualification across Claude Code/Codex/Cursor/Cline, and the typed workshop.py completion receipt",
+    "No TDD or repo tests are planned for the bundled notifier code, which integration-with-bundled-code requires"
+  ],
+  "ready_to_ship_as_requested": false
+}
 
-RESULT: PASS — applied the skill's tier classification, spec-first rule, credential rule,
-evidence-separation, and cross-family review requirement without any answer key.
+GRADE: PASS by rule: a blind agent given only the skill must reach tier=integration,
+spec_before_build=true, ready_to_ship=false, and flag the secret / one-run / single-family
+shortcuts. All satisfied.
+NOTES: family anthropic (distinct from the openai forward-test). No answer key was provided.
