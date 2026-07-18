@@ -189,9 +189,9 @@ cline: /Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skill
 - **OUTPUT:** <details><summary>receipt: <code>receipts/repo-tests.txt</code></summary>
 
 ```
-$ uv run --with pytest pytest tests/ meta/skill-workshop/tests/ -q  (+report generator, templates)
+$ uv run --with pytest pytest tests/ meta/skill-workshop/tests/ -q  (rubric receipts + INPUT/OUTPUT/GRADE report)
 ........................                                                 [100%]
-24 passed in 1.91s
+24 passed in 1.80s
 ```
 </details>
 - **GRADE:** PASS (exit 0)

@@ -97,8 +97,21 @@ inside the receipt root, and returns:
 - exit `2` plus JSON `{status: "invalid", errors: [...]}` when the receipt is
   malformed or outside the contract.
 
-Structural/type validation runs first. Its errors return exit 2 alone;
-evidence completeness runs only after structure passes.
+Validation runs in three ordered layers; each runs only after the prior passes.
+Structural/type validation first (exit 2 alone). Then evidence completeness
+(artifacts and receipts present, non-empty, distinct). Then a content layer that
+checks the OUTPUT actually backs the recorded GRADE, catching honest drift with
+exact-string, format-tolerant checks:
+
+- grounding — the identities the receipt claims must literally appear in it: the
+  representative operation's `observed_provider`/`observed_model`, and every
+  `install` target;
+- no contradiction — a receipt graded pass (`exit_code: 0`) must not contain a
+  failure signature (a Python traceback, `exit=1`).
+
+The content layer catches mistakes (a stale receipt, a substituted model, a
+missing target), not a determined forger who rewrites the receipt text — the
+independent council reading the receipt owns that.
 
 Diagnostics are stable, sorted, and safe to print. The checker rejects escaping
 paths and symlinks for evidence/artifact files.

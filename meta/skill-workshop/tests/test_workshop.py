@@ -82,6 +82,8 @@ class WorkshopCliTest(unittest.TestCase):
             **self.command("install"),
             "targets": ["claude", "codex", "cursor", "cline"],
         }
+        # install receipt must actually evidence the targets it claims (content-lint)
+        self.touch(value["evidence"]["install"]["receipt"], "linked: claude codex cursor cline\n")
         value["evidence"]["councils"] = []
         for phase in ("spec", "final"):
             evidence = self.command(f"council-{phase}")
@@ -187,6 +189,23 @@ class WorkshopCliTest(unittest.TestCase):
         result = self.check()
         self.assertEqual(result.returncode, 1)
         self.assertIn("reuses a receipt already used by another gate", result.stdout)
+
+    def test_install_receipt_must_evidence_each_target(self):
+        value = self.complete_method()
+        self.touch(value["evidence"]["install"]["receipt"], "linked: claude codex cursor\n")  # cline missing
+        self.write_json(value)
+        result = self.check()
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("never mentions target 'cline'", result.stdout)
+
+    def test_pass_graded_receipt_with_failure_signature_is_incomplete(self):
+        value = self.complete_method()
+        self.touch(value["evidence"]["baseline"]["receipt"],
+                   "run-baseline\nTraceback (most recent call last):\n  boom\n")
+        self.write_json(value)
+        result = self.check()
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("failure signature", result.stdout)
 
     def test_empty_receipt_is_incomplete(self):
         value = self.complete_method()

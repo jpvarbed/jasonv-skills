@@ -426,6 +426,62 @@ def _receipt_bearing_records(evidence):
         yield evidence["thermos"], "evidence.thermos"
 
 
+FAILURE_SIGNATURES = ("Traceback (most recent call last)", "exit=1", '"exit_code": 1')
+
+
+def _receipt_text(root, relative):
+    if not isinstance(relative, str):
+        return ""
+    try:
+        return (root / relative).read_text()
+    except OSError:
+        return ""
+
+
+def content_errors(value, receipt_path):
+    """Catch honest drift: does the OUTPUT actually back the GRADE the manifest claims?
+
+    Exact-string, format-tolerant checks only. A determined forger who edits the
+    receipt text is caught by the independent council reading it, not here.
+    """
+    errors = []
+    root = receipt_path.parent.resolve()
+    ev = value["evidence"]
+
+    # Grounding: the identities the manifest asserts must literally appear in the receipt.
+    representative = ev.get("representative")
+    if isinstance(representative, dict) and isinstance(representative.get("receipt"), str):
+        text = _receipt_text(root, representative["receipt"])
+        for key in ("observed_provider", "observed_model"):
+            claimed = representative.get(key)
+            if isinstance(claimed, str) and claimed and claimed not in text:
+                errors.append(f"incomplete: representative receipt never mentions {key} '{claimed}'")
+    install = ev.get("install")
+    if isinstance(install, dict) and isinstance(install.get("receipt"), str):
+        text = _receipt_text(root, install["receipt"])
+        for target in install.get("targets") or []:
+            if isinstance(target, str) and target not in text:
+                errors.append(f"incomplete: install receipt never mentions target '{target}'")
+
+    # No contradiction: a pass-graded command receipt must not contain a failure signature.
+    graded_pass = []
+    for key in ("baseline", "behavioral", "lint", "install", "repo_tests", "smoke", "representative"):
+        record = ev.get(key)
+        if isinstance(record, dict) and record.get("exit_code") == 0:
+            graded_pass.append((f"evidence.{key}", record.get("receipt")))
+    for index, forward in enumerate(ev.get("forward_tests") or []):
+        if isinstance(forward, dict) and forward.get("exit_code") == 0:
+            graded_pass.append((f"evidence.forward_tests[{index}]", forward.get("receipt")))
+    for label, relative in graded_pass:
+        text = _receipt_text(root, relative)
+        for signature in FAILURE_SIGNATURES:
+            if signature in text:
+                errors.append(
+                    f"incomplete: {label} is graded pass but its receipt contains a failure signature: {signature!r}"
+                )
+    return sorted(set(errors))
+
+
 def make_manifest(arguments):
     tier = arguments.tier
     if tier == "method":
@@ -509,6 +565,8 @@ def check_command(arguments):
         _write_json({"errors": errors, "status": "invalid"})
         return 2
     errors = completeness_errors(value, receipt)
+    if not errors:
+        errors = content_errors(value, receipt)
     if errors:
         _write_json({"errors": errors, "status": "incomplete"})
         return 1
