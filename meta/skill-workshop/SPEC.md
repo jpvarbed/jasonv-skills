@@ -103,11 +103,19 @@ Structural/type validation first (exit 2 alone). Then evidence completeness
 checks the OUTPUT actually backs the recorded GRADE, catching honest drift with
 exact-string, format-tolerant checks:
 
-- grounding — the identities the receipt claims must literally appear in it: the
-  representative operation's `observed_provider`/`observed_model`, and every
-  `install` target;
-- no contradiction — a receipt graded pass (`exit_code: 0`) must not contain a
-  failure signature (a Python traceback, `exit=1`).
+- grounding — the identities a record claims must literally appear in its own
+  receipt: the representative operation's `observed_provider`/`observed_model`,
+  every `install` target, every declared council `family`, and each forward
+  test's `family`. Cross-family independence is the design's core claim, so it
+  is grounded rather than trusted;
+- no contradiction — a receipt graded pass must not contain a failure signature.
+  Command records use generic signatures (a Python traceback, `exit=1`); review
+  receipts, which quote failures legitimately, use precise result lines instead
+  (`COUNCIL RESULT: status=fail`, `status=preflight_failed`, a Thermos
+  `"security_verdict": "fail"`). Review evidence is the highest-trust evidence,
+  so it is checked, not exempt;
+- no duplication — the two blind forward-test receipts must not be identical
+  content, so one run cannot stand in for both families.
 
 The content layer catches mistakes (a stale receipt, a substituted model, a
 missing target), not a determined forger who rewrites the receipt text — the

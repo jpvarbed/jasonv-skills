@@ -31,25 +31,27 @@
     "councils": [
       {
         "families": [
-          "anthropic",
-          "cursor",
-          "zhipu"
+          "codex",
+          "cline",
+          "claude",
+          "cursor"
         ],
         "phase": "spec",
         "profile": "fast",
         "receipt": "receipts/council-spec-fast.txt",
-        "status": "blocked"
+        "status": "fail"
       },
       {
         "families": [
-          "anthropic",
-          "cursor",
-          "zhipu"
+          "codex",
+          "cline",
+          "claude",
+          "cursor"
         ],
         "phase": "final",
         "profile": "deep",
         "receipt": "receipts/council-final-deep.txt",
-        "status": "blocked"
+        "status": "fail"
       }
     ],
     "forward_tests": [

@@ -70,3 +70,37 @@
 - No seat was substituted. Completion stays blocked on seat availability, now confirmed by
   the council tool's own min-3-seat preflight, not author judgment. Recovery: restore codex
   quota (Jul 23) or top up Cline credits, then re-run both councils.
+
+## Full 4-seat council round (2026-07-18) — verdict fail, findings fixed
+
+The Cline Pass fix (harness PR #23) restored the cline seat, so both councils finally
+convened the full panel: codex/gpt-5.6-sol, cline/glm-5.2, claude/opus, cursor/composer-2.5.
+HARNESS PASS, 4/4 personas produced valid verdicts, `status=fail` on both.
+
+Findings accepted and fixed in this revision:
+
+- The content layer exempted the highest-trust evidence: `content_errors` scanned only
+  command records and forward tests, so `councils[].status` and `thermos.security|quality`
+  were hand-typed enums whose receipt text was never read. `check` could have exited 0 with
+  a linked council receipt that said `status=fail`. Councils and Thermos are now checked
+  with precise result-line signatures (they quote failures legitimately, so the generic
+  traceback/exit signatures would false-positive).
+- Family identity was the one identity never grounded, which made cross-family
+  independence — the design's core claim — satisfiable by typing a second family name.
+  Every declared council family and forward-test family must now appear in its own receipt,
+  and the two forward-test receipts must not be identical content.
+- Consequently this work unit's own council families were re-recorded from
+  `anthropic/cursor/zhipu` (which appear nowhere in the receipts) to the four seats the
+  receipts actually evidence: `codex, cline, claude, cursor`.
+
+Finding rejected as factually wrong: "structural check can mark integration complete while
+`live` is ready with a non-`none` failure class." It cannot — `completeness_errors` already
+rejects that combination, verified by crafting exactly that manifest and observing
+`incomplete: ready live state requires none failure and null recovery`.
+
+Finding recorded, not actioned: the Pragmatist's YAGNI critique that the contract accretes
+typed fields faster than consumers read them. A real design question for the maintainer, not
+a defect in this revision.
+
+Council status is recorded `fail` for this round — it is the honest verdict, and the
+completion gate stays closed until a panel clears the fixed revision.

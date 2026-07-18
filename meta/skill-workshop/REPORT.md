@@ -4,8 +4,8 @@
 
 **Open gates:**
 
-- incomplete: evidence.councils[0] is blocked
-- incomplete: evidence.councils[1] is blocked
+- incomplete: evidence.councils[0] is fail
+- incomplete: evidence.councils[1] is fail
 
 > Read each receipt excerpt below to confirm the claim is real. The checker proves
 > the receipts exist, are non-empty, and are distinct; only this read confirms truth.
@@ -189,9 +189,9 @@ cline: /Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skill
 - **OUTPUT:** <details><summary>receipt: <code>receipts/repo-tests.txt</code></summary>
 
 ```
-$ uv run --with pytest pytest tests/ meta/skill-workshop/tests/ -q  (rubric receipts + INPUT/OUTPUT/GRADE report)
-........................                                                 [100%]
-24 passed in 1.80s
+$ uv run --with pytest pytest tests/ meta/skill-workshop/tests/ -q  (council+thermos+family content checks)
+................................                                         [100%]
+32 passed in 5.51s
 ```
 </details>
 - **GRADE:** PASS (exit 0)
@@ -298,11 +298,11 @@ usage limit. No answer key was provided.
 
 ## Council: spec/fast
 
-- **INPUT:** `cross-family review, seats: anthropic, cursor, zhipu`
+- **INPUT:** `cross-family review, seats: codex, cline, claude, cursor`
 - **OUTPUT:** <details><summary>receipt: <code>receipts/council-spec-fast.txt</code></summary>
 
 ```
-$ COUNCIL_PERSONAS_FILE=... council SPEC.md  (spec/fast, 3 seats: cline-pass + claude + cursor)
+$ council --focus 'spec completeness; any gate satisfiable without real evidence' SPEC.md   (spec/fast, full 4-seat panel)
 ===== HARNESS (deterministic — objective facts, no LLM) =====
 type: doc
 unresolved_markers: 0
@@ -312,9 +312,10 @@ task_checkboxes: 0 done / 0 total
 vague_terms: 7 (soft signal)
 
 HARNESS VERDICT: PASS
-(personas overridden from /private/tmp/claude-501/-Users-jasonvarbedian-dev/ca8f36df-4e2e-4957-ac3e-b251c8025fd5/scratchpad/council-personas.txt — 3 seats)
 
-===== COUNCIL PREFLIGHT: configured=3 min_valid=2 min_engines=2 workspace=/Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills/meta/skill-workshop =====
+===== COUNCIL PREFLIGHT: configured=4 min_valid=3 min_engines=2 workspace=/Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills/meta/skill-workshop =====
+PREFLIGHT READY: Architect (codex:gpt-5.6-sol)
+COUNCIL SEAT: persona=Architect requested_engine=codex requested_model=gpt-5.6-sol effective_engine=codex effective_model=gpt-5.6-sol status=ready failure_class=none recovery=none
 PREFLIGHT READY: Pragmatist (cline:glm-5.2)
 COUNCIL SEAT: persona=Pragmatist requested_engine=cline requested_model=glm-5.2 effective_engine=cline effective_model=cline-pass%2Fglm-5.2 status=ready failure_class=none recovery=none
 PREFLIGHT READY: Verifier (claude:opus)
@@ -322,42 +323,42 @@ COUNCIL SEAT: persona=Verifier requested_engine=claude requested_model=opus effe
 PREFLIGHT READY: Cursor-Reviewer (cursor:composer-2.5)
 COUNCIL SEAT: persona=Cursor-Reviewer requested_engine=cursor requested_model=composer-2.5 effective_engine=cursor effective_model=composer-2.5 status=ready failure_class=none recovery=none
 
+===== PERSONA: Architect  (codex : gpt-5.6-sol) =====
+  VERDICT: FAIL
+  FINDINGS (<=3, ranked, most important first):
+  - [H] Cross-family gates compare unconstrained lowercase strings, so aliases such as `openai`/`codex` or `anthropic`/`claude` can count as distinct families — this permits same-family completion despite the hard independence requirement — fix: define canonical family identifiers and normalize/reject aliases before distinctness checks.
+  - [H] Receipts are not bound to the work unit or reviewed artifact revision, despite the claim that the content layer catches stale receipts — a passing receipt from another workshop can satisfy most gates unchanged — fix: require every receipt to contain the exact `work_unit` and relevant artifact digest, then validate both.
+  - [M] `ignore_file` may be any artifact path, while validation only checks that its contents mention `device_config` — an inert file such as `docs/ignore.txt` can pass without Git actually ignoring the config — fix: require a repository-effective ignore file and verify the rule using repository-relative ignore semantics.
+  BIGGEST RISK: The checker can report complete while the supposedly independent evidence belongs to the same agent family or a different artifact revision.
+
 ===== PERSONA: Pragmatist  (cline : glm-5.2) =====
-  [2m[thinking] [0m[2mLet[0m[2m me review[0m[2m this[0m[2m spec as[0m[2m the Pr[0m[2magmat[0m[2mist reviewer[0m[2m focused on[0m[2m YAG[0m[2mNI[0m[2m & cost[0m[2m.
+  [2m[thinking] [0m[2mLet[0m[2m me review[0m[2m this[0m[2m as the[0m[2m Prag[0m[2mmat[0m[2mist ([0m[2mYAG[0m[2mNI &[0m[2m cost)[0m[2m reviewer.[0m[2m I should[0m[2m review[0m[2m the artifact[0m[2m only and[0m[2m return[0m[2m findings in[0m[2m the exact[0m[2m shape.
   
-  Let[0m[2m me read[0m[2m through the[0m[2m artifact carefully[0m[2m.
+  [0m[2mLet[0m[2m me think[0m[2m about this[0m[2m spec[0m[2m from a[0m[2m YAG[0m[2mNI[0m[2m/cost[0m[2m/over[0m[2m-engineering[0m[2m lens.
   
-  [0m[2mThis is[0m[2m a spec[0m[2m for[0m[2m `skill[0m[2m-workshop[0m[2m` —[0m[2m a skill[0m[2m that creates[0m[2m/ver[0m[2mifies skills[0m[2m with evidence[0m[2m. The[0m[2m artifact[0m[2m is the[0m[2m SPEC.md[0m[2m.
+  [0m[2mThe spec[0m[2m describes[0m[2m a "[0m[2mskill-work[0m[2mshop"[0m[2m —[0m[2m a meta[0m[2m-skill[0m[2m for[0m[2m turning ideas[0m[2m into skills[0m[2m with[0m[2m evidence.[0m[2m Let me[0m[2m look[0m[2m for over[0m[2m-engineering[0m[2m signals[0m[2m.
   
-  [0m[2mLet me[0m[2m think about[0m[2m the[0m[2m YAG[0m[2mNI lens[0m[2m here[0m[2m:
+  Key[0m[2m observations from[0m[2m a prag[0m[2mmatist[0m[2m lens:
   
-  1[0m[2m. The[0m[2m spec defines[0m[2m a `[0m[2mWORKSHOP[0m[2m.json[0m[2m` receipt[0m[2m format with[0m[2m a typed[0m[2m schema,[0m[2m a `[0m[2mscripts[0m[2m/workshop[0m[2m.py`[0m[2m checker[0m[2m tool,[0m[2m tier system[0m[2m ([0m[2mmethod/script[0m[2med/int[0m[2megration),[0m[2m effort[0m[2m levels,[0m[2m council phases[0m[2m, etc[0m[2m.
+  [0m[2m1.[0m[2m **[0m[2mThe checker[0m[2m has three[0m[2m ordered[0m[2m validation layers[0m[2m** —[0m[2m structural/type[0m[2m, evidence[0m[2m completeness,[0m[2m then[0m[2m a content[0m[2m layer with[0m[2m "[0m[2mgrounding[0m[2m" and[0m[2m "no[0m[2m contradiction[0m[2m" checks[0m[2m. The[0m[2m spec explicitly[0m[2m admits the[0m[2m content layer[0m[2m "[0m[2mcatches[0m[2m mistakes...[0m[2m not a[0m[2m determined[0m[2m forger[0m[2m." So[0m[2m we're[0m[2m building a[0m[2m content-validation[0m[2m layer whose[0m[2m threat model[0m[2m is honest[0m[2m mistakes[0m[2m. Is[0m[2m this justified[0m[2m? The[0m[2m SETT[0m[2mLED note[0m[2m says "[0m[2mchecker[0m[2m is necessary[0m[2m-not-s[0m[2mufficient BY[0m[2m DESIGN ([0m[2mthreat model[0m[2m =[0m[2m catch honest[0m[2m mistakes;[0m[2m forgery[0m[2m is this[0m[2m council's[0m[2m job)".[0m[2m So this[0m[2m is settled[0m[2m — can[0m[2m't re[0m[2m-l[0m[2mitigate[0m[2m. But[0m[2m I[0m[2m can question[0m[2m whether the[0m[2m content[0m[2m layer's[0m[2m complexity is[0m[2m proportion[0m[2mate.
   
-  2[0m[2m. Is[0m[2m this over[0m[2m-engine[0m[2mered?[0m[2m Let me[0m[2m look[0m[2m at what[0m[2m it actually[0m[2m does:
-  [0m[2m   -[0m[2m It com[0m[2mposes existing[0m[2m tools ([0m[2mnot building[0m[2m new[0m[2m ones)[0m[2m — good[0m[2m
-    [0m[2m - It[0m[2m has a[0m[2m receipt[0m[2m/checker[0m[2m that validates[0m[2m manifests[0m[2m — the[0m[2m checker never[0m[2m executes commands[0m[2m
-    [0m[2m - Three[0m[2m tiers with[0m[2m cumulative obligations[0m[2m
-    [0m[2m - Detailed[0m[2m evidence schema[0m[2m
-  
-  Key[0m[2m Y[0m[2mAGNI[0m[2m concerns:
-  [0m[2m- The[0m[2m `WORK[0m[2mSHOP.json[0m[2m` contract[0m[2m is extremely[0m[2m detailed with[0m[2m typed[0m[2m slots for[0m[2m every possible[0m[2m evidence type[0m[2m. Is[0m[2m all of[0m[2m this needed[0m[2m upfront?[0m[2m The spec[0m[2m says tiers[0m[2m are "[0m[2mfixed before[0m[2m build"[0m[2m —[0m[2m so you[0m[2m classify upfront[0m[2m and then[0m[2m build[0m[2m to the[0m[2m tier.[0m[2m That[0m[2m's reasonable[0m[2m.
-  -[0m[2m The `[0m[2mlive[0m[2m` evidence[0m[2m block for[0m[2m integration has[0m[2m `status[0m[2m`, `[0m[2mfailure_class[0m[2m`, `[0m[2mrecovery[0m[2m` —[0m[2m this[0m[2m is a[0m[2m full recovery[0m[2m taxonomy[0m[2m. Is[0m[2m this needed[0m[2m? For[0m[2m integration skills[0m[2m that depend[0m[2m on external[0m[2m services,[0m[2m knowing failure[0m[2m modes matters[0m[2m. But[0m[2m the taxonomy[0m[2m is[0m[2m quite elaborate[0m[2m (`none[0m[2m | auth[0m[2m | model[0m[2m | capacity[0m[2m | timeout[0m[2m | adapter[0m[2m`).
-… (+84 more lines in receipts/council-spec-fast.txt)
+… (+108 more lines in receipts/council-spec-fast.txt)
 ```
 </details>
-- **GRADE:** BLOCKED
+- **GRADE:** FAIL
 
 ## Council: final/deep
 
-- **INPUT:** `cross-family review, seats: anthropic, cursor, zhipu`
+- **INPUT:** `cross-family review, seats: codex, cline, claude, cursor`
 - **OUTPUT:** <details><summary>receipt: <code>receipts/council-final-deep.txt</code></summary>
 
 ```
-$ COUNCIL_PERSONAS_FILE=... council --gates . final-review-bundle.md  (final/deep, 3 seats: cline-pass+claude+cursor)
+$ council --gates . --focus 'evidence-gating integrity' final-review-bundle.md   (final/deep, full 4-seat panel)
+warning: artifact is 1299 lines — consider scoping to the highest-risk slice (see SKILL.md)
 ===== HARNESS (deterministic — objective facts, no LLM) =====
 type: spec-doc
 unresolved_markers: 0
-acceptance_criteria_mentions: 2
+acceptance_criteria_mentions: 4
 ears_requirements: 0
 task_checkboxes: 0 done / 0 total
 vague_terms: 13 (soft signal)
@@ -372,9 +373,10 @@ section_non_requirements: missing (soft)
   lint: skip (no script)
 
 HARNESS VERDICT: PASS
-(personas overridden from /private/tmp/claude-501/-Users-jasonvarbedian-dev/ca8f36df-4e2e-4957-ac3e-b251c8025fd5/scratchpad/council-personas.txt — 3 seats)
 
-===== COUNCIL PREFLIGHT: configured=3 min_valid=2 min_engines=2 workspace=/Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills =====
+===== COUNCIL PREFLIGHT: configured=4 min_valid=3 min_engines=2 workspace=/Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills =====
+PREFLIGHT READY: Architect (codex:gpt-5.6-sol)
+COUNCIL SEAT: persona=Architect requested_engine=codex requested_model=gpt-5.6-sol effective_engine=codex effective_model=gpt-5.6-sol status=ready failure_class=none recovery=none
 PREFLIGHT READY: Pragmatist (cline:glm-5.2)
 COUNCIL SEAT: persona=Pragmatist requested_engine=cline requested_model=glm-5.2 effective_engine=cline effective_model=cline-pass%2Fglm-5.2 status=ready failure_class=none recovery=none
 PREFLIGHT READY: Verifier (claude:opus)
@@ -382,21 +384,19 @@ COUNCIL SEAT: persona=Verifier requested_engine=claude requested_model=opus effe
 PREFLIGHT READY: Cursor-Reviewer (cursor:composer-2.5)
 COUNCIL SEAT: persona=Cursor-Reviewer requested_engine=cursor requested_model=composer-2.5 effective_engine=cursor effective_model=composer-2.5 status=ready failure_class=none recovery=none
 
+===== PERSONA: Architect  (codex : gpt-5.6-sol) =====
+  VERDICT: FAIL
+  FINDINGS (<=3, ranked, most important first):
+  - [H] `report_command` never calls `content_errors`, so it can label the checker verdict `complete` when `check` would return `incomplete` — the reviewer-facing report can directly contradict the acceptance command — fix: derive the report verdict through the same structural, completeness, and content-validation pipeline as `check_command`
+  - [H] No-contradiction lint recognizes only three literal signatures, so pass-graded raw output containing common failures such as `FAIL`, `FAILED`, `"status":"fail"`, or nonzero scorecard verdicts still yields `status: complete` — this defeats the stated honest-drift safeguard for the newly embedded JSON/scorecards — fix: parse each supported receipt format and validate its explicit verdict/status field against the recorded grade
+  - [M] Reports truncate receipts to 40 Markdown lines or 200 HTML lines while claiming to inline every receipt’s contents — failures after the cutoff are hidden from the promised one-read semantic review — fix: inline complete receipt contents, or clearly mark the report non-authoritative and link reviewers to every full receipt
+  BIGGEST RISK: The system can present both `check` and its reviewer report as complete while the retained raw evidence explicitly records failure.
+
 ===== PERSONA: Pragmatist  (cline : glm-5.2) =====
-  [2m[thinking] [0m[2mThe[0m[2m user is[0m[2m asking[0m[2m me to[0m[2m act as[0m[2m the[0m[2m "Pr[0m[2magmat[0m[2mist"[0m[2m reviewer[0m[2m on a[0m[2m review council[0m[2m grading[0m[2m a colleague[0m[2m's work[0m[2m. The[0m[2m lens is[0m[2m YAG[0m[2mNI &[0m[2m cost[0m[2m — is[0m[2m this over[0m[2m-engine[0m[2mered?[0m[2m Is there[0m[2m a simpler[0m[2m path[0m[2m? Scope[0m[2m creep?[0m[2m Eff[0m[2mort justified[0m[2m by value[0m[2m?[0m[2m Channel a[0m[2m blunt lazy[0m[2m-sen[0m[2mior-dev[0m[2m.
-  
-  I[0m[2m need[0m[2m to review[0m[2m the artifact[0m[2m (SPEC[0m[2m.md,[0m[2m SKILL[0m[2m.md,[0m[2m scripts[0m[2m/workshop[0m[2m.py)[0m[2m and return[0m[2m EXACT[0m[2mLY the[0m[2m specified[0m[2m shape.
-  
-  [0m[2mLet me[0m[2m carefully[0m[2m review this[0m[2m from a[0m[2m YAG[0m[2mNI[0m[2m / cost[0m[2m perspective.
-  
-  [0m[2mThe artifact[0m[2m is a[0m[2m skill called[0m[2m "skill[0m[2m-workshop[0m[2m" that[0m[2m helps build[0m[2m and[0m[2m prove agent[0m[2m skills.[0m[2m It[0m[2m has:
-  [0m[2m- A[0m[2m SPEC[0m[2m.md that[0m[2m defines a[0m[2m tier[0m[2m system ([0m[2mmethod/script[0m[2med/int[0m[2megration)
-  [0m[2m- A[0m[2m SK[0m[2mILL.md[0m[2m with an[0m[2m 8[0m[2m-step[0m[2m workflow
-  [0m[2m- A[0m[2m workshop[0m[2m.py script[0m[2m that generates[0m[2m and validates[0m[2m completion manifests[0m[2m (WORK[0m[2mSHOP.json[0m[2m)
-… (+83 more lines in receipts/council-final-deep.txt)
+… (+240 more lines in receipts/council-final-deep.txt)
 ```
 </details>
-- **GRADE:** BLOCKED
+- **GRADE:** FAIL
 
 ## Thermos (security + quality)
 

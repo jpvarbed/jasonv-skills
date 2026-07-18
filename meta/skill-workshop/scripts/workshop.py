@@ -427,6 +427,14 @@ def _receipt_bearing_records(evidence):
 
 
 FAILURE_SIGNATURES = ("Traceback (most recent call last)", "exit=1", '"exit_code": 1')
+# Review receipts quote failures and tracebacks legitimately, so they get precise
+# result-line signatures instead of the generic ones.
+COUNCIL_FAIL_SIGNATURES = (
+    "COUNCIL RESULT: status=fail",
+    "status=deterministic_fail",
+    "status=preflight_failed",
+)
+THERMOS_FAIL_SIGNATURES = ('"security_verdict": "fail"', '"quality_verdict": "fail"')
 
 
 def _receipt_text(root, relative):
@@ -479,6 +487,46 @@ def content_errors(value, receipt_path):
                 errors.append(
                     f"incomplete: {label} is graded pass but its receipt contains a failure signature: {signature!r}"
                 )
+
+    # Review evidence is the highest-trust evidence, so it is checked too: a pass-graded
+    # council or Thermos record must not link a receipt whose own result says otherwise.
+    for index, council in enumerate(ev.get("councils") or []):
+        if not isinstance(council, dict):
+            continue
+        label = f"evidence.councils[{index}]"
+        text = _receipt_text(root, council.get("receipt"))
+        if council.get("status") == "pass":
+            for signature in COUNCIL_FAIL_SIGNATURES:
+                if signature in text:
+                    errors.append(f"incomplete: {label} is graded pass but its receipt contains {signature!r}")
+        for family in council.get("families") or []:
+            if isinstance(family, str) and family and family not in text:
+                errors.append(f"incomplete: {label} receipt never mentions declared family '{family}'")
+    thermos = ev.get("thermos")
+    if isinstance(thermos, dict) and thermos.get("security") == "pass" and thermos.get("quality") == "pass":
+        text = _receipt_text(root, thermos.get("receipt"))
+        for signature in THERMOS_FAIL_SIGNATURES:
+            if signature in text:
+                errors.append(f"incomplete: evidence.thermos is graded pass but its receipt contains {signature!r}")
+
+    # Cross-family independence is the design's core claim, so grounding it is not optional:
+    # each declared family must appear in its own receipt, and the two blind forward-tests
+    # must not be the same run pasted twice.
+    forwards = ev.get("forward_tests") or []
+    for index, forward in enumerate(forwards):
+        if not isinstance(forward, dict):
+            continue
+        family = forward.get("family")
+        text = _receipt_text(root, forward.get("receipt"))
+        if isinstance(family, str) and family and family not in text:
+            errors.append(
+                f"incomplete: evidence.forward_tests[{index}] receipt never mentions declared family '{family}'"
+            )
+    if len(forwards) == 2 and all(isinstance(item, dict) for item in forwards):
+        first = _receipt_text(root, forwards[0].get("receipt"))
+        second = _receipt_text(root, forwards[1].get("receipt"))
+        if first and first == second:
+            errors.append("incomplete: forward_tests receipts have identical content")
     return sorted(set(errors))
 
 

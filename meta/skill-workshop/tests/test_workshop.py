@@ -77,6 +77,9 @@ class WorkshopCliTest(unittest.TestCase):
             {**self.command("forward-openai"), "family": "openai"},
             {**self.command("forward-anthropic"), "family": "anthropic"},
         ]
+        # each forward-test receipt must evidence its own family, and the two must differ
+        self.touch("receipts/forward-openai.txt", "family: openai\nverdict from the openai agent\n")
+        self.touch("receipts/forward-anthropic.txt", "family: anthropic\nverdict from the anthropic agent\n")
         value["evidence"]["lint"] = self.command("lint")
         value["evidence"]["install"] = {
             **self.command("install"),
@@ -87,6 +90,8 @@ class WorkshopCliTest(unittest.TestCase):
         value["evidence"]["councils"] = []
         for phase in ("spec", "final"):
             evidence = self.command(f"council-{phase}")
+            # the council receipt must evidence every family it declares
+            self.touch(evidence["receipt"], "seats: openai, anthropic\nCOUNCIL RESULT: status=pass\n")
             value["evidence"]["councils"].append(
                 {
                     "phase": phase,
@@ -206,6 +211,95 @@ class WorkshopCliTest(unittest.TestCase):
         result = self.check()
         self.assertEqual(result.returncode, 1)
         self.assertIn("failure signature", result.stdout)
+
+    def complete_scripted(self):
+        value = self.init(tier="scripted", bundles_code=True, effort="deep")
+        value["artifacts"]["scripts"] = ["scripts/tool.py"]
+        value["artifacts"]["tests"] = ["tests/test_tool.py"]
+        for artifact in value["artifacts"].values():
+            for path in (artifact if isinstance(artifact, list) else [artifact]):
+                self.touch(path)
+        value["evidence"]["baseline"] = self.command("baseline")
+        value["evidence"]["behavioral"] = self.command("behavioral")
+        value["evidence"]["forward_tests"] = [
+            {**self.command("forward-openai"), "family": "openai"},
+            {**self.command("forward-anthropic"), "family": "anthropic"},
+        ]
+        self.touch("receipts/forward-openai.txt", "family: openai\nopenai agent verdict\n")
+        self.touch("receipts/forward-anthropic.txt", "family: anthropic\nanthropic agent verdict\n")
+        value["evidence"]["lint"] = self.command("lint")
+        value["evidence"]["install"] = {
+            **self.command("install"),
+            "targets": ["claude", "codex", "cursor", "cline"],
+        }
+        self.touch("receipts/install.txt", "linked: claude codex cursor cline\n")
+        value["evidence"]["repo_tests"] = self.command("repo-tests")
+        thermos = self.command("thermos")
+        self.touch(thermos["receipt"], '{"security_verdict": "pass", "quality_verdict": "pass"}\n')
+        value["evidence"]["thermos"] = {
+            "security": "pass", "quality": "pass", "receipt": thermos["receipt"],
+        }
+        value["evidence"]["councils"] = []
+        for phase, profile in (("spec", "fast"), ("final", "deep")):
+            evidence = self.command(f"council-{phase}")
+            self.touch(evidence["receipt"], "seats: openai, anthropic\nCOUNCIL RESULT: status=pass\n")
+            value["evidence"]["councils"].append({
+                "phase": phase, "profile": profile, "families": ["openai", "anthropic"],
+                "status": "pass", "receipt": evidence["receipt"],
+            })
+        self.write_json(value)
+        return value
+
+    def test_complete_scripted_passes(self):
+        self.complete_scripted()
+        result = self.check()
+        self.assertEqual(result.returncode, 0, result.stdout)
+        self.assertEqual(json.loads(result.stdout)["status"], "complete")
+
+    def test_pass_graded_thermos_with_failing_receipt_is_incomplete(self):
+        value = self.complete_scripted()
+        self.touch(value["evidence"]["thermos"]["receipt"],
+                   '{"security_verdict": "fail", "quality_verdict": "pass"}\n')
+        self.write_json(value)
+        result = self.check()
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("evidence.thermos is graded pass but its receipt contains", result.stdout)
+
+    def test_pass_graded_council_with_failing_receipt_is_incomplete(self):
+        value = self.complete_method()
+        receipt = value["evidence"]["councils"][1]["receipt"]
+        self.touch(receipt, "seats: openai, anthropic\nCOUNCIL RESULT: status=fail\n")
+        self.write_json(value)
+        result = self.check()
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("is graded pass but its receipt contains", result.stdout)
+
+    def test_council_receipt_must_evidence_declared_families(self):
+        value = self.complete_method()
+        receipt = value["evidence"]["councils"][0]["receipt"]
+        self.touch(receipt, "seats: openai only\nCOUNCIL RESULT: status=pass\n")  # anthropic absent
+        self.write_json(value)
+        result = self.check()
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("never mentions declared family 'anthropic'", result.stdout)
+
+    def test_forward_test_receipt_must_evidence_its_family(self):
+        value = self.complete_method()
+        self.touch(value["evidence"]["forward_tests"][0]["receipt"], "a verdict with no family named\n")
+        self.write_json(value)
+        result = self.check()
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("never mentions declared family 'openai'", result.stdout)
+
+    def test_identical_forward_test_receipts_are_incomplete(self):
+        value = self.complete_method()
+        same = "family: openai\nfamily: anthropic\nthe very same pasted run\n"
+        self.touch(value["evidence"]["forward_tests"][0]["receipt"], same)
+        self.touch(value["evidence"]["forward_tests"][1]["receipt"], same)
+        self.write_json(value)
+        result = self.check()
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("identical content", result.stdout)
 
     def test_empty_receipt_is_incomplete(self):
         value = self.complete_method()
