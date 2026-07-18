@@ -32,7 +32,8 @@
       {
         "families": [
           "anthropic",
-          "cursor"
+          "cursor",
+          "zhipu"
         ],
         "phase": "spec",
         "profile": "fast",
@@ -42,7 +43,8 @@
       {
         "families": [
           "anthropic",
-          "cursor"
+          "cursor",
+          "zhipu"
         ],
         "phase": "final",
         "profile": "deep",
@@ -105,7 +107,7 @@
       "exit_code": 0,
       "observed_model": "qwen-coder-32b-fc",
       "observed_provider": "local",
-      "receipt": "receipts/arena-local-clean.txt",
+      "receipt": "receipts/representative-local.txt",
       "substituted": false
     },
     "smoke": {

@@ -1,0 +1,6 @@
+$ POST localhost:4000/v1/chat/completions  model=qwen-coder-32b-fc  (representative bounded op, distinct from baseline/behavioral eval)
+observed model: qwen-coder-32b-fc
+content: ```json
+["spec-after-build", "tier-downgrade"]
+```
+exit=0

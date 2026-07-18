@@ -400,7 +400,30 @@ def completeness_errors(value, receipt_path):
             else:
                 if not _strings_are_placeholders(config):
                     errors.append("incomplete: config strings must be empty or ${PLACEHOLDER}")
+
+    seen = set()
+    for record, label in _receipt_bearing_records(evidence):
+        if not isinstance(record, dict):
+            continue
+        receipt = record.get("receipt")
+        if not isinstance(receipt, str):
+            continue
+        if receipt in seen:
+            errors.append(f"incomplete: {label} reuses a receipt already used by another gate")
+        seen.add(receipt)
     return sorted(set(errors))
+
+
+def _receipt_bearing_records(evidence):
+    for key in ("baseline", "behavioral", "lint", "install", "repo_tests", "smoke", "representative"):
+        if key in evidence and evidence[key] is not None:
+            yield evidence[key], f"evidence.{key}"
+    for index, item in enumerate(evidence.get("forward_tests") or []):
+        yield item, f"evidence.forward_tests[{index}]"
+    for index, item in enumerate(evidence.get("councils") or []):
+        yield item, f"evidence.councils[{index}]"
+    if evidence.get("thermos") is not None:
+        yield evidence["thermos"], "evidence.thermos"
 
 
 def make_manifest(arguments):

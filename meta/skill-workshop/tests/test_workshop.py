@@ -180,6 +180,14 @@ class WorkshopCliTest(unittest.TestCase):
         self.assertEqual(result.returncode, 1)
         self.assertIn("distinct receipts", result.stdout)
 
+    def test_cross_gate_receipt_reuse_is_incomplete(self):
+        value = self.complete_method()
+        value["evidence"]["lint"]["receipt"] = value["evidence"]["install"]["receipt"]
+        self.write_json(value)
+        result = self.check()
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("reuses a receipt already used by another gate", result.stdout)
+
     def test_empty_receipt_is_incomplete(self):
         value = self.complete_method()
         self.touch(value["evidence"]["baseline"]["receipt"], content="")
