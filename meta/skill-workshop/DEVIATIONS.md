@@ -142,3 +142,20 @@ pass by explicit decision):
 
 The completion gate therefore remains open on `councils[1]`. It is honestly open: closing it
 requires a fresh panel on the fixed revision, not a re-grade of the verdict already returned.
+
+## Ship decision (2026-07-19) — maintainer override of the completion gate
+
+`SKILL.md` says to ship only when `workshop.py check` reports `complete`. It reports
+`incomplete` on exactly one item: `evidence.councils[1] is fail`. The maintainer
+(Jason) reviewed the state and elected to ship anyway rather than run a fourth
+fix-and-review round. This is an explicit, recorded override, not an oversight:
+
+- Every other gate passes, including all four content-lint layers.
+- The `spec/fast` council is accepted (`concerns`, 4/4 seats, zero FAIL).
+- The `final/deep` FAIL was driven by two defects in that round's own code, both since
+  fixed with tests; the verdict is kept as returned rather than re-graded.
+- The remaining objections are recorded above and none is a live defect.
+
+The receipt is therefore shipped `incomplete` and truthful. Closing the gate later
+requires a fresh panel on this revision — the honest path stays open, and nothing in
+the manifest was edited to manufacture a green result.
