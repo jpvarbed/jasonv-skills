@@ -269,13 +269,17 @@ cursor: linked/updated 12 · skipped 0 · pruned 0 → /private/tmp/claude-501/-
 cline: linked/updated 12 · skipped 0 · pruned 0 → /private/tmp/claude-501/-Users-jasonvarbedian-dev/ca8f36df-4e2e-4957-ac3e-b251c8025fd5/scratchpad/install-targets/cline
 exit=0
 --- verify skill-workshop linked into all four targets ---
-claude: /Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills/meta/skill-workshop
-codex: /Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills/meta/skill-workshop
-cursor: /Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills/meta/skill-workshop
-cline: /Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills/meta/skill-workshop
+claude: ~/dev/jasonv-skills/meta/skill-workshop
+codex: ~/dev/jasonv-skills/meta/skill-workshop
+cursor: ~/dev/jasonv-skills/meta/skill-workshop
+cline: ~/dev/jasonv-skills/meta/skill-workshop
 
 GRADE: PASS by rule: install.sh exited 0 and skill-workshop resolved in all four
-targets (claude, codex, cursor, cline).</pre></details><p><b>GRADE (declared):</b> <code>PASS (exit 0)</code></p></section><section><h2>Repository tests</h2><p><b>INPUT:</b> <code>uv run --with pytest pytest tests/ meta/skill-workshop/tests/ -q</code></p><p><b>OUTPUT:</b></p><details><summary>receipt: <code>receipts/repo-tests.txt</code></summary><pre>$ uv run --with pytest pytest tests/ meta/skill-workshop/tests/ -q  (report/thermos fixes)
+targets (claude, codex, cursor, cline).
+
+NOTE: absolute local paths in this receipt were redacted to `~/dev/jasonv-skills`
+before public publication (the scrub gate hard-fails on absolute home paths). Only the
+path prefix changed; every command, output value and verdict is otherwise verbatim.</pre></details><p><b>GRADE (declared):</b> <code>PASS (exit 0)</code></p></section><section><h2>Repository tests</h2><p><b>INPUT:</b> <code>uv run --with pytest pytest tests/ meta/skill-workshop/tests/ -q</code></p><p><b>OUTPUT:</b></p><details><summary>receipt: <code>receipts/repo-tests.txt</code></summary><pre>$ uv run --with pytest pytest tests/ meta/skill-workshop/tests/ -q  (report/thermos fixes)
 ...................................                                      [100%]
 35 passed in 57.88s
 GRADE: PASS by rule: pytest exited 0, all tests passing.</pre></details><p><b>GRADE (declared):</b> <code>PASS (exit 0)</code></p></section><section><h2>Blind forward-test #1 (anthropic)</h2><p><b>INPUT:</b> <code>Agent(claude): blind, SKILL.md + one raw task; verdict JSON</code></p><p><b>OUTPUT:</b></p><details><summary>receipt: <code>receipts/forward-test-anthropic.txt</code></summary><pre>INPUT: Fresh isolated Claude agent (family: anthropic), given ONLY the SKILL.md path
@@ -369,7 +373,7 @@ vague_terms: 7 (soft signal)
 
 HARNESS VERDICT: PASS
 
-===== COUNCIL PREFLIGHT: configured=4 min_valid=3 min_engines=2 workspace=/Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills/meta/skill-workshop =====
+===== COUNCIL PREFLIGHT: configured=4 min_valid=3 min_engines=2 workspace=~/dev/jasonv-skills/meta/skill-workshop =====
 PREFLIGHT READY: Architect (codex:gpt-5.6-sol)
 COUNCIL SEAT: persona=Architect requested_engine=codex requested_model=gpt-5.6-sol effective_engine=codex effective_model=gpt-5.6-sol status=ready failure_class=none recovery=none
 PREFLIGHT READY: Pragmatist (cline:glm-5.2)
@@ -506,7 +510,11 @@ COUNCIL_EXIT=1
 GRADE: CONCERNS by rule: full 4-seat panel (codex, cline, claude, cursor), HARNESS PASS,
 4/4 personas returned a valid verdict, all CONCERNS, zero FAIL. Under the no-blocking-defect
 gate (pass|concerns completes) this council is accepted; its objections are recorded in
-DEVIATIONS.md rather than silently dropped.</pre></details><p><b>GRADE (declared):</b> <code>CONCERNS</code></p></section><section><h2>Council: final/deep</h2><p><b>INPUT:</b> <code>cross-family review, seats: codex, cline, claude, cursor</code></p><p><b>OUTPUT:</b></p><details><summary>receipt: <code>receipts/council-final-deep.txt</code></summary><pre>$ council --gates . --focus 'evidence-gating integrity' final-review-bundle.md   (final/deep, FINAL round)
+DEVIATIONS.md rather than silently dropped.
+
+NOTE: absolute local paths in this receipt were redacted to `~/dev/jasonv-skills`
+before public publication (the scrub gate hard-fails on absolute home paths). Only the
+path prefix changed; every command, output value and verdict is otherwise verbatim.</pre></details><p><b>GRADE (declared):</b> <code>CONCERNS</code></p></section><section><h2>Council: final/deep</h2><p><b>INPUT:</b> <code>cross-family review, seats: codex, cline, claude, cursor</code></p><p><b>OUTPUT:</b></p><details><summary>receipt: <code>receipts/council-final-deep.txt</code></summary><pre>$ council --gates . --focus 'evidence-gating integrity' final-review-bundle.md   (final/deep, FINAL round)
 warning: artifact is 1229 lines — consider scoping to the highest-risk slice (see SKILL.md)
 ===== HARNESS (deterministic — objective facts, no LLM) =====
 type: doc
@@ -523,7 +531,7 @@ vague_terms: 11 (soft signal)
 
 HARNESS VERDICT: PASS
 
-===== COUNCIL PREFLIGHT: configured=4 min_valid=3 min_engines=2 workspace=/Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills =====
+===== COUNCIL PREFLIGHT: configured=4 min_valid=3 min_engines=2 workspace=~/dev/jasonv-skills =====
 PREFLIGHT READY: Architect (codex:gpt-5.6-sol)
 COUNCIL SEAT: persona=Architect requested_engine=codex requested_model=gpt-5.6-sol effective_engine=codex effective_model=gpt-5.6-sol status=ready failure_class=none recovery=none
 PREFLIGHT READY: Pragmatist (cline:glm-5.2)
@@ -668,7 +676,11 @@ GRADE: FAIL by rule: full 4-seat panel, HARNESS PASS, 4/4 valid verdicts, but th
 The two [H]/[M] defects driving it were real bugs in this round's own code and are now fixed
 (report_command skipped content_errors; Thermos skipped the positive GRADE check), but this
 receipt records the verdict as it was returned — it is NOT re-graded on the strength of a
-later fix. Closing this gate requires a fresh panel on the fixed revision.</pre></details><p><b>GRADE (declared):</b> <code>FAIL</code></p></section><section><h2>Thermos (security + quality)</h2><p><b>INPUT:</b> <code>Thermos (security + quality)</code></p><p><b>OUTPUT:</b></p><details><summary>receipt: <code>receipts/thermos.txt</code></summary><pre>INPUT: Two thermo-nuclear reviews of the skill-workshop diff — a branch review
+later fix. Closing this gate requires a fresh panel on the fixed revision.
+
+NOTE: absolute local paths in this receipt were redacted to `~/dev/jasonv-skills`
+before public publication (the scrub gate hard-fails on absolute home paths). Only the
+path prefix changed; every command, output value and verdict is otherwise verbatim.</pre></details><p><b>GRADE (declared):</b> <code>FAIL</code></p></section><section><h2>Thermos (security + quality)</h2><p><b>INPUT:</b> <code>Thermos (security + quality)</code></p><p><b>OUTPUT:</b></p><details><summary>receipt: <code>receipts/thermos.txt</code></summary><pre>INPUT: Two thermo-nuclear reviews of the skill-workshop diff — a branch review
 (security/bugs/breaking/devex) and a code-quality audit — each run as an isolated subagent
 that returned a JSON verdict. This file is the aggregate; the raw reviewer outputs are the
 two primary receipts named under OUTPUT.

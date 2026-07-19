@@ -9,7 +9,7 @@ vague_terms: 7 (soft signal)
 
 HARNESS VERDICT: PASS
 
-===== COUNCIL PREFLIGHT: configured=4 min_valid=3 min_engines=2 workspace=/Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills/meta/skill-workshop =====
+===== COUNCIL PREFLIGHT: configured=4 min_valid=3 min_engines=2 workspace=~/dev/jasonv-skills/meta/skill-workshop =====
 PREFLIGHT READY: Architect (codex:gpt-5.6-sol)
 COUNCIL SEAT: persona=Architect requested_engine=codex requested_model=gpt-5.6-sol effective_engine=codex effective_model=gpt-5.6-sol status=ready failure_class=none recovery=none
 PREFLIGHT READY: Pragmatist (cline:glm-5.2)
@@ -147,3 +147,7 @@ GRADE: CONCERNS by rule: full 4-seat panel (codex, cline, claude, cursor), HARNE
 4/4 personas returned a valid verdict, all CONCERNS, zero FAIL. Under the no-blocking-defect
 gate (pass|concerns completes) this council is accepted; its objections are recorded in
 DEVIATIONS.md rather than silently dropped.
+
+NOTE: absolute local paths in this receipt were redacted to `~/dev/jasonv-skills`
+before public publication (the scrub gate hard-fails on absolute home paths). Only the
+path prefix changed; every command, output value and verdict is otherwise verbatim.

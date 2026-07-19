@@ -15,7 +15,7 @@ vague_terms: 11 (soft signal)
 
 HARNESS VERDICT: PASS
 
-===== COUNCIL PREFLIGHT: configured=4 min_valid=3 min_engines=2 workspace=/Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills =====
+===== COUNCIL PREFLIGHT: configured=4 min_valid=3 min_engines=2 workspace=~/dev/jasonv-skills =====
 PREFLIGHT READY: Architect (codex:gpt-5.6-sol)
 COUNCIL SEAT: persona=Architect requested_engine=codex requested_model=gpt-5.6-sol effective_engine=codex effective_model=gpt-5.6-sol status=ready failure_class=none recovery=none
 PREFLIGHT READY: Pragmatist (cline:glm-5.2)
@@ -161,3 +161,7 @@ The two [H]/[M] defects driving it were real bugs in this round's own code and a
 (report_command skipped content_errors; Thermos skipped the positive GRADE check), but this
 receipt records the verdict as it was returned — it is NOT re-graded on the strength of a
 later fix. Closing this gate requires a fresh panel on the fixed revision.
+
+NOTE: absolute local paths in this receipt were redacted to `~/dev/jasonv-skills`
+before public publication (the scrub gate hard-fails on absolute home paths). Only the
+path prefix changed; every command, output value and verdict is otherwise verbatim.

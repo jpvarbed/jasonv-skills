@@ -5,10 +5,14 @@ cursor: linked/updated 12 · skipped 0 · pruned 0 → /private/tmp/claude-501/-
 cline: linked/updated 12 · skipped 0 · pruned 0 → /private/tmp/claude-501/-Users-jasonvarbedian-dev/ca8f36df-4e2e-4957-ac3e-b251c8025fd5/scratchpad/install-targets/cline
 exit=0
 --- verify skill-workshop linked into all four targets ---
-claude: /Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills/meta/skill-workshop
-codex: /Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills/meta/skill-workshop
-cursor: /Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills/meta/skill-workshop
-cline: /Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills/meta/skill-workshop
+claude: ~/dev/jasonv-skills/meta/skill-workshop
+codex: ~/dev/jasonv-skills/meta/skill-workshop
+cursor: ~/dev/jasonv-skills/meta/skill-workshop
+cline: ~/dev/jasonv-skills/meta/skill-workshop
 
 GRADE: PASS by rule: install.sh exited 0 and skill-workshop resolved in all four
 targets (claude, codex, cursor, cline).
+
+NOTE: absolute local paths in this receipt were redacted to `~/dev/jasonv-skills`
+before public publication (the scrub gate hard-fails on absolute home paths). Only the
+path prefix changed; every command, output value and verdict is otherwise verbatim.

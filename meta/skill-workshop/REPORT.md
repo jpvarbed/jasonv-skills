@@ -186,13 +186,17 @@ cursor: linked/updated 12 · skipped 0 · pruned 0 → /private/tmp/claude-501/-
 cline: linked/updated 12 · skipped 0 · pruned 0 → /private/tmp/claude-501/-Users-jasonvarbedian-dev/ca8f36df-4e2e-4957-ac3e-b251c8025fd5/scratchpad/install-targets/cline
 exit=0
 --- verify skill-workshop linked into all four targets ---
-claude: /Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills/meta/skill-workshop
-codex: /Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills/meta/skill-workshop
-cursor: /Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills/meta/skill-workshop
-cline: /Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills/meta/skill-workshop
+claude: ~/dev/jasonv-skills/meta/skill-workshop
+codex: ~/dev/jasonv-skills/meta/skill-workshop
+cursor: ~/dev/jasonv-skills/meta/skill-workshop
+cline: ~/dev/jasonv-skills/meta/skill-workshop
 
 GRADE: PASS by rule: install.sh exited 0 and skill-workshop resolved in all four
 targets (claude, codex, cursor, cline).
+
+NOTE: absolute local paths in this receipt were redacted to `~/dev/jasonv-skills`
+before public publication (the scrub gate hard-fails on absolute home paths). Only the
+path prefix changed; every command, output value and verdict is otherwise verbatim.
 ```
 </details>
 - **GRADE (declared):** PASS (exit 0)
@@ -328,7 +332,7 @@ vague_terms: 7 (soft signal)
 
 HARNESS VERDICT: PASS
 
-===== COUNCIL PREFLIGHT: configured=4 min_valid=3 min_engines=2 workspace=/Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills/meta/skill-workshop =====
+===== COUNCIL PREFLIGHT: configured=4 min_valid=3 min_engines=2 workspace=~/dev/jasonv-skills/meta/skill-workshop =====
 PREFLIGHT READY: Architect (codex:gpt-5.6-sol)
 COUNCIL SEAT: persona=Architect requested_engine=codex requested_model=gpt-5.6-sol effective_engine=codex effective_model=gpt-5.6-sol status=ready failure_class=none recovery=none
 PREFLIGHT READY: Pragmatist (cline:glm-5.2)
@@ -357,7 +361,7 @@ COUNCIL SEAT: persona=Cursor-Reviewer requested_engine=cursor requested_model=co
   
   1[0m[2m. The[0m[2m content[0m[2m layer of[0m[2m the checker[0m[2m has[0m[2m four sub[0m[2m-checks[0m[2m (ground[0m[2ming,[0m[2m no contradiction[0m[2m, no[0m[2m duplication,[0m[2m positive result[0m[2m). Is[0m[2m this over[0m[2m-engineered[0m[2m? The[0m[2m "positive[0m[2m result"[0m[2m check[0m[2m (every[0m[2m receipt must[0m[2m state[0m[2m its own[0m[2m GRADE[0m[2m token[0m[2m matching the[0m[2m manifest)[0m[2m is somewhat[0m[2m justified by[0m[2m the argument[0m[2m that absence[0m[2m-of-f[0m[2mailure isn[0m[2m't proof[0m[2m of[0m[2m success.[0m[2m But this[0m[2m is a[0m[2m manifest[0m[2m checker,[0m[2m and the[0m[2m spec[0m[2m explicitly says[0m[2m "the[0m[2m receipt[0m[2m is a[0m[2m manifest,[0m[2m not a[0m[2m second[0m[2m evaluator."[0m[2m There's[0m[2m tension[0m[2m here:[0m[2m the content[0m[2m layer is[0m[2m creeping[0m[2m toward being[0m[2m a second[0m[2m evaluator[0m[2m. However[0m[2m, this[0m[2m is settled[0m[2m territory[0m[2m ("structural[0m[2m!=truth[0m[2m is[0m[2m the accepted[0m[2m thesis")[0m[2m —[0m[2m the checker[0m[2m catches honest[0m[2m mistakes not[0m[2m forgery[0m[2m. So[0m[2m this[0m[2m is within[0m[2m settled bounds[0m[2m. Don[0m[2m't re[0m[2m-raise[0m[2m.
   
-… (+109 more lines in receipts/council-spec-fast.txt)
+… (+113 more lines in receipts/council-spec-fast.txt)
 ```
 </details>
 - **GRADE (declared):** CONCERNS
@@ -385,7 +389,7 @@ vague_terms: 11 (soft signal)
 
 HARNESS VERDICT: PASS
 
-===== COUNCIL PREFLIGHT: configured=4 min_valid=3 min_engines=2 workspace=/Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills =====
+===== COUNCIL PREFLIGHT: configured=4 min_valid=3 min_engines=2 workspace=~/dev/jasonv-skills =====
 PREFLIGHT READY: Architect (codex:gpt-5.6-sol)
 COUNCIL SEAT: persona=Architect requested_engine=codex requested_model=gpt-5.6-sol effective_engine=codex effective_model=gpt-5.6-sol status=ready failure_class=none recovery=none
 PREFLIGHT READY: Pragmatist (cline:glm-5.2)
@@ -408,7 +412,7 @@ COUNCIL SEAT: persona=Cursor-Reviewer requested_engine=cursor requested_model=co
   
   [0m[2mLet me[0m[2m analyze[0m[2m from the[0m[2m YAG[0m[2mNI[0m[2m/cost[0m[2m perspective:[0m[2m is this[0m[2m over-engine[0m[2mered?[0m[2m Scope creep[0m[2m? Is[0m[2m effort justified[0m[2m by value[0m[2m?
   
-… (+123 more lines in receipts/council-final-deep.txt)
+… (+127 more lines in receipts/council-final-deep.txt)
 ```
 </details>
 - **GRADE (declared):** FAIL
