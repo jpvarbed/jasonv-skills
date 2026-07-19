@@ -1,0 +1,4 @@
+interface:
+  display_name: "Goal to Done"
+  short_description: "Steward a substantial goal from rough request to verified completion"
+  default_prompt: "Take this goal through clarification, routing, ticket decomposition, frontier execution, and final verification with goal-to-done."

@@ -24,6 +24,7 @@ Humans: each skill lives under `<category>/<skill>/` with a `SKILL.md` (the meth
 
 ### engineering
 
+- **[goal-to-done](engineering/goal-to-done/)** — Steward one substantial goal from a rough request to verified completion: clarify decisions, compile a verifiable brief, route through the closed cascade, drive the dependency-ready ticket frontier, re-plan, and finish with integration proof. _(needs: a tracker CLI, a review CLI, bundled python)_
 - **[total-tdd](engineering/total-tdd/)** — Systematic whole-app feature audit → test → fix loop, backed by tracker.py + render.py over one canonical CSV state machine. _(needs: a browser-automation tool, bundled python)_
 
 ### meta
