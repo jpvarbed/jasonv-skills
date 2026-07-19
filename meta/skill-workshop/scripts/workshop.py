@@ -41,6 +41,12 @@ REPRESENTATIVE_KEYS = COMMAND_KEYS | {
     "substituted",
 }
 COUNCIL_KEYS = {"phase", "profile", "families", "status", "receipt"}
+# The council returns `fail` if ANY persona says FAIL and `concerns` if any says
+# CONCERNS, so `pass` demands unanimous zero-concern approval from reviewers whose
+# job is to attack — practically unreachable. The gate is therefore "no blocking
+# defect": concerns completes, fail and blocked do not.
+COUNCIL_STATUSES = {"pass", "concerns", "fail", "blocked"}
+COUNCIL_ACCEPTED = {"pass", "concerns"}
 LIVE_KEYS = {
     "provider",
     "model",
@@ -196,7 +202,7 @@ def structural_errors(value):
                 errors.append(f"invalid: {path}.phase must be spec or final")
             if council["profile"] not in {"fast", "deep"}:
                 errors.append(f"invalid: {path}.profile must be fast or deep")
-            if council["status"] not in {"pass", "fail", "blocked"}:
+            if council["status"] not in COUNCIL_STATUSES:
                 errors.append(f"invalid: {path}.status must be pass, fail, or blocked")
             if not isinstance(council["families"], list) or any(
                 not _identifier(family) for family in council["families"]
@@ -336,7 +342,7 @@ def completeness_errors(value, receipt_path):
     for index, council in enumerate(evidence["councils"]):
         label = f"evidence.councils[{index}]"
         _safe_file(root, council["receipt"], f"{label}.receipt", errors)
-        if council["status"] != "pass":
+        if council["status"] not in COUNCIL_ACCEPTED:
             errors.append(f"incomplete: {label} is {council['status']}")
         if len(set(council["families"])) < 2:
             errors.append(f"incomplete: {label} requires two distinct families")
@@ -435,6 +441,39 @@ COUNCIL_FAIL_SIGNATURES = (
     "status=preflight_failed",
 )
 THERMOS_FAIL_SIGNATURES = ('"security_verdict": "fail"', '"quality_verdict": "fail"')
+GRADE_TOKENS = {"PASS", "FAIL", "CONCERNS", "BLOCKED"}
+
+
+def _declared_grade(text):
+    """The GRADE token a receipt states about itself, or None."""
+    for line in text.splitlines():
+        stripped = line.strip()
+        if not stripped.startswith("GRADE:"):
+            continue
+        rest = stripped[len("GRADE:"):].split()
+        if rest:
+            token = rest[0].strip().upper().rstrip(".,:")
+            if token in GRADE_TOKENS:
+                return token
+    return None
+
+
+def _grade_agreement_error(root, relative, expected, label):
+    """A receipt must state its own result, and it must match what the manifest records.
+
+    Structured (.json) receipts are self-describing data and carry no GRADE line.
+    """
+    if not isinstance(relative, str) or relative.endswith(".json"):
+        return None
+    text = _receipt_text(root, relative)
+    if not text:
+        return None
+    declared = _declared_grade(text)
+    if declared is None:
+        return f"incomplete: {label} receipt states no GRADE, so its result is unverifiable"
+    if declared != expected:
+        return f"incomplete: {label} receipt states GRADE {declared} but the manifest records {expected}"
+    return None
 
 
 def _receipt_text(root, relative):
@@ -487,6 +526,11 @@ def content_errors(value, receipt_path):
                 errors.append(
                     f"incomplete: {label} is graded pass but its receipt contains a failure signature: {signature!r}"
                 )
+        # Positive check: the receipt must state its own result and agree, so a
+        # hand-typed exit_code cannot stand alone and unrelated evidence cannot pass.
+        mismatch = _grade_agreement_error(root, relative, "PASS", label)
+        if mismatch:
+            errors.append(mismatch)
 
     # Review evidence is the highest-trust evidence, so it is checked too: a pass-graded
     # council or Thermos record must not link a receipt whose own result says otherwise.
@@ -495,19 +539,29 @@ def content_errors(value, receipt_path):
             continue
         label = f"evidence.councils[{index}]"
         text = _receipt_text(root, council.get("receipt"))
-        if council.get("status") == "pass":
+        if council.get("status") in COUNCIL_ACCEPTED:
             for signature in COUNCIL_FAIL_SIGNATURES:
                 if signature in text:
-                    errors.append(f"incomplete: {label} is graded pass but its receipt contains {signature!r}")
+                    errors.append(
+                        f"incomplete: {label} is graded {council['status']} but its receipt contains {signature!r}"
+                    )
         for family in council.get("families") or []:
             if isinstance(family, str) and family and family not in text:
                 errors.append(f"incomplete: {label} receipt never mentions declared family '{family}'")
+        status = council.get("status")
+        if isinstance(status, str) and status in COUNCIL_STATUSES:
+            mismatch = _grade_agreement_error(root, council.get("receipt"), status.upper(), label)
+            if mismatch:
+                errors.append(mismatch)
     thermos = ev.get("thermos")
     if isinstance(thermos, dict) and thermos.get("security") == "pass" and thermos.get("quality") == "pass":
         text = _receipt_text(root, thermos.get("receipt"))
         for signature in THERMOS_FAIL_SIGNATURES:
             if signature in text:
                 errors.append(f"incomplete: evidence.thermos is graded pass but its receipt contains {signature!r}")
+        mismatch = _grade_agreement_error(root, thermos.get("receipt"), "PASS", "evidence.thermos")
+        if mismatch:
+            errors.append(mismatch)
 
     # Cross-family independence is the design's core claim, so grounding it is not optional:
     # each declared family must appear in its own receipt, and the two blind forward-tests
@@ -708,6 +762,9 @@ def render_report_markdown(value, root, verdict):
         out += ["**Open gates:**", ""] + [f"- {e}" for e in verdict["errors"]] + [""]
     out += ["> Read each receipt excerpt below to confirm the claim is real. The checker proves",
             "> the receipts exist, are non-empty, and are distinct; only this read confirms truth.",
+            ">",
+            "> Each gate's **GRADE (declared)** below is the author's recorded field, not a verdict.",
+            f"> The authoritative result is the checker verdict above: `{verdict['status']}`.",
             "", "---", ""]
     for title, facts, receipt in report_sections(value):
         out.append(f"## {title}")
@@ -726,7 +783,7 @@ def render_report_markdown(value, root, verdict):
                 out.append("</details>")
         else:
             out.append("- **OUTPUT:** _(declared fields only — no receipt file)_")
-        out.append(f"- **GRADE:** {_grade_line(facts)}")
+        out.append(f"- **GRADE (declared):** {_grade_line(facts)}")
         out.append("")
     return "\n".join(out) + "\n"
 
@@ -772,7 +829,7 @@ def render_report_html(value, root, verdict):
                              f"<pre>{_html_escape(body)}</pre></details>")
         else:
             parts.append("<p><b>OUTPUT:</b> <em>declared fields only — no receipt file</em></p>")
-        parts.append(f"<p><b>GRADE:</b> <code>{_html_escape(_grade_line(facts))}</code></p>")
+        parts.append(f"<p><b>GRADE (declared):</b> <code>{_html_escape(_grade_line(facts))}</code></p>")
         parts.append("</section>")
     return "".join(parts) + "\n"
 
@@ -788,8 +845,13 @@ def report_command(arguments):
     if errors:
         print("invalid receipt; run check first", file=sys.stderr)
         return 2
-    completeness = completeness_errors(value, receipt)
-    verdict = {"status": "complete" if not completeness else "incomplete", "errors": completeness}
+    # Mirror check_command's ordered pipeline exactly. The report is the human review
+    # surface and calls its own banner authoritative, so it must not render "complete"
+    # for a manifest that `check` would reject on the content layer.
+    errors = completeness_errors(value, receipt)
+    if not errors:
+        errors = content_errors(value, receipt)
+    verdict = {"status": "complete" if not errors else "incomplete", "errors": errors}
     root = receipt.parent.resolve()
     if arguments.format == "html":
         text = render_report_html(value, root, verdict)

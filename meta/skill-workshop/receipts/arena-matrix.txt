@@ -7,3 +7,7 @@ with-skill  ERROR 18/18  11/18 (61%)
 
 wrote out/skill-workshop-gate/results.json
 wrote out/skill-workshop-gate/leaderboard.html
+
+GRADE: FAIL by rule: the codex column errored on every case (subscription usage limit),
+so this matrix is not usable evidence. Kept deliberately as visible proof of the capacity
+failure; the clean local-only run is the canonical eval receipt.

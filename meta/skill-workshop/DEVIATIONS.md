@@ -104,3 +104,41 @@ a defect in this revision.
 
 Council status is recorded `fail` for this round — it is the honest verdict, and the
 completion gate stays closed until a panel clears the fixed revision.
+
+## Final review round (2026-07-19) — bounded by agreement to one pass
+
+Both councils ran on the full 4-seat panel (codex, cline, claude, cursor), HARNESS PASS,
+4/4 valid verdicts each, run sequentially (concurrent runs contend on cline's hub and
+cursor's credential lookup).
+
+- `spec/fast`: **concerns** — all four personas CONCERNS, zero FAIL. Accepted under the
+  no-blocking-defect gate.
+- `final/deep`: **fail** — the Architect (codex) returned FAIL. Not accepted. Recorded as
+  returned; it is deliberately NOT re-graded on the strength of the fixes below.
+
+Two findings were real defects in this round's own code and were fixed:
+
+- `report_command` computed its verdict from structure + completeness only and never called
+  `content_errors`, so a manifest failing the new content layer still rendered
+  `Checker verdict: complete` under a banner calling that authoritative — inverting the very
+  confusion the round set out to fix. It now mirrors `check_command`'s ordered pipeline.
+- Thermos was exempt from the positive `GRADE` cross-check although SPEC required it of every
+  non-`.json` receipt, so a hand-typed `{"security":"pass","quality":"pass"}` could pass on
+  absence-of-failure alone. `_grade_agreement_error` is now applied to it.
+
+Standing objections — recorded, not actioned (the fix-and-review loop was bounded to one
+pass by explicit decision):
+
+- `.json` receipts are exempt from the positive `GRADE` check, so an unrelated or stale JSON
+  file can satisfy a command gate when no failure signature matches. Closing this needs a
+  recognized result field per JSON receipt kind.
+- `failure_class` (`none|auth|model|capacity|timeout|adapter`) is validated for membership but
+  the checker never branches on the distinct values — all six collapse to `none`→ready,
+  anything else→blocked. It is a vocabulary with no distinct gate logic; `status` + free-text
+  `recovery` would carry the same weight. A real YAGNI critique of the contract's size.
+- The `GRADE:` vocabulary and casing are enforced in code (`PASS|FAIL|CONCERNS|BLOCKED`,
+  uppercased on parse) but not stated normatively in SPEC, and council receipts carry a second
+  dialect (`COUNCIL RESULT: status=…`). A documentation gap, not a behavioural one.
+
+The completion gate therefore remains open on `councils[1]`. It is honestly open: closing it
+requires a fresh panel on the fixed revision, not a re-grade of the verdict already returned.

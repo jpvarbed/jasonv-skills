@@ -4,3 +4,6 @@ content: ```json
 ["spec-after-build", "tier-downgrade"]
 ```
 exit=0
+
+GRADE: PASS by rule: a bounded real operation completed against the declared seat and
+the observed model came back qwen-coder-32b-fc, matching the declaration; no substitution.

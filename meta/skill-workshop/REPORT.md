@@ -4,11 +4,13 @@
 
 **Open gates:**
 
-- incomplete: evidence.councils[0] is fail
 - incomplete: evidence.councils[1] is fail
 
 > Read each receipt excerpt below to confirm the claim is real. The checker proves
 > the receipts exist, are non-empty, and are distinct; only this read confirms truth.
+>
+> Each gate's **GRADE (declared)** below is the author's recorded field, not a verdict.
+> The authoritative result is the checker verdict above: `incomplete`.
 
 ---
 
@@ -29,9 +31,12 @@ with-skill  11/18 (61%)
 wrote out/skill-workshop-gate-local/results.json
 wrote out/skill-workshop-gate-local/leaderboard.html
 exit=0
+
+GRADE: PASS by rule: the run completed (exit=0) and produced both variants —
+baseline 8/18 (44%) and with-skill 11/18 (61%), i.e. real measured lift, no error cells.
 ```
 </details>
-- **GRADE:** PASS (exit 0)
+- **GRADE (declared):** PASS (exit 0)
 
 ## Behavioral eval (with skill)
 
@@ -82,7 +87,7 @@ exit=0
 … (+253 more lines in receipts/arena-results.json)
 ```
 </details>
-- **GRADE:** PASS (exit 0)
+- **GRADE (declared):** PASS (exit 0)
 
 ## Representative live operation
 
@@ -96,9 +101,12 @@ content: ```json
 ["spec-after-build", "tier-downgrade"]
 ```
 exit=0
+
+GRADE: PASS by rule: a bounded real operation completed against the declared seat and
+the observed model came back qwen-coder-32b-fc, matching the declaration; no substitution.
 ```
 </details>
-- **GRADE:** PASS (exit 0)
+- **GRADE (declared):** PASS (exit 0)
 
 ## Smoke / identity
 
@@ -109,9 +117,12 @@ exit=0
 $ curl -sf localhost:4000/v1/models
 {"data":[{"id":"qwen-coder-32b","object":"model","created":1677610602,"owned_by":"openai"},{"id":"qwen-coder-32b-fc","object":"model","created":1677610602,"owned_by":"openai","max_input_tokens":32768,"max_output_tokens":32768},{"id":"qwen-coder-7b-fc","object":"model","created":1677610602,"owned_by":"openai","max_input_tokens":32768,"max_output_tokens":32768},{"id":"llama3.1-8b","object":"model","created":1677610602,"owned_by":"openai"}],"object":"list"}
 exit=0
+
+GRADE: PASS by rule: the endpoint answered (exit=0) and the declared model
+qwen-coder-32b-fc is present in the served model list — reachability + identity only.
 ```
 </details>
-- **GRADE:** PASS (exit 0)
+- **GRADE (declared):** PASS (exit 0)
 
 ## Static lint
 
@@ -160,7 +171,7 @@ after, making it 31/31.
 NOTES: the description fix (third quoted trigger) is committed; re-lint would score 31/31.
 ```
 </details>
-- **GRADE:** PASS (exit 0)
+- **GRADE (declared):** PASS (exit 0)
 
 ## Install across targets
 
@@ -179,9 +190,12 @@ claude: /Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skil
 codex: /Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills/meta/skill-workshop
 cursor: /Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills/meta/skill-workshop
 cline: /Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills/meta/skill-workshop
+
+GRADE: PASS by rule: install.sh exited 0 and skill-workshop resolved in all four
+targets (claude, codex, cursor, cline).
 ```
 </details>
-- **GRADE:** PASS (exit 0)
+- **GRADE (declared):** PASS (exit 0)
 
 ## Repository tests
 
@@ -189,12 +203,13 @@ cline: /Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skill
 - **OUTPUT:** <details><summary>receipt: <code>receipts/repo-tests.txt</code></summary>
 
 ```
-$ uv run --with pytest pytest tests/ meta/skill-workshop/tests/ -q  (council+thermos+family content checks)
-................................                                         [100%]
-32 passed in 5.51s
+$ uv run --with pytest pytest tests/ meta/skill-workshop/tests/ -q  (report/thermos fixes)
+...................................                                      [100%]
+35 passed in 57.88s
+GRADE: PASS by rule: pytest exited 0, all tests passing.
 ```
 </details>
-- **GRADE:** PASS (exit 0)
+- **GRADE (declared):** PASS (exit 0)
 
 ## Blind forward-test #1 (anthropic)
 
@@ -245,7 +260,7 @@ GRADE: PASS by rule: a blind agent given only the skill must reach tier=integrat
 … (+3 more lines in receipts/forward-test-anthropic.txt)
 ```
 </details>
-- **GRADE:** PASS (exit 0)
+- **GRADE (declared):** PASS (exit 0)
 
 ## Blind forward-test #2 (openai)
 
@@ -294,7 +309,7 @@ NOTES: family openai (distinct from the anthropic forward-test). Ran before code
 usage limit. No answer key was provided.
 ```
 </details>
-- **GRADE:** PASS (exit 0)
+- **GRADE (declared):** PASS (exit 0)
 
 ## Council: spec/fast
 
@@ -302,7 +317,7 @@ usage limit. No answer key was provided.
 - **OUTPUT:** <details><summary>receipt: <code>receipts/council-spec-fast.txt</code></summary>
 
 ```
-$ council --focus 'spec completeness; any gate satisfiable without real evidence' SPEC.md   (spec/fast, full 4-seat panel)
+$ council --focus 'spec completeness' SPEC.md   (spec/fast, FINAL round, sequential)
 ===== HARNESS (deterministic — objective facts, no LLM) =====
 type: doc
 unresolved_markers: 0
@@ -324,28 +339,28 @@ PREFLIGHT READY: Cursor-Reviewer (cursor:composer-2.5)
 COUNCIL SEAT: persona=Cursor-Reviewer requested_engine=cursor requested_model=composer-2.5 effective_engine=cursor effective_model=composer-2.5 status=ready failure_class=none recovery=none
 
 ===== PERSONA: Architect  (codex : gpt-5.6-sol) =====
-  VERDICT: FAIL
+  VERDICT: CONCERNS
   FINDINGS (<=3, ranked, most important first):
-  - [H] Cross-family gates compare unconstrained lowercase strings, so aliases such as `openai`/`codex` or `anthropic`/`claude` can count as distinct families — this permits same-family completion despite the hard independence requirement — fix: define canonical family identifiers and normalize/reject aliases before distinctness checks.
-  - [H] Receipts are not bound to the work unit or reviewed artifact revision, despite the claim that the content layer catches stale receipts — a passing receipt from another workshop can satisfy most gates unchanged — fix: require every receipt to contain the exact `work_unit` and relevant artifact digest, then validate both.
-  - [M] `ignore_file` may be any artifact path, while validation only checks that its contents mention `device_config` — an inert file such as `docs/ignore.txt` can pass without Git actually ignoring the config — fix: require a repository-effective ignore file and verify the rule using repository-relative ignore semantics.
-  BIGGEST RISK: The checker can report complete while the supposedly independent evidence belongs to the same agent family or a different artifact revision.
+  - [M] JSON receipts bypass the positive-result guarantee — no parser or result mapping verifies their self-described outcome, so unrelated JSON can still satisfy the checker — fix: parse recognized JSON schemas and compare their result fields, requiring `GRADE:` for unknown schemas
+  - [M] Generic failure signatures can reject valid baseline or test evidence — those receipts may intentionally contain tracebacks or `exit=1` while testing expected failures — fix: match only an authoritative final result line or structured outcome field
+  - [M] assumption: `ignore_file` follows gitignore semantics, but exact-rule checking does not prove the config remains ignored — later broader negations can re-include it — fix: validate the effective final rule against the normalized device path
+  BIGGEST RISK: The checker can report complete for an unverified JSON receipt despite claiming every recorded result receives a positive cross-check.
 
 ===== PERSONA: Pragmatist  (cline : glm-5.2) =====
-  [2m[thinking] [0m[2mLet[0m[2m me review[0m[2m this[0m[2m as the[0m[2m Prag[0m[2mmat[0m[2mist ([0m[2mYAG[0m[2mNI &[0m[2m cost)[0m[2m reviewer.[0m[2m I should[0m[2m review[0m[2m the artifact[0m[2m only and[0m[2m return[0m[2m findings in[0m[2m the exact[0m[2m shape.
+  [2m[thinking] [0m[2mThe[0m[2m user wants[0m[2m me to[0m[2m act as[0m[2m the[0m[2m "Pr[0m[2magmat[0m[2mist"[0m[2m reviewer[0m[2m on a[0m[2m review council[0m[2m,[0m[2m grading a[0m[2m spec for[0m[2m a skill[0m[2m-work[0m[2mshop.[0m[2m The lens[0m[2m is Y[0m[2mAGNI[0m[2m & cost[0m[2m.[0m[2m Let me[0m[2m read the[0m[2m artifact[0m[2m carefully and[0m[2m grade it[0m[2m.
   
-  [0m[2mLet[0m[2m me think[0m[2m about this[0m[2m spec[0m[2m from a[0m[2m YAG[0m[2mNI[0m[2m/cost[0m[2m/over[0m[2m-engineering[0m[2m lens.
+  The[0m[2m harness already[0m[2m passed.[0m[2m Set[0m[2mtled[0m[2m items I[0m[2m must[0m[2m not re[0m[2m-lit[0m[2migate.[0m[2m Let[0m[2m me focus[0m[2m on what[0m[2m remains,[0m[2m attacking from[0m[2m the Y[0m[2mAGNI[0m[2m/cost[0m[2m/scope[0m[2m-[0m[2mcreep[0m[2m lens.
   
-  [0m[2mThe spec[0m[2m describes[0m[2m a "[0m[2mskill-work[0m[2mshop"[0m[2m —[0m[2m a meta[0m[2m-skill[0m[2m for[0m[2m turning ideas[0m[2m into skills[0m[2m with[0m[2m evidence.[0m[2m Let me[0m[2m look[0m[2m for over[0m[2m-engineering[0m[2m signals[0m[2m.
+  [0m[2mLet me[0m[2m read[0m[2m the artifact[0m[2m carefully as[0m[2m a blunt[0m[2m lazy-s[0m[2menior[0m[2m-dev.
   
-  Key[0m[2m observations from[0m[2m a prag[0m[2mmatist[0m[2m lens:
+  [0m[2mKey[0m[2m observations from[0m[2m the prag[0m[2mmatist[0m[2m lens[0m[2m:
   
-  [0m[2m1.[0m[2m **[0m[2mThe checker[0m[2m has three[0m[2m ordered[0m[2m validation layers[0m[2m** —[0m[2m structural/type[0m[2m, evidence[0m[2m completeness,[0m[2m then[0m[2m a content[0m[2m layer with[0m[2m "[0m[2mgrounding[0m[2m" and[0m[2m "no[0m[2m contradiction[0m[2m" checks[0m[2m. The[0m[2m spec explicitly[0m[2m admits the[0m[2m content layer[0m[2m "[0m[2mcatches[0m[2m mistakes...[0m[2m not a[0m[2m determined[0m[2m forger[0m[2m." So[0m[2m we're[0m[2m building a[0m[2m content-validation[0m[2m layer whose[0m[2m threat model[0m[2m is honest[0m[2m mistakes[0m[2m. Is[0m[2m this justified[0m[2m? The[0m[2m SETT[0m[2mLED note[0m[2m says "[0m[2mchecker[0m[2m is necessary[0m[2m-not-s[0m[2mufficient BY[0m[2m DESIGN ([0m[2mthreat model[0m[2m =[0m[2m catch honest[0m[2m mistakes;[0m[2m forgery[0m[2m is this[0m[2m council's[0m[2m job)".[0m[2m So this[0m[2m is settled[0m[2m — can[0m[2m't re[0m[2m-l[0m[2mitigate[0m[2m. But[0m[2m I[0m[2m can question[0m[2m whether the[0m[2m content[0m[2m layer's[0m[2m complexity is[0m[2m proportion[0m[2mate.
+  1[0m[2m. The[0m[2m content[0m[2m layer of[0m[2m the checker[0m[2m has[0m[2m four sub[0m[2m-checks[0m[2m (ground[0m[2ming,[0m[2m no contradiction[0m[2m, no[0m[2m duplication,[0m[2m positive result[0m[2m). Is[0m[2m this over[0m[2m-engineered[0m[2m? The[0m[2m "positive[0m[2m result"[0m[2m check[0m[2m (every[0m[2m receipt must[0m[2m state[0m[2m its own[0m[2m GRADE[0m[2m token[0m[2m matching the[0m[2m manifest)[0m[2m is somewhat[0m[2m justified by[0m[2m the argument[0m[2m that absence[0m[2m-of-f[0m[2mailure isn[0m[2m't proof[0m[2m of[0m[2m success.[0m[2m But this[0m[2m is a[0m[2m manifest[0m[2m checker,[0m[2m and the[0m[2m spec[0m[2m explicitly says[0m[2m "the[0m[2m receipt[0m[2m is a[0m[2m manifest,[0m[2m not a[0m[2m second[0m[2m evaluator."[0m[2m There's[0m[2m tension[0m[2m here:[0m[2m the content[0m[2m layer is[0m[2m creeping[0m[2m toward being[0m[2m a second[0m[2m evaluator[0m[2m. However[0m[2m, this[0m[2m is settled[0m[2m territory[0m[2m ("structural[0m[2m!=truth[0m[2m is[0m[2m the accepted[0m[2m thesis")[0m[2m —[0m[2m the checker[0m[2m catches honest[0m[2m mistakes not[0m[2m forgery[0m[2m. So[0m[2m this[0m[2m is within[0m[2m settled bounds[0m[2m. Don[0m[2m't re[0m[2m-raise[0m[2m.
   
-… (+108 more lines in receipts/council-spec-fast.txt)
+… (+109 more lines in receipts/council-spec-fast.txt)
 ```
 </details>
-- **GRADE:** FAIL
+- **GRADE (declared):** CONCERNS
 
 ## Council: final/deep
 
@@ -353,19 +368,15 @@ COUNCIL SEAT: persona=Cursor-Reviewer requested_engine=cursor requested_model=co
 - **OUTPUT:** <details><summary>receipt: <code>receipts/council-final-deep.txt</code></summary>
 
 ```
-$ council --gates . --focus 'evidence-gating integrity' final-review-bundle.md   (final/deep, full 4-seat panel)
-warning: artifact is 1299 lines — consider scoping to the highest-risk slice (see SKILL.md)
+$ council --gates . --focus 'evidence-gating integrity' final-review-bundle.md   (final/deep, FINAL round)
+warning: artifact is 1229 lines — consider scoping to the highest-risk slice (see SKILL.md)
 ===== HARNESS (deterministic — objective facts, no LLM) =====
-type: spec-doc
+type: doc
 unresolved_markers: 0
-acceptance_criteria_mentions: 4
+acceptance_criteria_mentions: 3
 ears_requirements: 0
 task_checkboxes: 0 done / 0 total
-vague_terms: 13 (soft signal)
-section_requirements: missing (soft — standalone doc, not a specs/ dir)
-section_designs: ok
-section_tasks: missing (soft — standalone doc, not a specs/ dir)
-section_non_requirements: missing (soft)
+vague_terms: 11 (soft signal)
 --- repo gates (.) ---
   typecheck: skip (no tsconfig)
   build: skip (no script)
@@ -387,16 +398,20 @@ COUNCIL SEAT: persona=Cursor-Reviewer requested_engine=cursor requested_model=co
 ===== PERSONA: Architect  (codex : gpt-5.6-sol) =====
   VERDICT: FAIL
   FINDINGS (<=3, ranked, most important first):
-  - [H] `report_command` never calls `content_errors`, so it can label the checker verdict `complete` when `check` would return `incomplete` — the reviewer-facing report can directly contradict the acceptance command — fix: derive the report verdict through the same structural, completeness, and content-validation pipeline as `check_command`
-  - [H] No-contradiction lint recognizes only three literal signatures, so pass-graded raw output containing common failures such as `FAIL`, `FAILED`, `"status":"fail"`, or nonzero scorecard verdicts still yields `status: complete` — this defeats the stated honest-drift safeguard for the newly embedded JSON/scorecards — fix: parse each supported receipt format and validate its explicit verdict/status field against the recorded grade
-  - [M] Reports truncate receipts to 40 Markdown lines or 200 HTML lines while claiming to inline every receipt’s contents — failures after the cutoff are hidden from the promised one-read semantic review — fix: inline complete receipt contents, or clearly mark the report non-authoritative and link reviewers to every full receipt
-  BIGGEST RISK: The system can present both `check` and its reviewer report as complete while the retained raw evidence explicitly records failure.
+  - [H] `report_command` can label a manifest `complete` when `check` rejects it — reporting skips `content_errors`, yet calls its result the authoritative checker verdict — fix: run the same ordered validation pipeline as `check_command`
+  - [M] Non-JSON Thermos receipts bypass the promised positive result check — Thermos receives only negative-signature checks, so a receipt without `GRADE: PASS` can complete — fix: apply `_grade_agreement_error(..., "PASS", "evidence.thermos")`
+  - [M] JSON receipts bypass positive result validation without proving they are self-describing — unrelated or stale JSON can satisfy any command gate when no failure signature matches — fix: require and validate a recognized JSON result field, or require `GRADE: PASS`
+  BIGGEST RISK: The generated report can falsely present rejected evidence as an authoritative complete checker result.
 
 ===== PERSONA: Pragmatist  (cline : glm-5.2) =====
-… (+240 more lines in receipts/council-final-deep.txt)
+  [2m[thinking] [0m[2mLet[0m[2m me review[0m[2m this[0m[2m artifact as[0m[2m the "[0m[2mPrag[0m[2mmatist[0m[2m" reviewer[0m[2m — Y[0m[2mAG[0m[2mNI &[0m[2m cost lens[0m[2m. The[0m[2m artifact is[0m[2m the skill[0m[2m-work[0m[2mshop SPEC[0m[2m.md and[0m[2m the[0m[2m workshop.py[0m[2m checker.
+  
+  [0m[2mLet me[0m[2m analyze[0m[2m from the[0m[2m YAG[0m[2mNI[0m[2m/cost[0m[2m perspective:[0m[2m is this[0m[2m over-engine[0m[2mered?[0m[2m Scope creep[0m[2m? Is[0m[2m effort justified[0m[2m by value[0m[2m?
+  
+… (+123 more lines in receipts/council-final-deep.txt)
 ```
 </details>
-- **GRADE:** FAIL
+- **GRADE (declared):** FAIL
 
 ## Thermos (security + quality)
 
@@ -421,11 +436,11 @@ NOTES: non-blocking findings from both reviews were either applied (untracked ar
 workshop.py:361 guard) or recorded as known limitations / surfaced to the author.
 ```
 </details>
-- **GRADE:** security=pass quality=pass
+- **GRADE (declared):** security=pass quality=pass
 
 ## Live seat qualification
 
 - **INPUT:** `seat local/qwen-coder-32b-fc`
 - **OUTPUT:** _(declared fields only — no receipt file)_
-- **GRADE:** READY
+- **GRADE (declared):** READY
 

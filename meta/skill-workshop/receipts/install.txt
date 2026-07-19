@@ -9,3 +9,6 @@ claude: /Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skil
 codex: /Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills/meta/skill-workshop
 cursor: /Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills/meta/skill-workshop
 cline: /Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills/meta/skill-workshop
+
+GRADE: PASS by rule: install.sh exited 0 and skill-workshop resolved in all four
+targets (claude, codex, cursor, cline).

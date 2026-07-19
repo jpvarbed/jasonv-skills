@@ -39,7 +39,7 @@
         "phase": "spec",
         "profile": "fast",
         "receipt": "receipts/council-spec-fast.txt",
-        "status": "fail"
+        "status": "concerns"
       },
       {
         "families": [

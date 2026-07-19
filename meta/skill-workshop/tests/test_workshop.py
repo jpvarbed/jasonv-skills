@@ -59,7 +59,8 @@ class WorkshopCliTest(unittest.TestCase):
 
     def command(self, name, command=None):
         receipt = f"receipts/{name}.txt"
-        self.touch(receipt)
+        # a receipt must state its own result (rubric GRADE), cross-checked by content-lint
+        self.touch(receipt, f"run-{name}\nGRADE: PASS\n")
         return {
             "command": command or f"run-{name}",
             "exit_code": 0,
@@ -78,20 +79,20 @@ class WorkshopCliTest(unittest.TestCase):
             {**self.command("forward-anthropic"), "family": "anthropic"},
         ]
         # each forward-test receipt must evidence its own family, and the two must differ
-        self.touch("receipts/forward-openai.txt", "family: openai\nverdict from the openai agent\n")
-        self.touch("receipts/forward-anthropic.txt", "family: anthropic\nverdict from the anthropic agent\n")
+        self.touch("receipts/forward-openai.txt", "family: openai\nverdict from the openai agent\nGRADE: PASS\n")
+        self.touch("receipts/forward-anthropic.txt", "family: anthropic\nverdict from the anthropic agent\nGRADE: PASS\n")
         value["evidence"]["lint"] = self.command("lint")
         value["evidence"]["install"] = {
             **self.command("install"),
             "targets": ["claude", "codex", "cursor", "cline"],
         }
         # install receipt must actually evidence the targets it claims (content-lint)
-        self.touch(value["evidence"]["install"]["receipt"], "linked: claude codex cursor cline\n")
+        self.touch(value["evidence"]["install"]["receipt"], "linked: claude codex cursor cline\nGRADE: PASS\n")
         value["evidence"]["councils"] = []
         for phase in ("spec", "final"):
             evidence = self.command(f"council-{phase}")
             # the council receipt must evidence every family it declares
-            self.touch(evidence["receipt"], "seats: openai, anthropic\nCOUNCIL RESULT: status=pass\n")
+            self.touch(evidence["receipt"], "seats: openai, anthropic\nCOUNCIL RESULT: status=pass\nGRADE: PASS\n")
             value["evidence"]["councils"].append(
                 {
                     "phase": phase,
@@ -225,24 +226,24 @@ class WorkshopCliTest(unittest.TestCase):
             {**self.command("forward-openai"), "family": "openai"},
             {**self.command("forward-anthropic"), "family": "anthropic"},
         ]
-        self.touch("receipts/forward-openai.txt", "family: openai\nopenai agent verdict\n")
-        self.touch("receipts/forward-anthropic.txt", "family: anthropic\nanthropic agent verdict\n")
+        self.touch("receipts/forward-openai.txt", "family: openai\nopenai agent verdict\nGRADE: PASS\n")
+        self.touch("receipts/forward-anthropic.txt", "family: anthropic\nanthropic agent verdict\nGRADE: PASS\n")
         value["evidence"]["lint"] = self.command("lint")
         value["evidence"]["install"] = {
             **self.command("install"),
             "targets": ["claude", "codex", "cursor", "cline"],
         }
-        self.touch("receipts/install.txt", "linked: claude codex cursor cline\n")
+        self.touch("receipts/install.txt", "linked: claude codex cursor cline\nGRADE: PASS\n")
         value["evidence"]["repo_tests"] = self.command("repo-tests")
         thermos = self.command("thermos")
-        self.touch(thermos["receipt"], '{"security_verdict": "pass", "quality_verdict": "pass"}\n')
+        self.touch(thermos["receipt"], '{"security_verdict": "pass", "quality_verdict": "pass"}\nGRADE: PASS\n')
         value["evidence"]["thermos"] = {
             "security": "pass", "quality": "pass", "receipt": thermos["receipt"],
         }
         value["evidence"]["councils"] = []
         for phase, profile in (("spec", "fast"), ("final", "deep")):
             evidence = self.command(f"council-{phase}")
-            self.touch(evidence["receipt"], "seats: openai, anthropic\nCOUNCIL RESULT: status=pass\n")
+            self.touch(evidence["receipt"], "seats: openai, anthropic\nCOUNCIL RESULT: status=pass\nGRADE: PASS\n")
             value["evidence"]["councils"].append({
                 "phase": phase, "profile": profile, "families": ["openai", "anthropic"],
                 "status": "pass", "receipt": evidence["receipt"],
@@ -256,6 +257,27 @@ class WorkshopCliTest(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stdout)
         self.assertEqual(json.loads(result.stdout)["status"], "complete")
 
+    def test_report_verdict_matches_check_including_content_layer(self):
+        value = self.complete_method()
+        # break only the content layer: install receipt no longer evidences a target
+        self.touch(value["evidence"]["install"]["receipt"], "linked: claude codex cursor\nGRADE: PASS\n")
+        self.write_json(value)
+        checked = self.check()
+        self.assertEqual(checked.returncode, 1)
+        out = self.root / "REPORT.md"
+        self.run_cli("report", self.receipt, "--output", str(out))
+        # the report must not call this complete just because structure+completeness passed
+        self.assertIn("incomplete", out.read_text())
+        self.assertNotIn("**Checker verdict:** `complete`", out.read_text())
+
+    def test_thermos_receipt_must_state_its_own_grade(self):
+        value = self.complete_scripted()
+        self.touch(value["evidence"]["thermos"]["receipt"], "thermos ran and found nothing blocking\n")
+        self.write_json(value)
+        result = self.check()
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("evidence.thermos receipt states no GRADE", result.stdout)
+
     def test_pass_graded_thermos_with_failing_receipt_is_incomplete(self):
         value = self.complete_scripted()
         self.touch(value["evidence"]["thermos"]["receipt"],
@@ -264,6 +286,22 @@ class WorkshopCliTest(unittest.TestCase):
         result = self.check()
         self.assertEqual(result.returncode, 1)
         self.assertIn("evidence.thermos is graded pass but its receipt contains", result.stdout)
+
+    def test_council_concerns_completes_but_fail_does_not(self):
+        value = self.complete_method()
+        for council in value["evidence"]["councils"]:
+            council["status"] = "concerns"
+            self.touch(council["receipt"], "seats: openai, anthropic\nCOUNCIL RESULT: status=concerns\nGRADE: CONCERNS\n")
+        self.write_json(value)
+        result = self.check()
+        self.assertEqual(result.returncode, 0, result.stdout)
+        self.assertEqual(json.loads(result.stdout)["status"], "complete")
+
+        value["evidence"]["councils"][0]["status"] = "fail"
+        self.write_json(value)
+        result = self.check()
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("is fail", result.stdout)
 
     def test_pass_graded_council_with_failing_receipt_is_incomplete(self):
         value = self.complete_method()
@@ -321,7 +359,7 @@ class WorkshopCliTest(unittest.TestCase):
         # every gate renders the rubric: INPUT -> OUTPUT -> GRADE
         self.assertIn("**INPUT:**", text)
         self.assertIn("**OUTPUT:**", text)
-        self.assertIn("**GRADE:**", text)
+        self.assertIn("**GRADE (declared):**", text)
         # receipt contents are inlined for semantic review, not just referenced
         self.assertIn("run-baseline", text)
 

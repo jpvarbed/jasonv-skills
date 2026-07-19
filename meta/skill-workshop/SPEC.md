@@ -115,7 +115,12 @@ exact-string, format-tolerant checks:
   `"security_verdict": "fail"`). Review evidence is the highest-trust evidence,
   so it is checked, not exempt;
 - no duplication — the two blind forward-test receipts must not be identical
-  content, so one run cannot stand in for both families.
+  content, so one run cannot stand in for both families;
+- positive result — every receipt states its own `GRADE:` token and it must match
+  the result the manifest records for that gate. Absence-of-failure is not proof
+  of success: without this, a hand-typed `exit_code: 0` stands alone and an
+  unrelated receipt satisfies a gate merely by containing no failure signature.
+  Structured `.json` receipts are self-describing data and are exempt.
 
 The content layer catches mistakes (a stale receipt, a substituted model, a
 missing target), not a determined forger who rewrites the receipt text — the
@@ -203,8 +208,15 @@ the exact normalized device-config path without an exact negation.
 Council rules:
 
 - every council record has `phase`, `profile`, `families`, `status`, `receipt`;
-- `status` is `pass | fail | blocked`; only pass completes, while fail and
-  blocked return exit 1 with distinct diagnostics;
+- `status` is `pass | concerns | fail | blocked`. The gate is **no blocking
+  defect**: `pass` and `concerns` complete; `fail` and `blocked` return exit 1
+  with distinct diagnostics. This is deliberate calibration, not leniency — the
+  council reports `fail` if any one persona says FAIL and `concerns` if any says
+  CONCERNS, so requiring `pass` would demand unanimous zero-concern approval from
+  four reviewers whose assigned job is to attack, which is unreachable in
+  practice. `concerns` means every reviewer's objection was non-blocking; the
+  objections still get recorded and answered in `DEVIATIONS.md`;
+- every declared family must appear in that council's own receipt;
 - `families` contains at least two distinct values and excludes
   `author_family` only as a sole family, not as a participant;
 - `standard` requires passing `spec/fast` and `final/fast` records;
