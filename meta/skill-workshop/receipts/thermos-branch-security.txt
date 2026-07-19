@@ -1,0 +1,22 @@
+INPUT: thermo-nuclear branch review (bugs, breaking changes, security, devex, flag-leaks)
+over the jasonv-skills + skill-arena diffs vs origin/main, focused on workshop.py's receipt
+validator (path-traversal/symlink escapes, any way to report complete without real evidence,
+credential persistence, config placeholder bypass).
+
+OUTPUT (the reviewer's own returned JSON, verbatim):
+{
+  "security_verdict": "pass",
+  "quality_verdict": "pass",
+  "blocking_findings": [],
+  "non_blocking_notes": [
+    "meta/skill-workshop/config.example.json and meta/skill-workshop/.gitignore are UNTRACKED (git status '??', not in the origin/main...HEAD diff), as are WORKSHOP.json and receipts/. The skill is integration-tier and its own SPEC (lines 122-124) and references/integration-tier.md require a committed placeholder example and ignore rule; if the branch is pushed/merged as-is these files won't ship, so a fresh clone yields an incomplete skill and its own `workshop.py check` would fail on missing artifacts.config_example/ignore_file. Likely just a missing `git add`. Not a code defect, but flag before PR.",
+    "Repo B skills/skill-workshop/config.json hardcodes skill_path as '../../../skills-29-skill-workshop-jasonv-skills/meta/skill-workshop/SKILL.md' — it depends on the sibling worktree's exact directory name. This will not resolve on main, in CI, or in any normally-named clone, undercutting the arena eval's reproducibility (SPEC Verification matrix claims 'clean checkout reruns deterministic gates').",
+    "workshop.py:361 reads the ignore file via ignore_path.read_text() without a try/except, while the config-example read at line 383 is guarded against OSError/decode errors. A non-UTF8 or unreadable ignore file yields an uncaught traceback and a non-zero exit instead of a clean sorted 'incomplete:' diagnostic, contradicting the SPEC's 'diagnostics are stable, sorted, and safe to print' contract. Low severity (author-local tool).",
+    "workshop.py:364 negation check only detects an exact '!<device_config>' rule. A broader un-ignore glob (e.g. '!*.json') that re-includes the device file would pass the check. The SPEC frames this as best-effort ('not the ignored file itself'), so acceptable, but worth noting the guarantee is narrow."
+  ]
+}
+
+GRADE: PASS by rule: security_verdict == pass AND quality_verdict == pass AND
+blocking_findings == []. All three hold.
+NOTES: The 4 non-blocking notes were acted on — untracked artifacts fixed (git add),
+workshop.py:361 guarded, arena skill_path recorded as a known limitation, negation glob noted.

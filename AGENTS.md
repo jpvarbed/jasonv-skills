@@ -12,8 +12,9 @@ into it; the agent then discovers each `SKILL.md` natively.
 - **Claude Code** — `~/.claude/skills`
 - **Codex** — `~/.codex/skills`
 - **Cursor** — `~/.cursor/skills`
+- **Cline** — `~/.cline/skills`
 
-`./install.sh all` does all three. Override any target with `CLAUDE_SKILLS_DIR`/`CODEX_SKILLS_DIR`/`CURSOR_SKILLS_DIR`. Safe and
+`./install.sh all` does all four. Override any target with `CLAUDE_SKILLS_DIR`/`CODEX_SKILLS_DIR`/`CURSOR_SKILLS_DIR`/`CLINE_SKILLS_DIR`. Safe and
 idempotent: it only creates, refreshes, or prunes symlinks that point back into this repo —
 a skill name you already own (a real dir, or a link elsewhere) is left untouched.
 
@@ -23,7 +24,7 @@ These skills were authored and used in **Claude Code**. They're written to be
 agent-agnostic — they assume no specific model, only the external *tools* each needs (the
 `needs` column). **None have been formally evaluated on other agents yet**; the table is by
 dependency, not by proof. Each skill's `SPEC.md` (when present) records what it was actually
-tested on. Specs exist for 2/11 skills so far.
+tested on. Specs exist for 4/12 skills so far.
 
 | skill | category | needs | spec? |
 | --- | --- | --- | --- |
@@ -33,6 +34,7 @@ tested on. Specs exist for 2/11 skills so far.
 | [determinize-refactor](meta/determinize-refactor/) | meta | nothing (pure method) | — |
 | [goal-spec](meta/goal-spec/) | meta | nothing (pure method) | — |
 | [instruction-conflicts](meta/instruction-conflicts/) | meta | nothing (pure method) | — |
+| [skill-workshop](meta/skill-workshop/) | meta | bundled python, skill-arena, configured review seats | ✓ |
 | [caveman](productivity/caveman/) | productivity | nothing (pure method) | — |
 | [adversarial-review](review/adversarial-review/) | review | configured `fast`/`deep` profiles using Codex, Cursor, Cline, and/or Claude | ✓ |
 | [gtm-diligence](review/gtm-diligence/) | review | a browser-automation tool | — |
@@ -48,7 +50,7 @@ do and the record of which agents it has been evaluated on. Change the spec firs
 ## Install
 
 ```
-./install.sh [claude|codex|cursor|all]
+./install.sh [claude|codex|cursor|cline|all]
 ```
 
 MIT © 2026 Jason Varbedian

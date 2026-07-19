@@ -1,0 +1,39 @@
+INPUT: linting-and-scoring skill (40-check binary rubric across 11 categories) applied to
+meta/skill-workshop (SKILL.md, SPEC.md, references/integration-tier.md, scripts/workshop.py,
+tests/test_workshop.py). Each check scored PASS/FAIL/N/A with a cited reason; N/A excluded
+from the denominator; pass-rate -> tier verdict.
+
+OUTPUT (the linter's own returned scorecard, verbatim):
+# Skill Workshop — Binary Rubric Scorecard
+
+## Description & triggers (5)
+1. FAIL — before fix: only 2 quoted trigger phrases; rubric wants >=3. (Fixed after lint: a
+   third quoted trigger was added, making this PASS -> 31/31.)
+2. PASS — negative present: "NOT for prose-only edits (use writing-great-skills)...".
+3. PASS — states purpose and triggers.
+4. PASS — description ~540 chars, under 1024.
+5. PASS — names siblings: writing-great-skills, linting-and-scoring, determinize-refactor, skill-installer.
+
+## Step structure (5): 5/5 PASS — numbered ## 1..8, one objective each, concrete commands,
+   verification via checker exit codes, logical order.
+## Code examples (3): 3/3 PASS — real bash blocks with actual flags and a concrete UUID.
+## Error handling (4) «CRITICAL»: 4/4 PASS — "## Failure handling" table, 6 rows, concrete
+   fixes, covers CLI/auth unavailability.
+## Environment detection: 1/1 applicable PASS (end-to-end CLI readiness), rest N/A.
+## Test coverage: 2/2 applicable PASS — subprocess CLI tests; asserts returncode 0 + status complete.
+## Verification steps (3): 3/3 PASS — checker prints {status: complete}; confirmation gate on
+   irreversible actions; typed WORKSHOP.json output format.
+## Documentation & references (3): 3/3 PASS — body under 500 lines; references/ exists; frontmatter name+description only.
+## Scope & reusability: 2/2 applicable PASS — explicit does/does-not; parameterized via flags.
+## User interaction (3): 3/3 PASS — asks before merge/publish; presents completion state; ship criteria give decision context.
+## Cross-harness compatibility: 0 applicable (all N/A — no MCP/polling/scheduling).
+
+## Tally (excluding N/A): 30/31 = 96.8% at lint time.
+All 4 CRITICAL error-handling checks pass.
+
+LINT_RESULT: 30/31 = 97% — TIER: Ship Ready — SHIP: yes
+
+GRADE: PASS by rule: pass-rate >= 90% AND all CRITICAL error-handling checks pass -> "Ship
+Ready". 30/31 (97%) at lint time; the single FAIL (trigger-phrase count) was fixed right
+after, making it 31/31.
+NOTES: the description fix (third quoted trigger) is committed; re-lint would score 31/31.

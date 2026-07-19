@@ -1,0 +1,22 @@
+INPUT: thermo-nuclear code-quality audit (maintainability, structure, 1k-line rule,
+spaghetti, code-judo) over scripts/workshop.py (the receipt validator), tests/test_workshop.py,
+install.sh, and tests/test_install.py. (Thermos plugin skill was not installed in the
+subagent's env; it applied the fallback harsh-maintainability rubric per its instructions.)
+
+OUTPUT (the reviewer's own returned JSON, verbatim):
+{
+  "quality_verdict": "pass",
+  "blocking_findings": [],
+  "non_blocking_notes": [
+    "Tier-to-shape knowledge is duplicated across three sites in /Users/jasonvarbedian/dev/worktrees/skills-29-skill-workshop-jasonv-skills/meta/skill-workshop/scripts/workshop.py: the condition `tier == 'scripted' or (tier == 'integration' and bundles_code)` appears in _artifact_keys (line 108), _evidence_keys (line 117), and again as imperative construction in make_manifest (lines 410-422). Validation derives shape from the helpers while make_manifest re-implements it; adding a tier or moving a field requires editing both the declarative key-set helpers and the generator, which can silently drift. Consider having make_manifest build its skeleton from the same _artifact_keys/_evidence_keys source of truth.",
+    "structural_errors (lines 126-247) is ~120 lines. It reads fine because it is a flat sequence of independent per-key checks, but the integration block (218-246) and the council block (191-206) are cohesive enough to extract into _live_errors / _council_errors helpers, matching the granularity already used elsewhere in the file.",
+    "Defensive re-validation pattern repeats: after _valid_command runs, callers re-guard with `isinstance(x, dict) and set(x) == KEYS` before touching subfields (lines 182, 185, 240). It is correct but easy to get subtly wrong on the next field addition; a small helper like `_fully_valid(value, keys)` would make the intent explicit and DRY.",
+    "install.sh is dense (single-letter locals n/d/l/tgt, compound one-line conditionals at lines 27 and 34). It is correct and idempotent, but the prune membership test relying on the space-delimited `names` string (line 15/34) is a fragile idiom; a comment example of the match would help the next maintainer.",
+    "test_install.py hardcodes the sentinel skill name 'apply-paper' (lines 36, 42) to prove linking worked. If that skill is ever renamed or removed, the install tests break for an unrelated reason. Prefer asserting against a skill discovered from the repo, or against the count/stdout summary rather than one specific external skill folder."
+  ]
+}
+
+GRADE: PASS by rule: quality_verdict == pass AND blocking_findings == []. Both hold
+(507 lines, under the 1k rule; clean two-phase structure; careful symlink handling).
+NOTES: 5 non-blocking maintainability notes recorded, not applied — they would re-trigger
+review for no correctness gain; surfaced to the author.

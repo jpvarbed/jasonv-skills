@@ -1,0 +1,6 @@
+$ curl -sf localhost:4000/v1/models
+{"data":[{"id":"qwen-coder-32b","object":"model","created":1677610602,"owned_by":"openai"},{"id":"qwen-coder-32b-fc","object":"model","created":1677610602,"owned_by":"openai","max_input_tokens":32768,"max_output_tokens":32768},{"id":"qwen-coder-7b-fc","object":"model","created":1677610602,"owned_by":"openai","max_input_tokens":32768,"max_output_tokens":32768},{"id":"llama3.1-8b","object":"model","created":1677610602,"owned_by":"openai"}],"object":"list"}
+exit=0
+
+GRADE: PASS by rule: the endpoint answered (exit=0) and the declared model
+qwen-coder-32b-fc is present in the served model list — reachability + identity only.

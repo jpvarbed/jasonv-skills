@@ -1,0 +1,4 @@
+$ uv run --with pytest pytest tests/ meta/skill-workshop/tests/ -q  (report/thermos fixes)
+...................................                                      [100%]
+35 passed in 57.88s
+GRADE: PASS by rule: pytest exited 0, all tests passing.
