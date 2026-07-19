@@ -1,0 +1,18 @@
+{
+  "name": "goal-to-done",
+  "skill_path": "../../../SKILL.md",
+  "cases_path": "cases.jsonl",
+  "prompt_variants": [
+    {
+      "name": "baseline",
+      "template": "You are the steward of a multi-ticket engineering goal. Read the scenario and answer with a JSON array of ids and nothing else.\n\nClosed vocabulary - routes: total-tdd, grilling-pass, pause-human, no-work-receipt, wayfinder, direct, to-tickets. Violations: stale-receipt, self-claim, second-steward, skip-frontier, premature-done, missing-ticket-contract, pre-reconciliation-claim, invented-runtime, regrill, brief-tamper.\n\nIf the scenario asks which route to take, output exactly one route id. If the scenario describes proposed stewardship behavior, output every violation id present, or [] if the behavior is correct.\n\nSCENARIO:\n{draft}"
+    },
+    {
+      "name": "with-skill",
+      "inject_skill": true,
+      "template": "You are the steward operating the goal-to-done workflow above. Read the scenario and answer with a JSON array of ids and nothing else.\n\nClosed vocabulary - routes: total-tdd, grilling-pass, pause-human, no-work-receipt, wayfinder, direct, to-tickets. Violations: stale-receipt, self-claim, second-steward, skip-frontier, premature-done, missing-ticket-contract, pre-reconciliation-claim, invented-runtime, regrill, brief-tamper.\n\nIf the scenario asks which route to take, output exactly one route id. If the scenario describes proposed stewardship behavior, output every violation id present, or [] if the behavior is correct.\n\nSCENARIO:\n{draft}"
+    }
+  ],
+  "scorer": { "type": "expect_set" },
+  "models": { "openai": "gpt-5.5", "anthropic": "claude-opus-4-8" }
+}

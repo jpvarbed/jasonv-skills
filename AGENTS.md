@@ -24,10 +24,11 @@ These skills were authored and used in **Claude Code**. They're written to be
 agent-agnostic — they assume no specific model, only the external *tools* each needs (the
 `needs` column). **None have been formally evaluated on other agents yet**; the table is by
 dependency, not by proof. Each skill's `SPEC.md` (when present) records what it was actually
-tested on. Specs exist for 3/11 skills so far.
+tested on. Specs exist for 4/12 skills so far.
 
 | skill | category | needs | spec? |
 | --- | --- | --- | --- |
+| [goal-to-done](engineering/goal-to-done/) | engineering | a tracker CLI, a review CLI, bundled python | ✓ |
 | [total-tdd](engineering/total-tdd/) | engineering | a browser-automation tool, bundled python | ✓ |
 | [apply-paper](meta/apply-paper/) | meta | nothing (pure method) | — |
 | [determinize-refactor](meta/determinize-refactor/) | meta | nothing (pure method) | — |
